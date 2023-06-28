@@ -9,6 +9,7 @@ Created on Thu Mar 30 14:05:22 2023
 import os
 import shutil
 from pathlib import Path
+from metobs_toolkit import demo_template
 
 
 
@@ -18,7 +19,7 @@ from pathlib import Path
 
 GUI_dir = str( Path(__file__).resolve().parents[0])
 
-TLK_dir = str( Path(__file__).resolve().parents[1])
+# TLK_dir = str( Path(__file__).resolve().parents[1])
 
 
 # =============================================================================
@@ -28,11 +29,12 @@ TLK_dir = str( Path(__file__).resolve().parents[1])
 TMP_dir = os.path.join(GUI_dir, 'tmp')
 
 CACHE_dir = os.path.join(GUI_dir, 'cache')
+print(f'debug in path handler: {CACHE_dir}')
 # toolkit location of templates
-tlk_default_template = os.path.join(TLK_dir, 'data_templates',
-                                    'template_defaults', 'default_template.csv')
+# tlk_default_template = os.path.join(TLK_dir, 'data_templates',
+#                                     'template_defaults', 'default_template.csv')
 
-
+tlk_default_template = demo_template
 # =============================================================================
 # Helper functions
 # =============================================================================

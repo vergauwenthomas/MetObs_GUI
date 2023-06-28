@@ -1,34 +1,31 @@
 [tool.poetry]
-name = "MetObs-toolkit"
-version = "0.1.1a0"
-description = "A Meteorological observations toolkit for scientists"
+name = "MetObs-GUI"
+version = "0.0.1"
+description = "A GUI for the MetObs-toolkit"
 authors = ["Thomas Vergauwen <thomas.vergauwen@meteo.be>"]
 maintainers = ["Thomas Vergauwen <thomas.vergauwen@meteo.be>"]
 license = "LICENSE"
 readme = "README.md"
 documentation = "https://python-poetry.org/docs/"
-packages = [{include = "metobs_toolkit"}]
-keywords = ["meteorology", "observations", "urban climate"]
+packages = [{include = "metobs_gui"}]
+keywords = ["meteorology", "observations", "urban climate", "GUI"]
+
+
 
 [tool.poetry.dependencies]
+# Get the latest revision on the branch named "next"
+#requests = { git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", branch = "master"}
 python = "^3.9"
-pandas = "^1.3.0"
-numpy = "^1.17.3"
-matplotlib = "^3.0.0"
-mysql-connector-python = "^8.0.6"
-geopandas = "^0.9.0"
-pyproj = "~3.4"
-mapclassify = "^2.4.0"
-earthengine-api = "^0.1.340"
-geemap = '^0.20.0'
-#PyQt5 = "=5.12.2" #Technical: this version is the latest to build from source
-pyQt5 = "^5.12.2" # This installs Version 5.15.9, which works
+PyQt5 = "=5.12.2" #Technical: this version is the latest to build from source
+#pyQt5 = "^5.12.2" # This installs Version 5.15.9, which works
 #pyqt5.15.9 installs--> PyQt5-Qt5 >=5.15.2 and +PyQt5-sip = ">=12.11,<13"
 #pyqt5-sip = "^12.12.1"
 #pyqt5-qt5 = "^5.15.2"
-titanlib = "^0.3"
-pyqt5-sip = "^12.12.1"
-pyqt5-qt5 = "^5.15.2"
+
+#pyqt5-sip = "^12.12.1"
+#pyqt5-qt5 = "^5.15.2"
+metobs-toolkit = {git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", rev = "master"}
+#pyqt5 = "^5.15.9"
 
 
 

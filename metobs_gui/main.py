@@ -303,22 +303,38 @@ class MainWindow(QDialog):
 # =============================================================================
 
 def main():
-    try:
-        app=QApplication(sys.argv)
 
-        mainwindow = MainWindow()
-        widget = QtWidgets.QStackedWidget()
-        widget.addWidget(mainwindow)
-        widget.show()
-        succesfull=True
-    except:
-        print('Failing !')
-        # sys.exit('Something went wrong in the GUI')
-        succesfull=False
-        pass
+    app=QApplication(sys.argv)
+
+    mainwindow = MainWindow()
+    widget = QtWidgets.QStackedWidget()
+    widget.addWidget(mainwindow)
+    widget.show()
+    succesfull=True
+    # except:
+    #     print('Failing !')
+    #     # sys.exit('Something went wrong in the GUI')
+    #     succesfull=False
+    #     pass
     sys.exit(app.exec_())
 
     return succesfull
+    # try:
+    #     app=QApplication(sys.argv)
+
+    #     mainwindow = MainWindow()
+    #     widget = QtWidgets.QStackedWidget()
+    #     widget.addWidget(mainwindow)
+    #     widget.show()
+    #     succesfull=True
+    # except:
+    #     print('Failing !')
+    #     # sys.exit('Something went wrong in the GUI')
+    #     succesfull=False
+    #     pass
+    # sys.exit(app.exec_())
+
+    # return succesfull
 
 
 if __name__ == '__main__':
