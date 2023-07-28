@@ -13,8 +13,8 @@ from io import StringIO
 from PyQt5.QtWidgets import QSpinBox, QDoubleSpinBox
 
 
-import metobs_toolkit.GUI.path_handler as path_handler
-from metobs_toolkit.GUI.errors import Error, Notification
+import metobs_gui.path_handler as path_handler
+from metobs_gui.errors import Error, Notification
 # method1: add the toolkit to path,
 # sys.path.append(path_handler.TLK_dir)
 # from vlinder_toolkit import Dataset
@@ -69,6 +69,16 @@ class Capturing(list):
         self.extend(self._stringio.getvalue().splitlines())
         del self._stringio    # free up some memory
         sys.stdout = self._stdout
+
+class Capturing_logs(list):
+    def __enter__(self):
+        self._stderr = sys.stderr
+        sys.stderr = self._stringio_err = StringIO()
+        return self
+    def __exit__(self, *args):
+        self.extend(self._stringio_err.getvalue().splitlines())
+        del self._stringio_err    # free up some memory
+        sys.stderr = self._stderr
 
 #%% Initialisation of widgets
 
@@ -192,7 +202,7 @@ def load_dataset(main):
             return
 
 
-    test=Capturing()
+    # test=Capturing()
 
     with Capturing() as terminaloutput:
 
@@ -243,5 +253,14 @@ def load_dataset(main):
         main.prompt.append(line + '\n')
 
     return dataset, comb_df
+
+
+def dataset_show_info(main):
+    main.prompt.append('\n \n------ Dataset Info ----- \n \n')
+    with Capturing() as terminaloutput:
+        main.dataset.get_info()
+    for line in terminaloutput:
+        main.prompt.append(line)
+
 
 

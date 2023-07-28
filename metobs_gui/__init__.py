@@ -6,6 +6,7 @@
 import logging
 from pathlib import Path
 import os, sys
+import metobs_toolkit
 
 # Create the Logger
 loggers = logging.getLogger(__name__)  # logger name is <vlinder-toolkit>
@@ -29,54 +30,14 @@ loggers.info("Logger initiated")
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_PATH)
 
-# # demo files
 
-# demo_datafile = os.path.join(
-#     BASE_PATH, "metobs_toolkit", "datafiles", "demo_datafile.csv"
-# )
-# demo_metadatafile = os.path.join(
-#     BASE_PATH, "metobs_toolkit", "datafiles", "demo_metadatafile.csv"
-# )
-# demo_template = os.path.join(
-#     BASE_PATH, "metobs_toolkit", "datafiles", "demo_templatefile.csv"
-# )
-
-
-# =============================================================================
-#  Static variables to be reached by users
-# =============================================================================
-# observation_types = [
-#     "temp",
-#     "radiation_temp",
-#     "humidity",
-#     "precip",
-#     "precip_sum",
-#     "wind_speed",
-#     "wind_gust",
-#     "wind_direction",
-#     "pressure",
-#     "pressure_at_sea_level",
-# ]
-
-
-# =============================================================================
-# Import classes and function to be used by the user
-# =============================================================================
-
-# from metobs_toolkit.dataset import Dataset
-# from metobs_toolkit.station import Station
-# from metobs_toolkit.modeldata import Modeldata
-import metobs_toolkit
 # import GUI
+
+
 def launch_gui():
     from metobs_gui.main import main
     main()
 
-
-# =============================================================================
-# Import extenders
-# =============================================================================
-# from metobs_toolkit.dataset_settings_updater import Dataset
 
 # =============================================================================
 # Version

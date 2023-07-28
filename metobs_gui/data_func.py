@@ -34,13 +34,18 @@ def isvalidfile(filepath, filetype=None):
 
 
 
-def readfile(filepath):
+def readfile(filepath, nrows=None):
+
     common_seperators = [None, ';',',','    ','.']
 
     df=pd.DataFrame()
     for sep in common_seperators:
         try:
-            df = pd.read_csv(filepath_or_buffer=filepath, sep=sep)
+            if nrows is None:
+                df = pd.read_csv(filepath_or_buffer=filepath, sep=sep)
+            else:
+                df = pd.read_csv(filepath_or_buffer=filepath, sep=sep,
+                                 nrows=int(nrows))
         except:
             pass
 
@@ -48,7 +53,7 @@ def readfile(filepath):
             break #df found
 
     if df.empty:
-        return pass_return(df, True, f'Datafile is empyt.')
+        return pass_return(df, True, f'{filepath} data is empyt.')
     return pass_return(df)
 
 

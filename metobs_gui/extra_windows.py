@@ -6,20 +6,20 @@ Created on Thu Apr 27 16:17:53 2023
 @author: thoverga
 """
 
-# DEBUG
-import sys
-sys.path.insert(0, '/home/thoverga/Documents/VLINDER_github/MetObs_toolkit/metobs_toolkit')
-import metobs_toolkit
-# END DEBUG
+# # DEBUG
+# import sys
+# sys.path.insert(0, '/home/thoverga/Documents/VLINDER_github/MetObs_toolkit/metobs_toolkit')
+# import metobs_toolkit
+# # END DEBUG
 
 import sys, os
 import pandas as pd
 from PyQt5.QtWidgets import QApplication, QVBoxLayout, QWidget, QPushButton, QMainWindow
 from PyQt5.uic import loadUi
 
-import metobs_toolkit.GUI.path_handler as path_handler
-from metobs_toolkit.GUI.pandasmodel import DataFrameModel
-import metobs_toolkit.GUI.template_func as template_func
+import metobs_gui.path_handler as path_handler
+from metobs_gui.pandasmodel import DataFrameModel
+import metobs_gui.template_func as template_func
 
 
 
@@ -30,7 +30,7 @@ import metobs_toolkit.GUI.template_func as template_func
 # Figure windows
 # =============================================================================
 
-from metobs_toolkit.GUI.figuremodel import MplCanvas
+from metobs_gui.figuremodel import MplCanvas
 
 class TimeSeriesWindow(QMainWindow):
     """ Creates new window """

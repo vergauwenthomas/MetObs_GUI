@@ -20,15 +20,20 @@ from PyQt5.uic import loadUi
 import pandas as pd
 import pytz
 
-import metobs_toolkit.GUI.data_func as data_func
-import metobs_toolkit.GUI.template_func as template_func
-from metobs_toolkit.GUI.json_save_func import get_saved_vals, update_json_file
-from metobs_toolkit.GUI.pandasmodel import DataFrameModel
-import metobs_toolkit.GUI.path_handler as path_handler
-import metobs_toolkit.GUI.tlk_scripts as tlk_scripts
-from metobs_toolkit.GUI.errors import Error, Notification
+import metobs_gui.data_func as data_func
+import metobs_gui.template_func as template_func
+import metobs_gui.path_handler as path_handler
+import metobs_gui.tlk_scripts as tlk_scripts
 
-from metobs_toolkit.GUI.extra_windows import MergeWindow, TimeSeriesWindow
+from metobs_gui.json_save_func import get_saved_vals, update_json_file
+from metobs_gui.pandasmodel import DataFrameModel
+
+from metobs_gui.errors import Error, Notification
+from metobs_gui.extra_windows import MergeWindow, TimeSeriesWindow
+from metobs_gui.log_displayer import MyDialog
+
+import metobs_gui.template_page as template_page
+
 
 
 class MainWindow(QDialog):
@@ -41,10 +46,14 @@ class MainWindow(QDialog):
         # -------- Information to pass beween different triggers ----------
         self.dataset = None #the vlindertoolkit dataset instance
         self.merge_window = MergeWindow() #New  ui window
-
         self.tswindow = TimeSeriesWindow(dataset=None) #for plots
 
-        # P1 ------------------------
+
+        self.long_storage = {} #will read the json file to store info over mulitple settings
+        self.session = {} #store info during one session
+
+        # P1 INIT
+        template_page.init_template_page(self)
 
 
 
@@ -60,34 +69,45 @@ class MainWindow(QDialog):
 
         # Setup error message dialog
         self.error_dialog = QtWidgets.QErrorMessage(self)
-        self.set_datapaths_init()
+
 
         # link dfmodels to tables
         self.templmodel = DataFrameModel()
         self.table.setModel(self.templmodel)
 
 
-
-        # ------- Callbacks (Getters) ---------
-        self.Browse_data_B.clicked.connect(lambda: self.browsefiles_data()) #browse datafile
-        self.Browse_data_B_2.clicked.connect(lambda: self.browsefiles_data_p2()) #browse datafile
-        self.Browse_metadata_B.clicked.connect(lambda: self.browsefiles_metadata()) #browse metadatafile
-        self.Browse_metadata_B_2.clicked.connect(lambda: self.browsefiles_metadata_p2()) #browse metadatafile
-
         # ------- Callbacks (triggers) ------------
-        # P1 ------
+
+
+        # =============================================================================
+        # Windget links
+        # =============================================================================
+        self.data_file_T.textChanged.connect(self.data_file_T_2.setText) #link them
+        self.metadata_file_T.textChanged.connect(self.metadata_file_T_2.setText) #link them
+
+
+        # =============================================================================
+        # Mapping tab
+        # =============================================================================
+        self.Browse_data_B.clicked.connect(lambda: template_page.browsefiles_data(self)) #browse datafile
+        self.Browse_metadata_B.clicked.connect(lambda: template_page.browsefiles_metadata(self)) #browse metadatafile
+
+#
+
+
+
         # save paths when selected
-        self.save_data_path.clicked.connect(lambda: self.save_path(savebool=self.save_data_path.isChecked(),
+        self.save_data_path.clicked.connect(lambda: self.template_page.save_path(savebool=self.save_data_path.isChecked(),
                                                                    savekey='data_file_path',
                                                                    saveval=self.data_file_T.text()))
-        self.save_metadata_path.clicked.connect(lambda: self.save_path(savebool=self.save_metadata_path.isChecked(),
+        self.save_metadata_path.clicked.connect(lambda: self.template_page.save_path(savebool=self.save_metadata_path.isChecked(),
                                                                    savekey='metadata_file_path',
                                                                    saveval=self.metadata_file_T.text()))
 
-        self.data_file_T.editingFinished.connect(lambda: self.link_datapath())
-        self.metadata_file_T.editingFinished.connect(lambda: self.link_datapath())
+        self.browse_format.currentTextChanged.connect(lambda: template_page.enable_format_widgets(self))
+
         # initiate the start mapping module
-        self.start_mapping_B.clicked.connect(lambda: self.set_templ_map_val())
+        self.start_mapping_B.clicked.connect(lambda: template_page.prepare_for_mapping(self))
 
         # construnct the mappindict
         self.build_B.clicked.connect(lambda: self.build_template())
@@ -95,20 +115,54 @@ class MainWindow(QDialog):
         # save template
         self.save_template.clicked.connect(lambda: self.save_template_call())
 
-        # P2 -------
-        self.make_dataset.clicked.connect(lambda: self.make_tlk_dataset())
-        self.apply_qc.clicked.connect(lambda: self.apply_qc_on_dataset())
+        # =============================================================================
+        # Import data tab
+        # =============================================================================
 
+        self.Browse_data_B_2.clicked.connect(lambda: self.browsefiles_data_p2()) #browse datafile
+        self.Browse_metadata_B_2.clicked.connect(lambda: self.browsefiles_metadata_p2()) #browse metadatafile
+
+        self.make_dataset.clicked.connect(lambda: self.make_tlk_dataset())
+
+        self.get_info.clicked.connect(lambda: self.show_dataset_info())
         self.show_dataset.clicked.connect(lambda: self.create_dataset_window())
 
 
-         # P3 -------
+
+        # =============================================================================
+        # Quality control tab
+        # =============================================================================
         self.plot_dataset.clicked.connect(lambda: self.make_figure())
+        self.apply_qc.clicked.connect(lambda: self.apply_qc_on_dataset())
+
+        # =============================================================================
+        # Gap filling tab
+        # =============================================================================
+
+
+        # =============================================================================
+        # Visualisation tab
+        # =============================================================================
+
+
+        # =============================================================================
+        # Meta data tab
+        # =============================================================================
+
+
+        # =============================================================================
+        # Model data tab
+        # =============================================================================
+
+
+        # =============================================================================
+        # Analysis tab
+        # =============================================================================
 
 
 
 
-        # ------- Initialize --------------
+# ------- Initialize --------------
 
 
 
@@ -139,33 +193,33 @@ class MainWindow(QDialog):
 # =============================================================================
 # Init values
 # =============================================================================
-    def set_templ_map_val(self):
-        # First try reading the datafile
-        data_columns = self.read_datafiles(self.data_file_T.text())
+    # def set_templ_map_val(self):
+    #     # First try reading the datafile
+    #     data_columns = self.read_datafiles(self.data_file_T.text())
 
-        # Check if meta data is given, if so read the metadata columns
-        if len(self.metadata_file_T.text()) > 2:
-            metadata_columns = self.read_datafiles(self.metadata_file_T.text())
-        else:
-            metadata_columns = []
+    #     # Check if meta data is given, if so read the metadata columns
+    #     if len(self.metadata_file_T.text()) > 2:
+    #         metadata_columns = self.read_datafiles(self.metadata_file_T.text())
+    #     else:
+    #         metadata_columns = []
 
-        # Set defaults appropriate
-        template_func.set_templ_vals(self, data_columns, metadata_columns)
+    #     # Set defaults appropriate
+    #     template_func.set_templ_vals(self, data_columns, metadata_columns)
 
 
 
-    def set_datapaths_init(self):
-        saved_vals = get_saved_vals()
+    # def set_datapaths_init(self):
+    #     saved_vals = get_saved_vals()
 
-        # set datafile path
-        if 'data_file_path' in saved_vals:
-            self.data_file_T.setText(str(saved_vals['data_file_path']))
-            self.data_file_T_2.setText(str(saved_vals['data_file_path']))
+    #     # set datafile path
+    #     if 'data_file_path' in saved_vals:
+    #         self.data_file_T.setText(str(saved_vals['data_file_path']))
+    #         self.data_file_T_2.setText(str(saved_vals['data_file_path']))
 
-        # set metadata file path
-        if 'metadata_file_path' in saved_vals:
-            self.metadata_file_T.setText(str(saved_vals['metadata_file_path']))
-            self.metadata_file_T_2.setText(str(saved_vals['metadata_file_path']))
+    #     # set metadata file path
+    #     if 'metadata_file_path' in saved_vals:
+    #         self.metadata_file_T.setText(str(saved_vals['metadata_file_path']))
+    #         self.metadata_file_T_2.setText(str(saved_vals['metadata_file_path']))
 
 
     def set_possible_templates(self):
@@ -194,35 +248,25 @@ class MainWindow(QDialog):
 # =============================================================================
 # Save values
 # =============================================================================
-    def save_path(self, savebool, savekey, saveval):
-        if savebool:
-            savedict = {str(savekey): str(saveval)}
-            update_json_file(savedict)
+    # def save_path(self, savebool, savekey, saveval):
+    #     if savebool:
+    #         savedict = {str(savekey): str(saveval)}
+    #         update_json_file(savedict)
 
 # =============================================================================
 # Triggers
 # =============================================================================
-    def browsefiles_data(self):
-        fname=QFileDialog.getOpenFileName(self, 'Select data file', str(Path.home()))
-        self.data_file_T.setText(fname[0]) #update text
-
 
     def browsefiles_data_p2(self):
         fname=QFileDialog.getOpenFileName(self, 'Select data file', str(Path.home()))
         self.data_file_T_2.setText(fname[0])
 
 
-    def browsefiles_metadata(self):
-        fname=QFileDialog.getOpenFileName(self, 'Select metadata file', str(Path.home()))
-        self.metadata_file_T.setText(fname[0]) #update text
 
     def browsefiles_metadata_p2(self):
         fname=QFileDialog.getOpenFileName(self, 'Select metadata file', str(Path.home()))
         self.metadata_file_T_2.setText(fname[0]) #update text
 
-    def link_datapath(self):
-        self.data_file_T_2.setText(str(self.data_file_T.text()))
-        self.metadata_file_T_2.setText(str(self.metadata_file_T.text()))
 
 
     def read_datafiles(self, filepath):
@@ -277,6 +321,9 @@ class MainWindow(QDialog):
         # trigger update in seperate window
         self.merge_window.trigger_update()
 
+    def show_dataset_info(self):
+        tlk_scripts.dataset_show_info(self)
+
 
     def create_dataset_window(self):
 
@@ -310,6 +357,11 @@ def main():
     widget = QtWidgets.QStackedWidget()
     widget.addWidget(mainwindow)
     widget.show()
+
+    dlg = MyDialog()
+    dlg.show()
+    dlg.raise_()
+
     succesfull=True
     # except:
     #     print('Failing !')

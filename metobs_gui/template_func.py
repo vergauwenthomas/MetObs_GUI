@@ -6,7 +6,7 @@ Created on Mon Mar 20 13:00:45 2023
 @author: thoverga
 """
 
-import metobs_toolkit.GUI.path_handler as path_handler
+import metobs_gui.path_handler as path_handler
 import os
 from pathlib import Path
 import numpy as np
@@ -52,73 +52,85 @@ Meta_map_values = {
 # Functions
 # =============================================================================
 
-def set_templ_vals(main, data_columns, metadata_columns):
-    enable_all_boxes(main)
-    csv_columns = data_columns
-    csv_columns.insert(0, not_mapable)
+# def set_templ_vals(main, data_columns, metadata_columns):
+#     enable_all_boxes(main)
+#     csv_columns = data_columns
+#     csv_columns.insert(0, not_mapable)
 
 
-    # Get all obs boxes for colum mapping
-    obs_boxes = [main.temp_col_CB, main.radtemp_col_CB, main.hum_col_CB,
-                 main.pre_col_CB, main.pre_s_col_CB, main.wind_col_CB,
-                 main.gust_col_CB, main.dir_col_CB, main.p_col_CB,
-                 main.psea_col_CB, main.datetime_col_CB, main.date_col_CB,
-                 main.time_col_CB]
+#     # Get all obs boxes for colum mapping
+#     obs_boxes = [main.temp_col_CB, main.radtemp_col_CB, main.hum_col_CB,
+#                  main.pre_col_CB, main.pre_s_col_CB, main.wind_col_CB,
+#                  main.gust_col_CB, main.dir_col_CB, main.p_col_CB,
+#                  main.psea_col_CB, main.datetime_col_CB, main.date_col_CB,
+#                  main.time_col_CB]
 
-    for box in obs_boxes:
-        box.setEnabled(True)
-        box.addItems(csv_columns)
+#     for box in obs_boxes:
+#         # box.setEnabled(True)
+#         box.addItems(csv_columns)
 
-    metadata_boxes = [main.name_col_CB, main.lat_col_CB, main.lon_col_CB,
-                      main.loc_col_CB, main.call_col_CB, main.network_col_CB]
+#     metadata_boxes = [main.name_col_CB, main.lat_col_CB, main.lon_col_CB,
+#                       main.loc_col_CB, main.call_col_CB, main.network_col_CB]
 
-    # combine all possible columns:
-    csv_columns.extend(metadata_columns)
-    for box in metadata_boxes:
-        box.setEnabled(True)
-        box.addItems(csv_columns)
+#     # combine all possible columns:
+#     csv_columns.extend(metadata_columns)
+#     for box in metadata_boxes:
+#         box.setEnabled(True)
+#         box.addItems(csv_columns)
 
 
     # =============================================================================
     # Observation types
     # =============================================================================
+def set_obstype_spinner_values(main, values):
+    # Fill with defaults
+    main.temp_col_CB.addItems(values)
+    main.radtemp_col_CB.addItems(values)
+    main.hum_col_CB.addItems(values)
+    main.pre_col_CB.addItems(values)
+    main.pre_s_col_CB.addItems(values)
+    main.wind_col_CB.addItems(values)
+    main.gust_col_CB.addItems(values)
+    main.dir_col_CB.addItems(values)
+    main.p_col_CB.addItems(values)
+    main.psea_col_CB.addItems(values)
+
+def set_time_spinner_values(main, values):
+    # Fill with defaults
+    main.datetime_col_CB.addItems(values)
+    main.date_col_CB.addItems(values)
+    main.time_col_CB.addItems(values)
 
 
+def set_obstype_units_defaults(main):
 
     # Fill with defaults
     main.temp_units_CB.addItems(Obs_map_values['temp']['units'])
-    main.temp_desc_T.setText(Obs_map_values['temp']['description'])
-
     main.radtemp_units_CB.addItems(Obs_map_values['radiation_temp']['units'])
-    main.radtemp_desc_T.setText(Obs_map_values['radiation_temp']['description'])
-
     main.hum_units_CB.addItems(Obs_map_values['humidity']['units'])
-    main.hum_desc_T.setText(Obs_map_values['humidity']['description'])
-
     main.pre_units_CB.addItems(Obs_map_values['precip']['units'])
-    main.pre_desc_T.setText(Obs_map_values['precip']['description'])
-
     main.pre_s_units_CB.addItems(Obs_map_values['precip_sum']['units'])
-    main.pre_s_desc_T.setText(Obs_map_values['precip_sum']['description'])
-
     main.wind_units_CB.addItems(Obs_map_values['wind_speed']['units'])
-    main.wind_desc_T.setText(Obs_map_values['wind_speed']['description'])
-
     main.gust_units_CB.addItems(Obs_map_values['wind_gust']['units'])
-    main.gust_desc_T.setText(Obs_map_values['wind_gust']['description'])
-
     main.dir_units_CB.addItems(Obs_map_values['wind_direction']['units'])
-    main.dir_desc_T.setText(Obs_map_values['wind_direction']['description'])
-
     main.p_units_CB.addItems(Obs_map_values['pressure']['units'])
-    main.p_desc_T.setText(Obs_map_values['pressure']['description'])
-
     main.psea_units_CB.addItems(Obs_map_values['pressure_at_sea_level']['units'])
+
+def set_obstype_desc_defaults(main):
+
+    # Fill with defaults
+    main.temp_desc_T.setText(Obs_map_values['temp']['description'])
+    main.radtemp_desc_T.setText(Obs_map_values['radiation_temp']['description'])
+    main.hum_desc_T.setText(Obs_map_values['humidity']['description'])
+    main.pre_desc_T.setText(Obs_map_values['precip']['description'])
+    main.pre_s_desc_T.setText(Obs_map_values['precip_sum']['description'])
+    main.wind_desc_T.setText(Obs_map_values['wind_speed']['description'])
+    main.gust_desc_T.setText(Obs_map_values['wind_gust']['description'])
+    main.dir_desc_T.setText(Obs_map_values['wind_direction']['description'])
+    main.p_desc_T.setText(Obs_map_values['pressure']['description'])
     main.psea_desc_T.setText(Obs_map_values['pressure_at_sea_level']['description'])
 
-    # =============================================================================
-    #     Datetime
-    # =============================================================================
+def set_datetime_defaults(main):
 
     # Fill with defaults
     main.datetime_fmt_T.setText(Dt_map_values['datetime']['format'])
@@ -126,37 +138,51 @@ def set_templ_vals(main, data_columns, metadata_columns):
     main.time_fmt_T.setText(Dt_map_values['_time']['format'])
 
 
-def enable_all_boxes(main):
-    main.temp_col_CB.setEnabled(True)
-    main.temp_units_CB.setEnabled(True)
 
-    main.radtemp_units_CB.setEnabled(True)
-    main.radtemp_desc_T.setEnabled(True)
-    main.hum_units_CB.setEnabled(True)
-    main.hum_desc_T.setEnabled(True)
 
-    main.pre_units_CB.setEnabled(True)
-    main.pre_desc_T.setEnabled(True)
 
-    main.pre_s_units_CB.setEnabled(True)
-    main.pre_s_desc_T.setEnabled(True)
+def set_metadata_spinner_values(main, values):
+    main.name_col_CB.addItems(values)
+    main.lat_col_CB.addItems(values)
+    main.lon_col_CB.addItems(values)
+    main.loc_col_CB.addItems(values)
+    main.call_col_CB.addItems(values)
+    main.network_col_CB.addItems(values)
 
-    main.wind_units_CB.setEnabled(True)
-    main.wind_desc_T.setEnabled(True)
 
-    main.gust_units_CB.setEnabled(True)
-    main.gust_desc_T.setEnabled(True)
 
-    main.dir_units_CB.setEnabled(True)
-    main.dir_desc_T.setEnabled(True)
 
-    main.p_units_CB.setEnabled(True)
-    main.p_desc_T.setEnabled(True)
+# def enable_all_boxes(main):
+#     main.temp_col_CB.setEnabled(True)
+#     main.temp_units_CB.setEnabled(True)
 
-    main.psea_units_CB.setEnabled(True)
-    main.psea_desc_T.setEnabled(True)
+#     main.radtemp_units_CB.setEnabled(True)
+#     main.radtemp_desc_T.setEnabled(True)
+#     main.hum_units_CB.setEnabled(True)
+#     main.hum_desc_T.setEnabled(True)
 
-    main.build_B.setEnabled(True)
+#     main.pre_units_CB.setEnabled(True)
+#     main.pre_desc_T.setEnabled(True)
+
+#     main.pre_s_units_CB.setEnabled(True)
+#     main.pre_s_desc_T.setEnabled(True)
+
+#     main.wind_units_CB.setEnabled(True)
+#     main.wind_desc_T.setEnabled(True)
+
+#     main.gust_units_CB.setEnabled(True)
+#     main.gust_desc_T.setEnabled(True)
+
+#     main.dir_units_CB.setEnabled(True)
+#     main.dir_desc_T.setEnabled(True)
+
+#     main.p_units_CB.setEnabled(True)
+#     main.p_desc_T.setEnabled(True)
+
+#     main.psea_units_CB.setEnabled(True)
+#     main.psea_desc_T.setEnabled(True)
+
+#     main.build_B.setEnabled(True)
 
 def make_template_build(main):
 
