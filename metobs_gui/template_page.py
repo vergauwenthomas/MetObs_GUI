@@ -6,6 +6,7 @@ Created on Fri Jul 28 13:30:48 2023
 @author: thoverga
 """
 from pathlib import Path
+import copy
 import pytz
 from PyQt5.QtWidgets import QFileDialog, QComboBox
 
@@ -15,53 +16,11 @@ from PyQt5.QtWidgets import QFileDialog, QComboBox
 from metobs_gui.json_save_func import get_saved_vals, update_json_file
 from metobs_gui.data_func import readfile, isvalidfile, get_columns
 
-# from metobs_gui.template_func import (not_mapable, Obs_map_values,
-#                                       Dt_map_values, Meta_map_values,
-#                                       set_datetime_defaults,
-#                                       set_obstype_spinner_values,
-#                                       set_obstype_units_defaults,
-#                                       set_obstype_desc_defaults,
-#                                       enable_all_boxes)
+
 
 import metobs_gui.template_func as template_func
 
 from metobs_gui.errors import Error, Notification
-# =============================================================================
-# default settings
-# =============================================================================
-
-# not_mapable=template_func.not
-
-# Obs_map_values = {
-
-#      'temp':{'units': ['K', 'Celcius'], 'description':'2mT'},
-#      'radiation_temp':{'units': ['K', 'Celcius'], 'description':'Blackglobe temperature'},
-#      'humidity':{'units': ['%'], 'description':'Relative humidity'},
-#      'precip':{'units': ['l/hour x m²'], 'description':'Precipitation intensity'},
-#      'precip_sum':{'units': ['l/m²', 'Celcius'], 'description':'Precipitation cumulated'},
-#      'wind_speed':{'units': ['m/s'], 'description':'Average wind speed'},
-#      'wind_gust':{'units': ['m/s'], 'description':'Wind gust'},
-#      'wind_direction':{'units': ['°'], 'description':'Wind direction (from north CW)'},
-#      'pressure':{'units': ['Pa'], 'description':'Air pressure'},
-#      'pressure_at_sea_level':{'units': ['Pa'], 'description':'Pressure at sealevel'}
-
-#     }
-
-# Dt_map_values = {
-#     'datetime': {'format':'%Y-%m-%d %H:%M:%S'},
-#     '_date':{'format':'%Y-%m-%d'},
-#     '_time':{'format':'%H:%M:%S'},
-#     }
-
-# Meta_map_values = {
-#     'name': {'description': 'Station name/ID'},
-#     'lat':{'description': 'Latitude'},
-#     'lon':{'description': 'Longitude' },
-#     'location':{'description': 'Location identifier'},
-#     'call_name':{'description': 'Pseudo name of station'},
-#     'network':{'description': 'Name of the network'}
-#     }
-
 
 
 
@@ -71,6 +30,7 @@ from metobs_gui.errors import Error, Notification
 def init_template_page(MW):
 
     MW.session['mapping'] = {}
+    MW.session['mapping']['started'] = False
 
     # set data paths to saved files
     set_datapaths_init(MW)
@@ -118,8 +78,6 @@ def set_datapaths_init(MW):
 # =============================================================================
 # Triggers
 # =============================================================================
-
-
 # ----- browse files -------#
 
 def browsefiles_data(MW):
@@ -161,20 +119,35 @@ def enable_format_widgets(MW):
             # enable all
             for box in _get_obstype_boxes(MW): box.setEnabled(True)
             for box in _get_datetime_boxes(MW): box.setEnabled(True)
+            _get_name_box(MW).setEnabled(True)
             if MW.use_metadata.isChecked():
                 for box in _get_metadata_boxes(MW): box.setEnabled(True)
+                lab_txt = 'Station name/ID (=column in BOTH data and metadata files)'
+            else:
+                # update label text for more info.
+                lab_txt = 'Station name/ID (=column in the data file)'
+
         else:
             for box in _get_obstype_boxes(MW): box.setEnabled(False)
             for box in _get_datetime_boxes(MW): box.setEnabled(True)
             if MW.use_metadata.isChecked():
                 for box in _get_metadata_boxes(MW): box.setEnabled(True)
+                _get_name_box(MW).setEnabled(True)
+                lab_txt = 'Station name/ID (=column in the metadata file)'
+            else:
 
+                MW.name_col_CB.setCurrentText(template_func.not_mapable)
+                _get_name_box(MW).setEnabled(False)
+                lab_txt = 'Station name/ID (data columns are used)'
+
+        MW.stationname_labeltext.setText(lab_txt)
 
 
 def prepare_for_mapping(MW):
     MW.session['mapping']['started'] = True
 
     dat_format = str(MW.browse_format.currentText())
+    _get_name_box(MW).setEnabled(True)
     if (dat_format == 'long') | (dat_format == 'single-station'):
         # First try reading the datafile
         # 1. THe data file
@@ -184,8 +157,10 @@ def prepare_for_mapping(MW):
             Error(_msg)
             return
         # Read columns
-        df_cols = list(readfile(datafile, nrows=20)[0].columns)
-
+        df_head = readfile(datafile, nrows=20)[0]
+        df_cols = list(df_head.columns)
+        MW.session['mapping']['data_head'] = df_head.copy() #save for tests on template
+        MW.session['mapping']['data_cols'] = df_cols.copy() #save for tests on template
         # Get the obstype spinners
         csv_columns = df_cols
         csv_columns.insert(0, template_func.not_mapable)
@@ -194,13 +169,18 @@ def prepare_for_mapping(MW):
         for box in _get_obstype_boxes(MW): box.setEnabled(True)
         for box in _get_datetime_boxes(MW): box.setEnabled(True)
 
+
         # set column and default values
         template_func.set_obstype_spinner_values(MW, csv_columns)
         template_func.set_time_spinner_values(MW, csv_columns)
         template_func.set_obstype_desc_defaults(MW)
         template_func.set_obstype_units_defaults(MW)
         template_func.set_datetime_defaults(MW)
-
+    else:
+        csv_columns = []
+        if not MW.use_metadata.isChecked():
+            # no metadata and wide format
+            _get_name_box(MW).setEnabled(False)
 
 
 
@@ -211,7 +191,10 @@ def prepare_for_mapping(MW):
         if not valid:
             Error(_msg)
             return
-        metadf_cols = list(readfile(metadatafile, nrows=20)[0].columns)
+        metadf_head = readfile(metadatafile, nrows=20)[0]
+        metadf_cols = list(metadf_head.columns)
+        MW.session['mapping']['metadata_head'] = metadf_head.copy() #save for tests on template
+        MW.session['mapping']['metadata_cols'] = metadf_cols.copy() #save for tests on template
         metadf_cols.insert(0, template_func.not_mapable)
 
         # enable all obs boxes for colum mapping
@@ -219,6 +202,23 @@ def prepare_for_mapping(MW):
 
         # set column and default values
         template_func.set_metadata_spinner_values(MW, metadf_cols)
+    else:
+        metadf_cols = []
+
+    template_func.set_name_spinner_values(MW, csv_columns, metadf_cols)
+    # enable the build button
+    MW.build_B.setEnabled(True)
+
+
+# -------  Build template ---------
+
+def build_template(MW):
+    print('in build')
+    df, succes = template_func.make_template_build(MW)
+    if succes:
+        MW.templmodel.setDataFrame(df)
+        MW.save_template.setEnabled(True) #enable the save button
+
 
 
 
@@ -245,7 +245,10 @@ def _get_datetime_boxes(MW):
 
 
 def _get_metadata_boxes(MW):
-    return [MW.name_col_CB, MW.lat_col_CB, MW.lon_col_CB,
+    return [MW.lat_col_CB, MW.lon_col_CB,
             MW.loc_col_CB, MW.call_col_CB, MW.network_col_CB]
+
+def _get_name_box(MW):
+    return MW.name_col_CB
 
 

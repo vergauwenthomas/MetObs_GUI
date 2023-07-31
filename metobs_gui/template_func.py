@@ -8,9 +8,12 @@ Created on Mon Mar 20 13:00:45 2023
 
 import metobs_gui.path_handler as path_handler
 import os
+import math
 from pathlib import Path
 import numpy as np
 import pandas as pd
+
+from metobs_gui.errors import Error, Notification
 
 # =============================================================================
 # default settings
@@ -83,6 +86,17 @@ Meta_map_values = {
     # Observation types
     # =============================================================================
 def set_obstype_spinner_values(main, values):
+    # empty spinner values
+    main.temp_col_CB.clear()
+    main.radtemp_col_CB.clear()
+    main.hum_col_CB.clear()
+    main.pre_col_CB.clear()
+    main.pre_s_col_CB.clear()
+    main.wind_col_CB.clear()
+    main.gust_col_CB.clear()
+    main.dir_col_CB.clear()
+    main.p_col_CB.clear()
+    main.psea_col_CB.clear()
     # Fill with defaults
     main.temp_col_CB.addItems(values)
     main.radtemp_col_CB.addItems(values)
@@ -96,14 +110,42 @@ def set_obstype_spinner_values(main, values):
     main.psea_col_CB.addItems(values)
 
 def set_time_spinner_values(main, values):
+    # empty spinner values
+    main.datetime_col_CB.clear()
+    main.date_col_CB.clear()
+    main.time_col_CB.clear()
     # Fill with defaults
     main.datetime_col_CB.addItems(values)
     main.date_col_CB.addItems(values)
     main.time_col_CB.addItems(values)
 
+def set_name_spinner_values(main, values_a, values_b):
+    """ The valuese are the unique sum of values_a and values_b """
+    if values_a is None:
+        values_a = []
+    if values_b is None:
+        values_b = []
+    values_a.extend(values_b)
+    comb_val = list(set(values_a))
+
+    # empty spinner values
+    main.name_col_CB.clear()
+    main.name_col_CB.addItems(comb_val)
+
+
 
 def set_obstype_units_defaults(main):
-
+    # empty spinner values
+    main.temp_units_CB.clear()
+    main.radtemp_units_CB.clear()
+    main.hum_units_CB.clear()
+    main.pre_units_CB.clear()
+    main.pre_s_units_CB.clear()
+    main.wind_units_CB.clear()
+    main.gust_units_CB.clear()
+    main.dir_units_CB.clear()
+    main.p_units_CB.clear()
+    main.psea_units_CB.clear()
     # Fill with defaults
     main.temp_units_CB.addItems(Obs_map_values['temp']['units'])
     main.radtemp_units_CB.addItems(Obs_map_values['radiation_temp']['units'])
@@ -142,7 +184,13 @@ def set_datetime_defaults(main):
 
 
 def set_metadata_spinner_values(main, values):
-    main.name_col_CB.addItems(values)
+    # empty spinner values
+    main.lat_col_CB.clear()
+    main.lon_col_CB.clear()
+    main.loc_col_CB.clear()
+    main.call_col_CB.clear()
+    main.network_col_CB.clear()
+    # fill values
     main.lat_col_CB.addItems(values)
     main.lon_col_CB.addItems(values)
     main.loc_col_CB.addItems(values)
@@ -190,6 +238,7 @@ def make_template_build(main):
     obsmapper = {} #for observationtypes
     dtmapper = {} #for datetimes
     metamapper = {} #for metadata
+    optionsmapper = {}
     def get_obs_map(map_CB, unit_CB, desc_T):
         mapcolname = str(map_CB.currentText())
         if mapcolname != not_mapable:
@@ -279,6 +328,52 @@ def make_template_build(main):
     metamapper['call_name'] = get_meta_map(main.call_col_CB)
     metamapper['network'] = get_meta_map(main.network_col_CB)
 
+
+    # Options to dict
+    possible_options = {'data_structure': None, #['long', 'wide', 'single_station'],
+                        'stationname': None, #'_any_',
+                        'obstype': None, #observation_types,
+                        'obstype_unit': None, #'_any_',
+                        'obstype_description' : None, # '_any_',
+                        'timezone': None, #all_timezones
+                        }
+    # format
+    fmtdict= {'long': 'long',
+              'wide':'wide',
+              'single-station': 'single_station'}
+    possible_options['data_structure'] = fmtdict[str(main.browse_format.currentText())]
+    possible_options['stationname'] = str(main.stationname.text())
+    possible_options['timezone'] = str(main.timezone_spinner.currentText())
+
+    if possible_options['data_structure'] == 'wide':
+        possible_options['obstype'] = str(main.wide_obs_type.currentText())
+        possible_options['obstype_units'] = str(main.wide_obs_units.text())
+        possible_options['obstype_description'] = str(main.wide_obs_desc.text())
+
+
+    # empty textedit is represented by empty string, convert to none
+    for key, val in possible_options.items():
+        if val == '':
+            possible_options[key] = None
+
+    filtered_opt = {key: val for key, val in possible_options.items() if not val is None}
+
+    options_dict = {'options' : list(filtered_opt.keys()),
+                    'options_values': list(filtered_opt.values())}
+    options_df = pd.DataFrame(options_dict)
+
+    print(f'OPTIONS df: \n {options_df}')
+
+
+    # 3. check if mapping is valid
+    template_ok = test_template(main, obsmapper, metamapper, dtmapper, filtered_opt)
+
+    if not template_ok:
+        return None, False #succes = False
+
+
+
+
     # 2. Convert to a dataframe
     def to_dataframe(mapper):
         df = pd.DataFrame(mapper).transpose()
@@ -295,16 +390,111 @@ def make_template_build(main):
                        to_dataframe(metamapper),
                        to_dataframe(obsmapper)])
     mapdf = mapdf.reset_index(drop=True)
+    mapdf = pd.concat([mapdf,options_df], ignore_index=False, axis=1) #add optionscolumns
 
-    # 3. check if mapping is valid
-    #TODO
 
     # 4. write mappingtemplate to csv
     tmp_csv_file = os.path.join(path_handler.TMP_dir,'template.csv')
 
     mapdf.to_csv(path_or_buf=tmp_csv_file, sep=',', index=False)
 
-    return mapdf
+    return mapdf, True
+
+def test_template(main, obsmapper, metamapper, dtmapper, optionsmapper):
+    data_head = main.session['mapping']['data_head']
+    data_cols = main.session['mapping']['data_cols']
+    if main.use_metadata.isChecked():
+        metadata_head = main.session['mapping']['metadata_head']
+        metadata_cols = main.session['mapping']['metadata_cols']
+
+
+    fmt = optionsmapper['data_structure'] # long, wide or single_station
+    namecol = metamapper['name']['map_column']
+
+
+    if (fmt == 'long') :
+        # name must be in the data file as column
+        if not namecol in data_cols:
+            Error('Invalid mapping', f'The name column "{namecol}" is not found as a column in the data file! ')
+            return False
+    if (fmt == 'long') | (fmt == 'single_station'):
+        if main.use_metadata.isChecked():
+            if not namecol in metadata_cols:
+                # a) if metadata is given, and format is long, check if name column is present in both datafiles
+                Error('Invalid mapping', f'The name column "{namecol}" is not found as a column in the metadata file! ')
+                return False
+
+        # b) check if at least one obstype is mapped
+        mapped_obs = [key for key, item in obsmapper.items() if isinstance(item['map_column'], str)]
+        if len(mapped_obs) < 1 :
+            Error('Invalid mapping', f'None observation type is mapped! ')
+            return False
+
+
+    # check datetimemapping
+    mapped_dt = [key for key, item in dtmapper.items() if isinstance(item['map_column'], str)]
+
+    if len(mapped_dt) == 0:
+        Error('Invalid mapping', f'None datetime mapping is provided.')
+        return False
+    if len(mapped_dt) == 1:
+        if mapped_dt[0] =='datetime':
+            # test datetime format
+            dt_head = data_head[dtmapper['datetime']['map_column']]
+            dtfmt = dtmapper['datetime']['map_fmt']
+            try:
+                pd.to_datetime(dt_head, format=dtfmt)
+            except:
+                Error('Invalid mapping', f' {dtfmt} is not valid for the timestamps in the data ({dt_head[0:3].to_list()}, ...)')
+                return False
+        else:
+            Error('Invalid mapping', f'When one timestamp column is used, it must represent the datetime and not the {mapped_dt[0]}')
+            return False
+    if len(mapped_dt) == 2:
+        if (not '_date' in mapped_dt) | (not '_time' in mapped_dt):
+            Error('Invalid mapping', f'When two columns are use to indicate timestamps, one must be a "date" and the other a "time" representation.')
+            return False
+        # test datetime format
+        date_head = data_head[dtmapper['_date']['map_column']]
+        time_head = data_head[dtmapper['_time']['map_column']]
+
+        datefmt = dtmapper['_date']['map_fmt']
+        timefmt = dtmapper['_time']['map_fmt']
+
+        try:
+            pd.to_datetime(date_head, format=datefmt)
+        except:
+            Error('Invalid mapping', f' {datefmt} is not valid for the column representing the dates in the data ({date_head[0:3].to_list()}, ...)')
+            return False
+        try:
+            pd.to_datetime(time_head, format=timefmt)
+        except:
+            Error('Invalid mapping', f' {timefmt} is not valid for the column representing the timestamps in the data ({time_head[0:3].to_list()}, ...)')
+            return False
+    if len(mapped_dt) > 2:
+        Error('Invalid mapping', f'Invalid combination of datetime indicators: {mapped_dt}')
+        return False
+
+    # check wide data
+    if (fmt == 'wide'):
+        print(optionsmapper)
+        if not 'obstype_units' in optionsmapper.keys():
+            Error('Invalid mapping', f'(wide - format) Specify the observation units for the {optionsmapper["obstype"]} records.')
+            return False
+
+        if not 'obstype_description' in optionsmapper.keys():
+            Error('Invalid mapping', f'(wide - format) Specify the observation description for the {optionsmapper["obstype"]} records.')
+            return False
+
+    if (fmt == 'single_station'):
+        print('single station !!!!!!!')
+        if not 'stationname' in optionsmapper:
+            Error('Invalid mapping', f'(single station - format) Specify the name of the station.')
+            return False
+
+
+    return True
+
 
 
 def get_all_templates():

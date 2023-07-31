@@ -29,7 +29,7 @@ GUI_dir = str( Path(__file__).resolve().parents[0])
 TMP_dir = os.path.join(GUI_dir, 'tmp')
 
 CACHE_dir = os.path.join(GUI_dir, 'cache')
-print(f'debug in path handler: {CACHE_dir}')
+
 # toolkit location of templates
 # tlk_default_template = os.path.join(TLK_dir, 'data_templates',
 #                                     'template_defaults', 'default_template.csv')

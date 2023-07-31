@@ -97,12 +97,16 @@ class MainWindow(QDialog):
 
 
         # save paths when selected
-        self.save_data_path.clicked.connect(lambda: self.template_page.save_path(savebool=self.save_data_path.isChecked(),
-                                                                   savekey='data_file_path',
-                                                                   saveval=self.data_file_T.text()))
-        self.save_metadata_path.clicked.connect(lambda: self.template_page.save_path(savebool=self.save_metadata_path.isChecked(),
-                                                                   savekey='metadata_file_path',
-                                                                   saveval=self.metadata_file_T.text()))
+        self.save_data_path.clicked.connect(lambda: template_page.save_path(
+                                                                MW=self,
+                                                                savebool=self.save_data_path.isChecked(),
+                                                                savekey='data_file_path',
+                                                                saveval=self.data_file_T.text()))
+        self.save_metadata_path.clicked.connect(lambda: template_page.save_path(
+                                                                MW=self,
+                                                                savebool=self.save_metadata_path.isChecked(),
+                                                                savekey='metadata_file_path',
+                                                                saveval=self.metadata_file_T.text()))
 
         self.browse_format.currentTextChanged.connect(lambda: template_page.enable_format_widgets(self))
 
@@ -110,7 +114,7 @@ class MainWindow(QDialog):
         self.start_mapping_B.clicked.connect(lambda: template_page.prepare_for_mapping(self))
 
         # construnct the mappindict
-        self.build_B.clicked.connect(lambda: self.build_template())
+        self.build_B.clicked.connect(lambda: template_page.build_template(self))
 
         # save template
         self.save_template.clicked.connect(lambda: self.save_template_call())
@@ -277,13 +281,13 @@ class MainWindow(QDialog):
 
         return columns
 
-    def build_template(self):
-        df = template_func.make_template_build(self)
-        if df.empty:
-            Error('There are no mapped values.')
-        self.templmodel.setDataFrame(df)
+    # def build_template(self):
+    #     df = template_func.make_template_build(self)
+    #     if df.empty:
+    #         Error('There are no mapped values.')
+    #     self.templmodel.setDataFrame(df)
 
-        self.save_template.setEnabled(True) #enable the save button
+    #     self.save_template.setEnabled(True) #enable the save button
 
 
     def save_template_call(self):
@@ -358,9 +362,10 @@ def main():
     widget.addWidget(mainwindow)
     widget.show()
 
-    dlg = MyDialog()
-    dlg.show()
-    dlg.raise_()
+    # following lines are log window --> uncomment for debugging
+    # dlg = MyDialog()
+    # dlg.show()
+    # dlg.raise_()
 
     succesfull=True
     # except:
