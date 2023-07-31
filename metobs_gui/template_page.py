@@ -213,14 +213,42 @@ def prepare_for_mapping(MW):
 # -------  Build template ---------
 
 def build_template(MW):
-    print('in build')
     df, succes = template_func.make_template_build(MW)
     if succes:
+        MW.session['mapping']['template_df'] = df.copy()
         MW.templmodel.setDataFrame(df)
         MW.save_template.setEnabled(True) #enable the save button
 
 
 
+def show_data_head(MW):
+    # 1. THe data file
+    datafile = MW.data_file_T.text()
+    valid, _msg = isvalidfile(datafile, filetype='.csv')
+    if not valid:
+        Error(_msg)
+        return
+    # Read columns
+    df_head = readfile(datafile, nrows=20)[0]
+    MW.templmodel.setDataFrame(df_head)
+
+def show_metadata_head(MW):
+   metadatafile = MW.metadata_file_T.text()
+   valid, _msg = isvalidfile(metadatafile, filetype='.csv')
+   if not valid:
+       Error(_msg)
+       return
+   # Read columns
+   metadf_head = readfile(metadatafile, nrows=20)[0]
+   MW.templmodel.setDataFrame(metadf_head)
+
+
+
+def show_template(MW):
+    if not 'template_df' in MW.session['mapping']:
+        Error('View error', 'The template is not been succesfully build yet.')
+
+    MW.templmodel.setDataFrame(MW.session['mapping']['template_df'])
 
 
 # =============================================================================

@@ -18,7 +18,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1561</width>
+     <width>1781</width>
      <height>1131</height>
     </rect>
    </property>
@@ -862,7 +862,7 @@
        <x>20</x>
        <y>830</y>
        <width>1211</width>
-       <height>51</height>
+       <height>211</height>
       </rect>
      </property>
     </widget>
@@ -1250,8 +1250,8 @@
     <widget class="QLineEdit" name="templatename">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>900</y>
+       <x>1360</x>
+       <y>970</y>
        <width>161</width>
        <height>25</height>
       </rect>
@@ -1263,8 +1263,8 @@
     <widget class="QLabel" name="label_37">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>900</y>
+       <x>1250</x>
+       <y>980</y>
        <width>111</width>
        <height>17</height>
       </rect>
@@ -1279,8 +1279,8 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>300</x>
-       <y>900</y>
+       <x>1560</x>
+       <y>970</y>
        <width>80</width>
        <height>25</height>
       </rect>
@@ -1508,6 +1508,45 @@
        <width>151</width>
        <height>25</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="preview_data">
+     <property name="geometry">
+      <rect>
+       <x>1330</x>
+       <y>830</y>
+       <width>181</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Preview Data</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="preview_metadata">
+     <property name="geometry">
+      <rect>
+       <x>1330</x>
+       <y>880</y>
+       <width>181</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Preview Metadata</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="view_template">
+     <property name="geometry">
+      <rect>
+       <x>1330</x>
+       <y>930</y>
+       <width>181</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>View template</string>
      </property>
     </widget>
    </widget>

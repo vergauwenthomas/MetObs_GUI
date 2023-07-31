@@ -21,7 +21,7 @@ def pass_return(returnvalue, is_error=False,  err_message='Error detected!'):
 
 def isvalidfile(filepath, filetype=None):
     if not os.path.isfile(filepath):
-        return False, "f{filepath} is not a file."
+        return False, f"{filepath} is not a file."
 
     if not isinstance(filetype, type(None)):
         if not filepath.endswith(filetype):

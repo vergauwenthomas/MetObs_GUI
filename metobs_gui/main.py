@@ -94,8 +94,6 @@ class MainWindow(QDialog):
 
 #
 
-
-
         # save paths when selected
         self.save_data_path.clicked.connect(lambda: template_page.save_path(
                                                                 MW=self,
@@ -119,6 +117,10 @@ class MainWindow(QDialog):
         # save template
         self.save_template.clicked.connect(lambda: self.save_template_call())
 
+        # display df's
+        self.preview_data.clicked.connect(lambda: template_page.show_data_head(self))
+        self.preview_metadata.clicked.connect(lambda: template_page.show_metadata_head(self))
+        self.view_template.clicked.connect(lambda: template_page.show_template(self))
         # =============================================================================
         # Import data tab
         # =============================================================================
