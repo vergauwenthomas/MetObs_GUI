@@ -26,9 +26,12 @@ GUI_dir = str( Path(__file__).resolve().parents[0])
 # Derived locations
 # =============================================================================
 
-TMP_dir = os.path.join(GUI_dir, 'tmp')
+TMP_dir = os.path.join(GUI_dir, 'tmp') #to use in a single session
 
-CACHE_dir = os.path.join(GUI_dir, 'cache')
+CACHE_dir = os.path.join(GUI_dir, 'cache') #to use over multiple sessions
+
+template_dir = CACHE_dir
+pkl_dir = CACHE_dir
 
 # toolkit location of templates
 # tlk_default_template = os.path.join(TLK_dir, 'data_templates',
@@ -59,12 +62,14 @@ def file_exist(filepath):
 def copy_file(filepath, targetpath):
     shutil.copyfile(filepath, targetpath)
 
-def list_csv_filenames(folderpath):
+def list_filenames(folderpath, fileextension=None):
     all_stuff = os.listdir(folderpath)
     all_files = [file for file in all_stuff if os.path.isfile(os.path.join(
                                                 folderpath, file))]
-
-    filenames =[file for file in all_files if file.endswith('.csv')]
+    if fileextension is None:
+        filenames = all_files
+    else:
+        filenames =[file for file in all_files if file.endswith(fileextension)]
     filepaths =[os.path.join(folderpath, file) for file in filenames]
 
     return filenames, filepaths

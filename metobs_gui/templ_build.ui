@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1773</width>
-    <height>1123</height>
+    <width>1718</width>
+    <height>1170</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,15 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1781</width>
-     <height>1131</height>
+     <width>1778</width>
+     <height>1200</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
    <property name="currentIndex">
     <number>0</number>
@@ -1549,6 +1555,141 @@
       <string>View template</string>
      </property>
     </widget>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="geometry">
+      <rect>
+       <x>-1</x>
+       <y>-1</y>
+       <width>1661</width>
+       <height>1051</height>
+      </rect>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1659</width>
+        <height>1049</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <zorder>scrollArea</zorder>
+    <zorder>label_2</zorder>
+    <zorder>pre_units_CB</zorder>
+    <zorder>label_9</zorder>
+    <zorder>start_mapping_B</zorder>
+    <zorder>dir_desc_T</zorder>
+    <zorder>p_units_CB</zorder>
+    <zorder>label_27</zorder>
+    <zorder>hum_col_CB</zorder>
+    <zorder>psea_col_CB</zorder>
+    <zorder>label_12</zorder>
+    <zorder>wind_col_CB</zorder>
+    <zorder>date_col_CB</zorder>
+    <zorder>label_6</zorder>
+    <zorder>Browse_metadata_B</zorder>
+    <zorder>label_14</zorder>
+    <zorder>save_metadata_path</zorder>
+    <zorder>pre_col_CB</zorder>
+    <zorder>wind_desc_T</zorder>
+    <zorder>label_25</zorder>
+    <zorder>label_5</zorder>
+    <zorder>radtemp_col_CB</zorder>
+    <zorder>temp_col_CB</zorder>
+    <zorder>dir_units_CB</zorder>
+    <zorder>label_26</zorder>
+    <zorder>label_24</zorder>
+    <zorder>label</zorder>
+    <zorder>lat_col_CB</zorder>
+    <zorder>network_col_CB</zorder>
+    <zorder>line</zorder>
+    <zorder>label_20</zorder>
+    <zorder>temp_units_CB</zorder>
+    <zorder>pre_s_col_CB</zorder>
+    <zorder>datetime_col_CB</zorder>
+    <zorder>label_11</zorder>
+    <zorder>time_fmt_T</zorder>
+    <zorder>psea_desc_T</zorder>
+    <zorder>label_19</zorder>
+    <zorder>label_31</zorder>
+    <zorder>date_fmt_T</zorder>
+    <zorder>label_7</zorder>
+    <zorder>stationname_labeltext</zorder>
+    <zorder>label_33</zorder>
+    <zorder>label_8</zorder>
+    <zorder>radtemp_desc_T</zorder>
+    <zorder>label_22</zorder>
+    <zorder>hum_units_CB</zorder>
+    <zorder>datetime_fmt_T</zorder>
+    <zorder>label_17</zorder>
+    <zorder>build_B</zorder>
+    <zorder>label_10</zorder>
+    <zorder>pre_s_units_CB</zorder>
+    <zorder>gust_desc_T</zorder>
+    <zorder>label_32</zorder>
+    <zorder>hum_desc_T</zorder>
+    <zorder>radtemp_units_CB</zorder>
+    <zorder>label_4</zorder>
+    <zorder>label_38</zorder>
+    <zorder>loc_col_CB</zorder>
+    <zorder>label_30</zorder>
+    <zorder>temp_desc_T</zorder>
+    <zorder>table</zorder>
+    <zorder>label_23</zorder>
+    <zorder>label_35</zorder>
+    <zorder>pre_s_desc_T</zorder>
+    <zorder>save_data_path</zorder>
+    <zorder>label_21</zorder>
+    <zorder>wind_units_CB</zorder>
+    <zorder>label_18</zorder>
+    <zorder>psea_units_CB</zorder>
+    <zorder>label_39</zorder>
+    <zorder>data_file_T</zorder>
+    <zorder>lon_col_CB</zorder>
+    <zorder>label_3</zorder>
+    <zorder>label_13</zorder>
+    <zorder>p_desc_T</zorder>
+    <zorder>label_34</zorder>
+    <zorder>time_col_CB</zorder>
+    <zorder>label_36</zorder>
+    <zorder>metadata_file_T</zorder>
+    <zorder>p_col_CB</zorder>
+    <zorder>Browse_data_B</zorder>
+    <zorder>label_15</zorder>
+    <zorder>pre_desc_T</zorder>
+    <zorder>gust_col_CB</zorder>
+    <zorder>dir_col_CB</zorder>
+    <zorder>name_col_CB</zorder>
+    <zorder>gust_units_CB</zorder>
+    <zorder>label_16</zorder>
+    <zorder>call_col_CB</zorder>
+    <zorder>templatename</zorder>
+    <zorder>label_37</zorder>
+    <zorder>save_template</zorder>
+    <zorder>line_5</zorder>
+    <zorder>browse_format</zorder>
+    <zorder>label_48</zorder>
+    <zorder>label_49</zorder>
+    <zorder>checkBox</zorder>
+    <zorder>use_metadata</zorder>
+    <zorder>wide_obs_type</zorder>
+    <zorder>label_50</zorder>
+    <zorder>label_51</zorder>
+    <zorder>label_52</zorder>
+    <zorder>wide_obs_units</zorder>
+    <zorder>wide_obs_desc</zorder>
+    <zorder>label_53</zorder>
+    <zorder>stationname</zorder>
+    <zorder>label_54</zorder>
+    <zorder>timezone_spinner</zorder>
+    <zorder>preview_data</zorder>
+    <zorder>preview_metadata</zorder>
+    <zorder>view_template</zorder>
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -1561,7 +1702,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>40</y>
+       <y>60</y>
        <width>111</width>
        <height>25</height>
       </rect>
@@ -1576,15 +1717,22 @@
        <height>17</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
-      <string>Input data</string>
+      <string>Input data from files</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_40">
      <property name="geometry">
       <rect>
-       <x>140</x>
-       <y>40</y>
+       <x>20</x>
+       <y>30</y>
        <width>101</width>
        <height>17</height>
       </rect>
@@ -1597,7 +1745,7 @@
      <property name="geometry">
       <rect>
        <x>260</x>
-       <y>20</y>
+       <y>30</y>
        <width>54</width>
        <height>17</height>
       </rect>
@@ -1610,7 +1758,7 @@
      <property name="geometry">
       <rect>
        <x>610</x>
-       <y>20</y>
+       <y>30</y>
        <width>171</width>
        <height>17</height>
       </rect>
@@ -1623,7 +1771,7 @@
      <property name="geometry">
       <rect>
        <x>600</x>
-       <y>40</y>
+       <y>60</y>
        <width>221</width>
        <height>25</height>
       </rect>
@@ -1633,7 +1781,7 @@
      <property name="geometry">
       <rect>
        <x>840</x>
-       <y>40</y>
+       <y>60</y>
        <width>80</width>
        <height>25</height>
       </rect>
@@ -1646,7 +1794,7 @@
      <property name="geometry">
       <rect>
        <x>490</x>
-       <y>40</y>
+       <y>60</y>
        <width>80</width>
        <height>25</height>
       </rect>
@@ -1659,7 +1807,7 @@
      <property name="geometry">
       <rect>
        <x>250</x>
-       <y>40</y>
+       <y>60</y>
        <width>221</width>
        <height>25</height>
       </rect>
@@ -1668,8 +1816,8 @@
     <widget class="QLabel" name="label_43">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>430</y>
+       <x>10</x>
+       <y>630</y>
        <width>241</width>
        <height>17</height>
       </rect>
@@ -1681,8 +1829,8 @@
     <widget class="QPushButton" name="make_dataset">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>660</y>
+       <x>0</x>
+       <y>870</y>
        <width>171</width>
        <height>25</height>
       </rect>
@@ -1695,7 +1843,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>90</y>
+       <y>170</y>
        <width>911</width>
        <height>16</height>
       </rect>
@@ -1704,63 +1852,11 @@
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="label_44">
-     <property name="geometry">
-      <rect>
-       <x>380</x>
-       <y>100</y>
-       <width>91</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Import settings</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="tz_selector">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>130</y>
-       <width>121</width>
-       <height>25</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_45">
-     <property name="geometry">
-      <rect>
-       <x>160</x>
-       <y>130</y>
-       <width>54</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Timezone</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="metadata_box">
-     <property name="geometry">
-      <rect>
-       <x>580</x>
-       <y>110</y>
-       <width>141</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Use metadata</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
     <widget class="QSpinBox" name="resample_spinbox">
      <property name="geometry">
       <rect>
-       <x>280</x>
-       <y>160</y>
+       <x>40</x>
+       <y>240</y>
        <width>121</width>
        <height>26</height>
       </rect>
@@ -1784,30 +1880,17 @@
       <number>60</number>
      </property>
     </widget>
-    <widget class="QLabel" name="label_46">
-     <property name="geometry">
-      <rect>
-       <x>410</x>
-       <y>160</y>
-       <width>151</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Temporal resolution (min)</string>
-     </property>
-    </widget>
     <widget class="QCheckBox" name="resample_box">
      <property name="geometry">
       <rect>
-       <x>280</x>
-       <y>130</y>
-       <width>141</width>
+       <x>20</x>
+       <y>220</y>
+       <width>321</width>
        <height>23</height>
       </rect>
      </property>
      <property name="text">
-      <string>Resample temporal</string>
+      <string>Resample temporal resolution</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -1816,8 +1899,8 @@
     <widget class="QTextEdit" name="prompt">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>460</y>
+       <x>10</x>
+       <y>670</y>
        <width>981</width>
        <height>191</height>
       </rect>
@@ -1827,20 +1910,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>410</y>
-       <width>921</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_4">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>190</y>
+       <y>290</y>
        <width>921</width>
        <height>16</height>
       </rect>
@@ -1850,10 +1920,13 @@
      </property>
     </widget>
     <widget class="QPushButton" name="show_dataset">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
-       <x>800</x>
-       <y>660</y>
+       <x>790</x>
+       <y>870</y>
        <width>161</width>
        <height>25</height>
       </rect>
@@ -1863,10 +1936,13 @@
      </property>
     </widget>
     <widget class="QPushButton" name="plot_dataset">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
-       <x>800</x>
-       <y>700</y>
+       <x>790</x>
+       <y>910</y>
        <width>161</width>
        <height>25</height>
       </rect>
@@ -1876,16 +1952,550 @@
      </property>
     </widget>
     <widget class="QPushButton" name="get_info">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
-       <x>400</x>
-       <y>660</y>
+       <x>390</x>
+       <y>870</y>
        <width>171</width>
        <height>25</height>
       </rect>
      </property>
      <property name="text">
       <string>Get info</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="use_specific_temp">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>110</y>
+       <width>181</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Use specific template</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="specific_temp_path">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>130</y>
+       <width>221</width>
+       <height>25</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_28">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>240</y>
+       <width>54</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Minutes</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_55">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>180</y>
+       <width>181</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Input settings</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_56">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>220</y>
+       <width>91</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Gap defenition</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="gap_def_spinner">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>240</y>
+       <width>121</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="suffix">
+      <string/>
+     </property>
+     <property name="minimum">
+      <number>2</number>
+     </property>
+     <property name="maximum">
+      <number>2000</number>
+     </property>
+     <property name="singleStep">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>20</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_57">
+     <property name="geometry">
+      <rect>
+       <x>440</x>
+       <y>250</y>
+       <width>231</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string># missing consecutive records</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="show_dataset_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>980</x>
+       <y>870</y>
+       <width>161</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Save dataset</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_58">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>300</y>
+       <width>251</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Special manipulations</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="sync_obs">
+     <property name="geometry">
+      <rect>
+       <x>620</x>
+       <y>330</y>
+       <width>321</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Syncronize observations</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="freq_est_method">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>350</y>
+       <width>111</width>
+       <height>25</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_44">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>350</y>
+       <width>201</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Frequency estimation method</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="freq_simpl">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>370</y>
+       <width>181</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Frequency simplification</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="freq_simpl_spinner">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>400</y>
+       <width>121</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="suffix">
+      <string/>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>120</number>
+     </property>
+     <property name="singleStep">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>5</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_45">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>400</y>
+       <width>171</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Frequency simplification error</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_46">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>400</y>
+       <width>54</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Minutes</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_59">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>440</y>
+       <width>131</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Datafile read kwargs:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="data_kwargs">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>440</y>
+       <width>221</width>
+       <height>25</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_60">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>470</y>
+       <width>151</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Metadatafile read kwargs:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="metadata_kwargs">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>470</y>
+       <width>221</width>
+       <height>25</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_61">
+     <property name="geometry">
+      <rect>
+       <x>870</x>
+       <y>370</y>
+       <width>54</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Minutes</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="sync_obs_tol_spinner">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>730</x>
+       <y>360</y>
+       <width>121</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="suffix">
+      <string/>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>2000</number>
+     </property>
+     <property name="singleStep">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>10</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_62">
+     <property name="geometry">
+      <rect>
+       <x>620</x>
+       <y>370</y>
+       <width>151</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Tollerance</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="sync_obs_force">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>620</x>
+       <y>390</y>
+       <width>321</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Force frequency</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_63">
+     <property name="geometry">
+      <rect>
+       <x>620</x>
+       <y>420</y>
+       <width>151</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Target frequency:</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="sync_obs_force_spinner">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>730</x>
+       <y>420</y>
+       <width>121</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="suffix">
+      <string/>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>2000</number>
+     </property>
+     <property name="singleStep">
+      <number>10</number>
+     </property>
+     <property name="value">
+      <number>60</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_81">
+     <property name="geometry">
+      <rect>
+       <x>860</x>
+       <y>420</y>
+       <width>54</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Minutes</string>
+     </property>
+    </widget>
+    <widget class="Line" name="line_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>520</y>
+       <width>921</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_82">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>530</y>
+       <width>251</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Import dataset from pkl</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pkl_browser">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>590</y>
+       <width>80</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Browse</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="pkl_path">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>590</y>
+       <width>221</width>
+       <height>25</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="use_pkl">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>560</y>
+       <width>321</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Use dataset from pkl</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="Browse_specific_temp">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>130</y>
+       <width>80</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Browse</string>
      </property>
     </widget>
    </widget>
@@ -2306,6 +2916,11 @@
    <widget class="QWidget" name="tab_7">
     <attribute name="title">
      <string>Analysis</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="tab_9">
+    <attribute name="title">
+     <string>Page</string>
     </attribute>
    </widget>
   </widget>

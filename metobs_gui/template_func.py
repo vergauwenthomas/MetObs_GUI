@@ -393,11 +393,6 @@ def make_template_build(main):
     mapdf = pd.concat([mapdf,options_df], ignore_index=False, axis=1) #add optionscolumns
 
 
-    # 4. write mappingtemplate to csv
-    tmp_csv_file = os.path.join(path_handler.TMP_dir,'template.csv')
-
-    mapdf.to_csv(path_or_buf=tmp_csv_file, sep=',', index=False)
-
     return mapdf, True
 
 def test_template(main, obsmapper, metamapper, dtmapper, optionsmapper):
@@ -510,7 +505,8 @@ def get_all_templates():
     template_dict['default_template.csv'] = path_handler.tlk_default_template
 
     # all templates in cache
-    filenames, filepaths = path_handler.list_csv_filenames(path_handler.CACHE_dir)
+    filenames, filepaths = path_handler.list_filenames(path_handler.CACHE_dir,
+                                                       fileextension='.csv')
     template_dict.update(dict(zip(filenames, filepaths)))
 
     return template_dict

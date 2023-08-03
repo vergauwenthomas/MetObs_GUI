@@ -39,8 +39,11 @@ class TimeSeriesWindow(QMainWindow):
         super().__init__()
         loadUi(os.path.join(path_handler.GUI_dir,'fig_window.ui'), self)
 
-
+        # setup canvas
         self.canvas=MplCanvas(dataset)
+
+        #init widgets
+        self.init_widgets(dataset)
 
         # triggers
         self.update_plot_box.clicked.connect(lambda: self.update_plot())
@@ -62,6 +65,8 @@ class TimeSeriesWindow(QMainWindow):
 
         self.select_obstype.clear()
         self.select_obstype.addItems(dataset.df.columns.to_list())
+
+
     def _make_axes(self):
         # self.canvas.testplot() #create mpl axes plot
         self.canvas.timeseriesplot() #create mpl axes plot
@@ -110,16 +115,17 @@ class TimeSeriesWindow(QMainWindow):
 class MergeWindow(QMainWindow):
     """ Creates new window """
 
-    def __init__(self):
+    def __init__(self, df, mode='mergedf'):
         super().__init__()
         loadUi(os.path.join(path_handler.GUI_dir,'merge_overview.ui'), self)
 
         # Define data attributes
-        self.comb_df = pd.DataFrame()
-
+        self.df = df.reset_index()
         self.combmodel = DataFrameModel()
+        self.combmodel.setDataFrame(self.df)
         self.merge_table.setModel(self.combmodel)
 
+        self.mode = mode
 
         # initialise values
         self.set_obstype_subsetting_spinner()
@@ -132,12 +138,21 @@ class MergeWindow(QMainWindow):
         self.subset_comb_table()
 
     def set_obstype_subsetting_spinner(self):
+        # if mode is metadata --> disable spinner
+        if self.mode == 'metadf':
+            self.subset_merged_obstype.setEnabled(False)
+            return
+
         # check if dataset is available, if not use all possible obstypes
         all_obstypes = list(template_func.Obs_map_values.keys())
-        if self.comb_df.empty:
+        if self.df.empty:
             obstypes = all_obstypes
         else:
-            obstypes = [obstype for obstype in all_obstypes if obstype in self.comb_df.columns]
+            if self.mode == 'mergedf':
+                available_obstypes = self.df['obstype'].unique()
+                obstypes = [obstype for obstype in all_obstypes if obstype in available_obstypes]
+            else:
+                obstypes = [obstype for obstype in all_obstypes if obstype in self.df.columns]
 
         # insert 'NO SELECTION'
         if not 'NO SELECTION' in obstypes:
@@ -152,15 +167,20 @@ class MergeWindow(QMainWindow):
         # only if the combdf dataframe is not empty, and
         #  an obstype is selected, and the obstype is in the dataframe
         obstype = self.subset_merged_obstype.currentText()
-        comb_df = self.comb_df.reset_index()
 
-        if ((not comb_df.empty) &
-            (obstype != 'NO SELECTION') &
-            (obstype in comb_df.columns)):
-
-            subsetcols = ['name', 'datetime', obstype, obstype+'_final_label']
-            # update model
-            self.combmodel.setDataFrame(comb_df[subsetcols])
+        # comb_df = self.df.reset_index()
+        if self.mode == 'mergedf':
+            if ((not self.df.empty) &
+                (obstype != 'NO SELECTION')):
+                # subset model
+                self.combmodel.setDataFrame(self.df[self.df['obstype'] == obstype])
 
         else:
-            self.combmodel.setDataFrame(comb_df)
+            if ((not self.df.empty) &
+                (obstype != 'NO SELECTION')
+                (obstype in self.df.columns)):
+
+                subsetcols = ['name', 'datetime', obstype, obstype+'_final_label']
+                # update model
+                self.combmodel.setDataFrame(self.df[subsetcols])
+

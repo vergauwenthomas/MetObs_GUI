@@ -6,7 +6,14 @@
 import logging
 from pathlib import Path
 import os, sys
+
+# debug
+
+# print('CHANGE THE TOOLKIT PACKAGE LOCATION !!')
+# debug_path = '/home/thoverga/Documents/VLINDER_github/MetObs_toolkit'
+# sys.path.insert(0, debug_path)
 import metobs_toolkit
+
 
 # Create the Logger
 loggers = logging.getLogger(__name__)  # logger name is <vlinder-toolkit>

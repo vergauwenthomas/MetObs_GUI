@@ -6,6 +6,7 @@ Created on Fri Jul 28 13:30:48 2023
 @author: thoverga
 """
 from pathlib import Path
+import os
 import copy
 import pytz
 from PyQt5.QtWidgets import QFileDialog, QComboBox
@@ -19,6 +20,7 @@ from metobs_gui.data_func import readfile, isvalidfile, get_columns
 
 
 import metobs_gui.template_func as template_func
+import metobs_gui.path_handler as path_handler
 
 from metobs_gui.errors import Error, Notification
 
@@ -31,6 +33,11 @@ def init_template_page(MW):
 
     MW.session['mapping'] = {}
     MW.session['mapping']['started'] = False
+
+    # list all templates in the cache
+    MW.session['templates'] = {}
+    MW.session['templates']['cache'] = template_func.get_all_templates() # name.csv : path
+    MW.session['templates']['in_use']: {} # name.csv : path
 
     # set data paths to saved files
     set_datapaths_init(MW)
@@ -64,12 +71,12 @@ def set_datapaths_init(MW):
     # set datafile path
     if 'data_file_path' in saved_vals:
         MW.data_file_T.setText(str(saved_vals['data_file_path']))
-        MW.data_file_T_2.setText(str(saved_vals['data_file_path']))
+        # MW.data_file_T_2.setText(str(saved_vals['data_file_path']))
 
     # set metadata file path
     if 'metadata_file_path' in saved_vals:
         MW.metadata_file_T.setText(str(saved_vals['metadata_file_path']))
-        MW.metadata_file_T_2.setText(str(saved_vals['metadata_file_path']))
+        # MW.metadata_file_T_2.setText(str(saved_vals['metadata_file_path']))
 
 
 
@@ -213,13 +220,44 @@ def prepare_for_mapping(MW):
 # -------  Build template ---------
 
 def build_template(MW):
+    MW.session['mapping']['template_df'] = None
     df, succes = template_func.make_template_build(MW)
     if succes:
         MW.session['mapping']['template_df'] = df.copy()
         MW.templmodel.setDataFrame(df)
         MW.save_template.setEnabled(True) #enable the save button
 
+def save_template_call(MW):
+    # test if template is not empty
+    if MW.session['mapping']['template_df'] is None:
+        Error('Template error', 'The template has not been succesfully build. It is not possible to save.')
+        return
+    if MW.session['mapping']['template_df'].empty:
+        Error('Template error', 'The template is empty. It is not possible to save.')
+        return
+    # form path to save the template
+    template_name = str(MW.templatename.text())
+    if not template_name.endswith('.csv'):
+        filename = template_name + '.csv'
+    else:
+        filename = template_name
+    target_path = os.path.join(path_handler.template_dir, filename)
 
+    if path_handler.file_exist(target_path):
+        Error(f'{target_path} already exists! Change name of the template file and save again.')
+        return
+
+    # save template
+    temp_df =MW.session['mapping']['template_df']
+    temp_df.to_csv(path_or_buf=target_path, sep=',', index=False)
+
+    Notification(f'Template ({filename}) is saved!')
+    # update dict
+    MW.session['templates']['in_use'] = {filename : target_path}
+    # update cache templates
+    MW.session['templates']['cache'] = template_func.get_all_templates() # name.csv : path
+
+    print(MW.session)
 
 def show_data_head(MW):
     # 1. THe data file

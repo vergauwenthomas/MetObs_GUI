@@ -15,6 +15,7 @@ from pathlib import Path
 import matplotlib
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QMainWindow
+from PyQt5.QtWidgets import QScrollArea, QTabWidget
 from PyQt5.uic import loadUi
 
 import pandas as pd
@@ -33,21 +34,19 @@ from metobs_gui.extra_windows import MergeWindow, TimeSeriesWindow
 from metobs_gui.log_displayer import MyDialog
 
 import metobs_gui.template_page as template_page
+import metobs_gui.import_data_page as import_page
 
 
 
-class MainWindow(QDialog):
+class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         # Load gui widgets
-        loadUi(os.path.join(path_handler.GUI_dir,'templ_build.ui'),
+        loadUi(os.path.join(path_handler.GUI_dir,'last_attempt.ui'),
                self) #open the ui file
 
         # -------- Information to pass beween different triggers ----------
         self.dataset = None #the vlindertoolkit dataset instance
-        self.merge_window = MergeWindow() #New  ui window
-        self.tswindow = TimeSeriesWindow(dataset=None) #for plots
-
 
         self.long_storage = {} #will read the json file to store info over mulitple settings
         self.session = {} #store info during one session
@@ -55,14 +54,12 @@ class MainWindow(QDialog):
         # P1 INIT
         template_page.init_template_page(self)
 
-
+        # P2 INIT
+        import_page.init_import_page(self)
 
         # P2 ------------------------
         self.template_dict = None #dict; all available templname : templpath
         self.default_settings = tlk_scripts.get_default_settings()
-
-
-
 
 
         # ------- Setup (widgets and default values) ---------------
@@ -86,14 +83,12 @@ class MainWindow(QDialog):
         self.metadata_file_T.textChanged.connect(self.metadata_file_T_2.setText) #link them
 
 
+
         # =============================================================================
         # Mapping tab
         # =============================================================================
         self.Browse_data_B.clicked.connect(lambda: template_page.browsefiles_data(self)) #browse datafile
         self.Browse_metadata_B.clicked.connect(lambda: template_page.browsefiles_metadata(self)) #browse metadatafile
-
-#
-
         # save paths when selected
         self.save_data_path.clicked.connect(lambda: template_page.save_path(
                                                                 MW=self,
@@ -115,75 +110,94 @@ class MainWindow(QDialog):
         self.build_B.clicked.connect(lambda: template_page.build_template(self))
 
         # save template
-        self.save_template.clicked.connect(lambda: self.save_template_call())
+        self.save_template.clicked.connect(lambda: template_page.save_template_call(self))
 
         # display df's
         self.preview_data.clicked.connect(lambda: template_page.show_data_head(self))
         self.preview_metadata.clicked.connect(lambda: template_page.show_metadata_head(self))
         self.view_template.clicked.connect(lambda: template_page.show_template(self))
+
+
         # =============================================================================
         # Import data tab
         # =============================================================================
-
-        self.Browse_data_B_2.clicked.connect(lambda: self.browsefiles_data_p2()) #browse datafile
-        self.Browse_metadata_B_2.clicked.connect(lambda: self.browsefiles_metadata_p2()) #browse metadatafile
-
-        self.make_dataset.clicked.connect(lambda: self.make_tlk_dataset())
-
-        self.get_info.clicked.connect(lambda: self.show_dataset_info())
-        self.show_dataset.clicked.connect(lambda: self.create_dataset_window())
+        self.Browse_data_B_2.clicked.connect(lambda: import_page.browsefiles_data(self)) #browse datafile
+        self.Browse_metadata_B_2.clicked.connect(lambda: import_page.browsefiles_metadata(self)) #browse metadatafile
+        self.Browse_specific_temp.clicked.connect(lambda: import_page.browsefiles_templatefile(self)) #browse template
+        self.pkl_browser.clicked.connect(lambda: import_page.browsefiles_pklfile(self)) #browse pkl file
 
 
+        self.use_specific_temp.clicked.connect(lambda: import_page.setup_use_specific_temp(self))
+        self.use_pkl.clicked.connect(lambda: import_page.setup_use_input_pkl(self))
+        self.freq_simpl.clicked.connect(lambda: import_page.setup_freq_simplification(self))
+        self.sync_obs.clicked.connect(lambda: import_page.setup_syncronize(self))
+        self.use_origin.clicked.connect(lambda: import_page.setup_origin(self))
+        self.resample.clicked.connect(lambda: import_page.setup_resample_timeres(self))
 
-        # =============================================================================
-        # Quality control tab
-        # =============================================================================
-        self.plot_dataset.clicked.connect(lambda: self.make_figure())
-        self.apply_qc.clicked.connect(lambda: self.apply_qc_on_dataset())
-
-        # =============================================================================
-        # Gap filling tab
-        # =============================================================================
+        self.pkl_path_save.clicked.connect(lambda: import_page.save_input_pkl_path(self))
 
 
-        # =============================================================================
-        # Visualisation tab
-        # =============================================================================
+        self.make_dataset.clicked.connect(lambda: import_page.make_dataset(self))
 
+        self.get_info.clicked.connect(lambda: import_page.show_info(self))
+        self.show_dataset.clicked.connect(lambda: import_page.make_obsspace(self))
+        self.show_metadata.clicked.connect(lambda: import_page.show_metadf(self))
+        self.plot_dataset.clicked.connect(lambda: import_page.make_dataset_plot(self))
 
-        # =============================================================================
-        # Meta data tab
-        # =============================================================================
-
-
-        # =============================================================================
-        # Model data tab
-        # =============================================================================
-
-
-        # =============================================================================
-        # Analysis tab
-        # =============================================================================
+        self.save_pkl_B.clicked.connect(lambda: import_page.save_dataset(self))
 
 
 
 
-# ------- Initialize --------------
+#         # =============================================================================
+#         # Quality control tab
+#         # =============================================================================
+#         self.plot_dataset.clicked.connect(lambda: self.make_figure())
+#         self.apply_qc.clicked.connect(lambda: self.apply_qc_on_dataset())
+
+#         # =============================================================================
+#         # Gap filling tab
+#         # =============================================================================
+
+
+#         # =============================================================================
+#         # Visualisation tab
+#         # =============================================================================
+
+
+#         # =============================================================================
+#         # Meta data tab
+#         # =============================================================================
+
+
+#         # =============================================================================
+#         # Model data tab
+#         # =============================================================================
+
+
+#         # =============================================================================
+#         # Analysis tab
+#         # =============================================================================
 
 
 
-        # ----------P2 -----------------
-        self.set_possible_templates() #load available dataset
-        self.set_timezone_spinners()
+
+# # ------- Initialize --------------
+
+
+
+#         # ----------P2 -----------------
+#         # self.set_possible_templates() #load available dataset
+#         # self.set_timezone_spinners()
 
 
 
 
-        tlk_scripts.set_qc_default_settings(self)
+#         tlk_scripts.set_qc_default_settings(self)
 
 
-        #----- Cleanup files ----------------
-        path_handler.clear_dir(path_handler.TMP_dir) #cleanup tmp folder
+#         #----- Cleanup files ----------------
+#         path_handler.clear_dir(path_handler.TMP_dir) #cleanup tmp folder
 
 #%%
 # =============================================================================
@@ -228,27 +242,20 @@ class MainWindow(QDialog):
     #         self.metadata_file_T_2.setText(str(saved_vals['metadata_file_path']))
 
 
-    def set_possible_templates(self):
-        templ_dict = template_func.get_all_templates()
+    # def set_possible_templates(self):
+    #     templ_dict = template_func.get_all_templates()
 
-        # remove .csv for presenting
-        templ_names = [name.replace('.csv', '') for name in templ_dict.keys()]
+    #     # remove .csv for presenting
+    #     templ_names = [name.replace('.csv', '') for name in templ_dict.keys()]
 
-        #update spinner
-        self.select_temp.clear()
-        self.select_temp.addItems(templ_names)
+    #     #update spinner
+    #     self.select_temp.clear()
+    #     self.select_temp.addItems(templ_names)
 
-        # Store information to pass between triggers
-        self.template_dict = templ_dict #dict templname : templpath
+    #     # Store information to pass between triggers
+    #     self.template_dict = templ_dict #dict templname : templpath
 
-    def set_timezone_spinners(self):
-        # add all common tz to options
-        tzlist = pytz.common_timezones
-        self.tz_selector.addItems(tzlist)
 
-        # set default
-        default = self.default_settings.time_settings['timezone']
-        self.tz_selector.setCurrentText(default)
 
 
 # =============================================================================
@@ -343,9 +350,7 @@ class MainWindow(QDialog):
     def make_figure(self):
         self.tswindow.set_dataset(self.dataset)
         print(self.dataset)
-        print('tswindow set')
         self.tswindow.make_plot()
-        print('plot made')
         self.tswindow.show()
 
 
@@ -360,9 +365,10 @@ def main():
     app=QApplication(sys.argv)
 
     mainwindow = MainWindow()
-    widget = QtWidgets.QStackedWidget()
-    widget.addWidget(mainwindow)
-    widget.show()
+    mainwindow.show()
+    # widget = QtWidgets.QStackedWidget()
+    # widget.addWidget(mainwindow)
+    # widget.show()
 
     # following lines are log window --> uncomment for debugging
     # dlg = MyDialog()
@@ -399,9 +405,12 @@ def main():
 if __name__ == '__main__':
     matplotlib.use('Qt5Agg') #in protector because server runners do not support this, when this module is imported from the __init__
     app=QApplication(sys.argv)
+    # main()
 
-    widget = main()
-    widget.show()
+    mainwindow = MainWindow()
+    mainwindow.show()
+    # widget = main()
+    # widget.show()
     sys.exit(app.exec_())
 
 

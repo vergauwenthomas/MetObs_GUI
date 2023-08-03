@@ -20,7 +20,12 @@ from metobs_gui.errors import Error, Notification
 # from vlinder_toolkit import Dataset
 
 # method2: loead as package
+# print('CHANGE THE TOOLKIT PACKAGE LOCATION !!')
+# debug_path = '/home/thoverga/Documents/VLINDER_github/MetObs_toolkit'
+# sys.path.insert(0, debug_path)
 import metobs_toolkit
+
+
 
 #%% Mapping
 # when specific manipulation has to be done on values
@@ -60,7 +65,7 @@ qc_not_in_gui = ['duplicated_timestamp', 'internal_consistency'] #not present in
 
 #%% Helpers
 
-class Capturing(list):
+class CapturingPrint(list):
     def __enter__(self):
         self._stdout = sys.stdout
         sys.stdout = self._stringio = StringIO()
@@ -70,15 +75,15 @@ class Capturing(list):
         del self._stringio    # free up some memory
         sys.stdout = self._stdout
 
-class Capturing_logs(list):
-    def __enter__(self):
-        self._stderr = sys.stderr
-        sys.stderr = self._stringio_err = StringIO()
-        return self
-    def __exit__(self, *args):
-        self.extend(self._stringio_err.getvalue().splitlines())
-        del self._stringio_err    # free up some memory
-        sys.stderr = self._stderr
+# class Capturing_logs(list):
+#     def __enter__(self):
+#         self._stderr = sys.stderr
+#         sys.stderr = self._stringio_err = StringIO()
+#         return self
+#     def __exit__(self, *args):
+#         self.extend(self._stringio_err.getvalue().splitlines())
+#         del self._stringio_err    # free up some memory
+#         sys.stderr = self._stderr
 
 #%% Initialisation of widgets
 
@@ -174,9 +179,126 @@ def update_qc_settings(main, dataset, obstype):
             #set value
             dataset.settings.qc['qc_check_settings'][checkname][obstype][set_name] = set_val
 
+#%%
 
 
 
+def import_dataset_from_file(data_path, metadata_path, template_path,
+                             freq_est_method,
+                             freq_est_simplyfy,
+                             freq_est_simplyfy_toll,
+                             kwargs_data,
+                             kwargs_metadata,
+                             gap_def,
+                             sync, sync_tol,
+                             sync_force,
+                             sync_force_freq):
+
+
+
+    try:
+        # init dataset
+        dataset = metobs_toolkit.Dataset()
+        dataset.update_settings(input_data_file=data_path,
+                                input_metadata_file=metadata_path,
+                                template_file=template_path,
+                                )
+        # update gap defenition
+        dataset.update_qc_settings(gapsize_in_records=int(gap_def))
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, ['Dataset initialisation and settings update',
+                             error_msg]
+
+
+    # import data
+    try:
+        dataset.import_data_from_file(freq_estimation_method = freq_est_method,
+                                      freq_estimation_simplify = freq_est_simplyfy,
+                                      freq_estimation_simplify_error=freq_est_simplyfy_toll,
+                                      kwargs_data_read=kwargs_data,
+                                      kwargs_metadata_read=kwargs_metadata)
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, ['Dataset importing data', error_msg]
+
+    # syncronize
+    if sync:
+        try:
+            if sync_force:
+                print('hierD')
+                dataset.sync_observations(tollerance = sync_tol,
+                                      verbose=True,
+                                      _force_resolution_minutes=sync_force_freq,
+                                      _drop_target_nan_dt=False)
+            else:
+                print('hierE')
+                dataset.sync_observations(tollerance = sync_tol,
+                                      verbose=True,
+                                      _force_resolution_minutes=None,
+                                      _drop_target_nan_dt=False)
+        except Exception as e:
+            error_msg = str(e)
+            return None, False, ['Dataset syncronization', error_msg]
+
+
+    return dataset, True, ['error_theme', 'error_msg']
+
+
+def coarsen_timeres(dataset, target_freq, origin, method):
+    try:
+
+        dataset.coarsen_time_resolution(origin=origin,
+                                        freq=target_freq,
+                                        method=method)
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, ['Dataset coarsen timeresolution', error_msg]
+
+
+    return dataset, True, ['error_theme', 'error_msg']
+
+
+def import_dataset_from_pkl(pkl_name, pkl_folder):
+    try:
+        dataset = metobs_toolkit.Dataset()
+        dataset = dataset.import_dataset(folder_path=pkl_folder,
+                                         filename=pkl_name)
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, ['Dataset import from pkl',
+                            error_msg]
+
+    return dataset, True, ['error_theme', 'error_msg']
+
+
+def save_dataset_to_pkl(dataset, pkl_name, pkl_folder):
+    try:
+        dataset.save_dataset(outputfolder=pkl_folder,
+                             filename=pkl_name)
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, ['Dataset save to pkl',
+                             error_msg]
+    return None, True, ['error_theme', 'error_msg']
+
+
+
+def get_dataset_info(dataset):
+    with CapturingPrint() as infolist:
+        dataset.get_info()
+    return infolist
+
+
+
+def combine_to_obsspace(dataset):
+    try:
+        comb_df = dataset.combine_all_to_obsspace()
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, ['Combine dataset to observation-space',
+                             error_msg]
+    return comb_df, True, ['error_theme', 'error_msg']
 
 
 

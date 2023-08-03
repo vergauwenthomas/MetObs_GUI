@@ -1,4 +1,5 @@
 {
-    "data_file_path": "/home/thoverga/Documents/VLINDER_github/MetObs_toolkit/tests/test_data/vlinderdata.csv",
-    "metadata_file_path": "/home/thoverga/Documents/VLINDER_github/MetObs_toolkit/static_data/vlinder_metadata.csv"
+    "data_file_path": "/home/thoverga/Documents/VLINDER_github/MetObs_toolkit/metobs_toolkit/datafiles/demo_datafile.csv",
+    "metadata_file_path": "/home/thoverga/Documents/VLINDER_github/MetObs_toolkit/static_data/vlinder_metadata.csv",
+    "input_pkl_file_path": "/home/thoverga/mymap.html"
 }
