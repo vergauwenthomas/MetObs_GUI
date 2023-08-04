@@ -88,96 +88,96 @@ class CapturingPrint(list):
 #%% Initialisation of widgets
 
 
-def get_default_settings():
-    "Get default settings for initiating the widgets"
-    _dummy = metobs_toolkit.Dataset()
-    return _dummy.settings
+# def get_default_settings():
+#     "Get default settings for initiating the widgets"
+#     _dummy = metobs_toolkit.Dataset()
+#     return _dummy.settings
 
 
 
-def set_qc_default_settings(main):
-    # set default settings
+# def set_qc_default_settings(main):
+#     # set default settings
 
-    main.obstype_selector.addItems(['temp']) #TODO: for now only QC on temp
-    obstype = main.obstype_selector.currentText()
+#     main.obstype_selector.addItems(['temp']) #TODO: for now only QC on temp
+#     obstype = main.obstype_selector.currentText()
 
-    # Get standard tlk settings
-    qc_set = main.default_settings.qc['qc_check_settings']
+#     # Get standard tlk settings
+#     qc_set = main.default_settings.qc['qc_check_settings']
 
-    for checkname in qc_set:
-        if checkname in qc_not_in_gui:
-            continue
-        check_set = qc_set[checkname][obstype]
-        for set_name, set_val in check_set.items():
-            widgetname = checkname+'__'+set_name
-            if widgetname in tlk_to_gui:
-                apl=list(tlk_to_gui[widgetname].keys())[0]
-                val =list(tlk_to_gui[widgetname].values())[0]
+#     for checkname in qc_set:
+#         if checkname in qc_not_in_gui:
+#             continue
+#         check_set = qc_set[checkname][obstype]
+#         for set_name, set_val in check_set.items():
+#             widgetname = checkname+'__'+set_name
+#             if widgetname in tlk_to_gui:
+#                 apl=list(tlk_to_gui[widgetname].keys())[0]
+#                 val =list(tlk_to_gui[widgetname].values())[0]
 
-                if apl == 'multiply': set_val = _multiply(set_val, val)
-                elif apl == 'devide': set_val = _div(set_val, val)
-                elif apl == 'append': set_val = _append(set_val, val)
-                elif apl == 'remove': set_val = _remove(set_val, val)
-
-
-
-            print(f' {widgetname} : {set_val}')
-
-            widg = getattr(main, widgetname)
-            if isinstance(widg, type(QSpinBox())):
-                print('spinbox')
-                widg.setValue(int(set_val))
-            elif isinstance(widg, type(QDoubleSpinBox())):
-                widg.setValue(float(set_val))
-                print('doublspinbox')
+#                 if apl == 'multiply': set_val = _multiply(set_val, val)
+#                 elif apl == 'devide': set_val = _div(set_val, val)
+#                 elif apl == 'append': set_val = _append(set_val, val)
+#                 elif apl == 'remove': set_val = _remove(set_val, val)
 
 
-def apply_qualitycontrol(main):
-    # check if dataset exist
-    if isinstance(main.dataset, type(None)):
-        Error('Cannot apply quality control, first make a Dataset.')
 
-    with Capturing() as terminaloutput:
-        main.dataset.apply_quality_control()
-        print('QC IS DONE')
+#             print(f' {widgetname} : {set_val}')
 
-    # make mergedf for visualising
-    with Capturing() as terminaloutput:
-        comb_df = main.dataset.combine_all_to_obsspace()
-
-    # write terminal output to
-    main.prompt.append('\n \n ------ Qualtiy control ----- \n \n')
-    for line in terminaloutput:
-        main.prompt.append(line + '\n')
-
-    return comb_df
+#             widg = getattr(main, widgetname)
+#             if isinstance(widg, type(QSpinBox())):
+#                 print('spinbox')
+#                 widg.setValue(int(set_val))
+#             elif isinstance(widg, type(QDoubleSpinBox())):
+#                 widg.setValue(float(set_val))
+#                 print('doublspinbox')
 
 
-def update_qc_settings(main, dataset, obstype):
-    qc_set = dataset.settings.qc['qc_check_settings']
+# def apply_qualitycontrol(main):
+#     # check if dataset exist
+#     if isinstance(main.dataset, type(None)):
+#         Error('Cannot apply quality control, first make a Dataset.')
 
-    for checkname in qc_set:
-        if checkname in qc_not_in_gui:
-            continue
-        check_set = qc_set[checkname][obstype]
-        for set_name, _ in check_set.items():
-            widgetname = checkname+'__'+set_name
+#     with Capturing() as terminaloutput:
+#         main.dataset.apply_quality_control()
+#         print('QC IS DONE')
 
-            widget = getattr(main, widgetname)
-            widget_val = widget.value()
+#     # make mergedf for visualising
+#     with Capturing() as terminaloutput:
+#         comb_df = main.dataset.combine_all_to_obsspace()
 
-            if widgetname in gui_to_tlk:
-                apl=list(gui_to_tlk[widgetname].keys())[0]
-                val =list(gui_to_tlk[widgetname].values())[0]
+#     # write terminal output to
+#     main.prompt.append('\n \n ------ Qualtiy control ----- \n \n')
+#     for line in terminaloutput:
+#         main.prompt.append(line + '\n')
 
-                if apl == 'multiply': set_val = _multiply(widget_val, val)
-                elif apl == 'devide': set_val = _div(widget_val, val)
-                elif apl == 'append': set_val = _append(widget_val, val)
-                elif apl == 'remove': set_val = _remove(widget_val, val)
-            else:
-                set_val = widget_val
-            #set value
-            dataset.settings.qc['qc_check_settings'][checkname][obstype][set_name] = set_val
+#     return comb_df
+
+
+# def update_qc_settings(main, dataset, obstype):
+#     qc_set = dataset.settings.qc['qc_check_settings']
+
+#     for checkname in qc_set:
+#         if checkname in qc_not_in_gui:
+#             continue
+#         check_set = qc_set[checkname][obstype]
+#         for set_name, _ in check_set.items():
+#             widgetname = checkname+'__'+set_name
+
+#             widget = getattr(main, widgetname)
+#             widget_val = widget.value()
+
+#             if widgetname in gui_to_tlk:
+#                 apl=list(gui_to_tlk[widgetname].keys())[0]
+#                 val =list(gui_to_tlk[widgetname].values())[0]
+
+#                 if apl == 'multiply': set_val = _multiply(widget_val, val)
+#                 elif apl == 'devide': set_val = _div(widget_val, val)
+#                 elif apl == 'append': set_val = _append(widget_val, val)
+#                 elif apl == 'remove': set_val = _remove(widget_val, val)
+#             else:
+#                 set_val = widget_val
+#             #set value
+#             dataset.settings.qc['qc_check_settings'][checkname][obstype][set_name] = set_val
 
 #%%
 
@@ -302,87 +302,47 @@ def combine_to_obsspace(dataset):
 
 
 
+def get_altitude(dataset):
+    try:
+        with CapturingPrint() as infolist:
+            dataset.get_altitude()
+    except Exception as e:
+        error_msg = str(e)
+        return False, 'ERROR', ['Get altidude error',
+                       error_msg]
+    return True, infolist, ['error_theme', 'error_msg']
+
+
+def get_lcz(dataset):
+    try:
+        with CapturingPrint() as infolist:
+            dataset.get_lcz()
+    except Exception as e:
+        error_msg = str(e)
+        return False, 'ERROR', ['Get lcz error',
+                       error_msg]
+    return True, infolist, ['error_theme', 'error_msg']
+
+
+def get_landcover(dataset, buffers, aggbool, gee_map, overwrite=True):
+    try:
+        with CapturingPrint() as infolist:
+            _ = dataset.get_landcover(buffers=buffers,
+                                      aggregate=aggbool,
+                                      gee_map=gee_map,
+                                      overwrite=overwrite)
+    except Exception as e:
+        error_msg = str(e)
+        return False, 'ERROR', ['Get landcover error',
+                       error_msg]
+    return True, infolist, ['error_theme', 'error_msg']
+
+
+
 
 #%% Toolkit functions
 
-def load_dataset(main):
 
-
-    print('in the tlk module to load dataset')
-    # Get IO information
-
-    data_file = main.data_file_T_2.text()
-    metadata_file = main.metadata_file_T_2.text()
-    template_name =str(main.select_temp.currentText())+'.csv'
-
-    template_file = main.template_dict[template_name]
-
-    # Basic checks
-    for file in [data_file, template_file]:
-        if not path_handler.file_exist(file):
-            Error(f'{file} does not exist!')
-            return
-
-
-    # test=Capturing()
-
-    with Capturing() as terminaloutput:
-
-        # init dataset
-        dataset = metobs_toolkit.Dataset()
-
-        #use metadata
-        use_metadata = main.metadata_box.isChecked()
-        if use_metadata:
-            dataset.update_settings(input_data_file=data_file,
-                                    input_metadata_file=metadata_file,
-                                    data_template_file=template_file,
-                                    metadata_template_file=template_file,
-                                    )
-        else:
-            dataset.update_settings(input_data_file=data_file,
-                                    data_template_file=template_file,
-                                    )
-
-        # set timezone
-        tz_select = str(main.tz_selector.currentText())
-        dataset.update_timezone(tz_select)
-
-        # create dataset
-
-        dataset.import_data_from_file()
-
-        # coarsen settings
-        use_coarsening = main.resample_box.isChecked()
-        resolution = str(main.resample_spinbox.value())+'T'
-        if use_coarsening:
-            dataset.coarsen_time_resolution(freq=resolution)
-
-        # Update QC settings
-        update_qc_settings(main, dataset, main.obstype_selector.currentText())
-
-        # make mergedf (to visualise)
-        comb_df= dataset.combine_all_to_obsspace()
-
-        print('DATASET IS LOADED')
-
-
-
-
-    # write terminal output to
-    main.prompt.append('------ Make Dataset ----- \n \n')
-    for line in terminaloutput:
-        main.prompt.append(line + '\n')
-
-    return dataset, comb_df
-
-
-def dataset_show_info(main):
-    main.prompt.append('\n \n------ Dataset Info ----- \n \n')
-    with Capturing() as terminaloutput:
-        main.dataset.get_info()
-    for line in terminaloutput:
-        main.prompt.append(line)
 
 
 

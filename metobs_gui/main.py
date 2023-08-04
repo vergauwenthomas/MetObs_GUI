@@ -13,6 +13,9 @@ Created on Mon Mar 20 09:47:48 2023
 import os, sys
 from pathlib import Path
 import matplotlib
+
+from metobs_toolkit import loggers as toolkit_logger
+
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QMainWindow
 from PyQt5.QtWidgets import QScrollArea, QTabWidget
@@ -31,11 +34,12 @@ from metobs_gui.pandasmodel import DataFrameModel
 
 from metobs_gui.errors import Error, Notification
 from metobs_gui.extra_windows import MergeWindow, TimeSeriesWindow
-from metobs_gui.log_displayer import MyDialog
+import metobs_gui.log_displayer as log_displayer
+
 
 import metobs_gui.template_page as template_page
 import metobs_gui.import_data_page as import_page
-
+import metobs_gui.metadata_page as metadata_page
 
 
 class MainWindow(QMainWindow):
@@ -57,15 +61,27 @@ class MainWindow(QMainWindow):
         # P2 INIT
         import_page.init_import_page(self)
 
+        # P3 INIT
+        metadata_page.init_metadata_page(self)
+
         # P2 ------------------------
-        self.template_dict = None #dict; all available templname : templpath
-        self.default_settings = tlk_scripts.get_default_settings()
+        # self.template_dict = None #dict; all available templname : templpath
+        # self.default_settings = tlk_scripts.get_default_settings()
 
 
         # ------- Setup (widgets and default values) ---------------
 
         # Setup error message dialog
         self.error_dialog = QtWidgets.QErrorMessage(self)
+
+
+        # setup metobs toolkit log handles to stream to prompts
+        # Setup the logger handle to stream to the prompt
+        input_page_log_handler = log_displayer.QPlainTextEditLogger(self.prompt) #to prompt on input page
+        metadata_page_log_handler = log_displayer.QPlainTextEditLogger(self.prompt_metadata) #to prompt on input page
+        toolkit_logger.addHandler(input_page_log_handler)
+        toolkit_logger.addHandler(metadata_page_log_handler)
+
 
 
         # link dfmodels to tables
@@ -81,6 +97,10 @@ class MainWindow(QMainWindow):
         # =============================================================================
         self.data_file_T.textChanged.connect(self.data_file_T_2.setText) #link them
         self.metadata_file_T.textChanged.connect(self.metadata_file_T_2.setText) #link them
+
+
+
+
 
 
 
@@ -146,6 +166,18 @@ class MainWindow(QMainWindow):
 
         self.save_pkl_B.clicked.connect(lambda: import_page.save_dataset(self))
 
+
+        # =============================================================================
+        # Metadata tab
+        # =============================================================================
+        self.get_altitude.clicked.connect(lambda: metadata_page.get_altitude(self))
+        self.get_lcz.clicked.connect(lambda: metadata_page.get_lcz(self))
+        self.get_landcover.clicked.connect(lambda: metadata_page.get_landcover(self))
+
+        self.gee_submit.clicked.connect(lambda: metadata_page.get_altitude(self))
+
+        self.preview_metadata_2.clicked.connect(lambda: metadata_page.preview_metadata(self))
+        self.spatial_plot.clicked.connect(lambda: metadata_page.spatial_plot(self))
 
 
 

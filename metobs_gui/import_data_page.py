@@ -62,9 +62,9 @@ def init_import_page(MW):
     if 'input_pkl_file_path' in saved_vals:
         MW.pkl_path.setText(saved_vals['input_pkl_file_path'])
 
-    # Setup the logger handle to stream to the prompt
-    log_handler = log_displayer.QPlainTextEditLogger(MW.prompt)
-    toolkit_logger.addHandler(log_handler)
+    # # Setup the logger handle to stream to the prompt
+    # log_handler = log_displayer.QPlainTextEditLogger(MW.prompt)
+    # toolkit_logger.addHandler(log_handler)
 
 
 
