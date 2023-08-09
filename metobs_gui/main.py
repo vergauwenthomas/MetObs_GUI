@@ -11,35 +11,29 @@ Created on Mon Mar 20 09:47:48 2023
 
 
 import os, sys
-from pathlib import Path
 import matplotlib
 
 from metobs_toolkit import loggers as toolkit_logger
 
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QMainWindow
-from PyQt5.QtWidgets import QScrollArea, QTabWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.uic import loadUi
 
-import pandas as pd
-import pytz
 
-import metobs_gui.data_func as data_func
-import metobs_gui.template_func as template_func
 import metobs_gui.path_handler as path_handler
-import metobs_gui.tlk_scripts as tlk_scripts
-
-from metobs_gui.json_save_func import get_saved_vals, update_json_file
 from metobs_gui.pandasmodel import DataFrameModel
 
-from metobs_gui.errors import Error, Notification
-from metobs_gui.extra_windows import MergeWindow, TimeSeriesWindow
 import metobs_gui.log_displayer as log_displayer
 
 
 import metobs_gui.template_page as template_page
 import metobs_gui.import_data_page as import_page
 import metobs_gui.metadata_page as metadata_page
+import metobs_gui.qc_page as qc_page
+import metobs_gui.modeldata_page as modeldata_page
+import metobs_gui.fill_page as fill_page
+
+
 
 
 class MainWindow(QMainWindow):
@@ -51,6 +45,8 @@ class MainWindow(QMainWindow):
 
         # -------- Information to pass beween different triggers ----------
         self.dataset = None #the vlindertoolkit dataset instance
+        self.modeldata = None
+        self.modeldata_temporar = None #for termporal storage on direct input from gee
 
         self.long_storage = {} #will read the json file to store info over mulitple settings
         self.session = {} #store info during one session
@@ -64,9 +60,17 @@ class MainWindow(QMainWindow):
         # P3 INIT
         metadata_page.init_metadata_page(self)
 
-        # P2 ------------------------
-        # self.template_dict = None #dict; all available templname : templpath
-        # self.default_settings = tlk_scripts.get_default_settings()
+        # P4 INIT
+        qc_page.init_qc_page(self)
+
+        # P5 INIT
+        modeldata_page.init_modeldata_page(self)
+
+        # P6 INIT
+        fill_page.init_fill_page(self)
+
+
+
 
 
         # ------- Setup (widgets and default values) ---------------
@@ -76,11 +80,18 @@ class MainWindow(QMainWindow):
 
 
         # setup metobs toolkit log handles to stream to prompts
-        # Setup the logger handle to stream to the prompt
-        input_page_log_handler = log_displayer.QPlainTextEditLogger(self.prompt) #to prompt on input page
-        metadata_page_log_handler = log_displayer.QPlainTextEditLogger(self.prompt_metadata) #to prompt on input page
+
+        input_page_log_handler = log_displayer.QPlainTextEditLogger(self.prompt)
+        metadata_page_log_handler = log_displayer.QPlainTextEditLogger(self.prompt_metadata)
+        qc_page_log_handler = log_displayer.QPlainTextEditLogger(self.prompt_qc)
+        fill_page_log_handler = log_displayer.QPlainTextEditLogger(self.prompt_fill)
+        modeldata_page_log_handler = log_displayer.QPlainTextEditLogger(self.prompt_modeldata)
         toolkit_logger.addHandler(input_page_log_handler)
         toolkit_logger.addHandler(metadata_page_log_handler)
+        toolkit_logger.addHandler(qc_page_log_handler)
+        toolkit_logger.addHandler(fill_page_log_handler)
+        toolkit_logger.addHandler(modeldata_page_log_handler)
+
 
 
 
@@ -97,6 +108,8 @@ class MainWindow(QMainWindow):
         # =============================================================================
         self.data_file_T.textChanged.connect(self.data_file_T_2.setText) #link them
         self.metadata_file_T.textChanged.connect(self.metadata_file_T_2.setText) #link them
+        self.use_startdt.clicked.connect(self.use_enddt.setCheckState) #link them
+        self.use_enddt.clicked.connect(self.use_startdt.setCheckState) #link them
 
 
 
@@ -179,57 +192,76 @@ class MainWindow(QMainWindow):
         self.preview_metadata_2.clicked.connect(lambda: metadata_page.preview_metadata(self))
         self.spatial_plot.clicked.connect(lambda: metadata_page.spatial_plot(self))
 
+        # =============================================================================
+        # QC tab
+        # =============================================================================
+        self.obstype_spinner.currentTextChanged.connect(lambda: qc_page.obstype_change(self))
+        self.get_info_2.clicked.connect(lambda: qc_page.show_info(self))
+        self.show_metadata_2.clicked.connect(lambda: qc_page.show_metadf(self))
+        self.plot_dataset_2.clicked.connect(lambda: qc_page.show_timeseries(self))
+        self.show_dataset_2.clicked.connect(lambda: qc_page.show_dataset(self))
+
+        self.apply_qc.clicked.connect(lambda: qc_page.apply_qc(self))
 
 
-#         # =============================================================================
-#         # Quality control tab
-#         # =============================================================================
-#         self.plot_dataset.clicked.connect(lambda: self.make_figure())
-#         self.apply_qc.clicked.connect(lambda: self.apply_qc_on_dataset())
+        # =============================================================================
+        # Modeldata tab
+        # =============================================================================
 
-#         # =============================================================================
-#         # Gap filling tab
-#         # =============================================================================
+        self.model_method.currentTextChanged.connect(lambda: modeldata_page.setup_model_settings(self))
+
+        self.use_startdt.clicked.connect(lambda: modeldata_page.setup_model_dt(self))
+        self.use_enddt.clicked.connect(lambda: modeldata_page.setup_model_dt(self))
+
+        self.get_gee_modeldata.clicked.connect(lambda: modeldata_page.get_gee_modeldata(self))
+        self.import_modeldata.clicked.connect(lambda : modeldata_page.import_modeldata(self))
+
+        self.external_browse.clicked.connect(lambda: modeldata_page.browse_external_modeldata_file(self))
+        self.browse_drive.clicked.connect(lambda: modeldata_page.browse_google_file(self))
+
+        self.external_save_path.clicked.connect(lambda: template_page.save_path(
+                                                                MW=self,
+                                                                savebool=True,
+                                                                savekey='external_modeldata_path',
+                                                                saveval=self.external_path.text()))
+
+        self.obstype_convertor.currentTextChanged.connect(lambda : modeldata_page.get_tlk_unit(self))
+        self.use_expression.clicked.connect(lambda: modeldata_page.setup_conv_expression(self))
+        self.conv_units.clicked.connect(lambda: modeldata_page.convert_units(self))
+
+        self.get_modeldata_info.clicked.connect(lambda: modeldata_page.show_modeldata_info(self))
+        self.plot_modeldata.clicked.connect(lambda: modeldata_page.make_plot(self))
+        self.show_modeldata.clicked.connect(lambda: modeldata_page.show_modeldata_df(self))
+        self.model_save.clicked.connect(lambda: modeldata_page.save_modeldata(self))
+
+        # =============================================================================
+        # Fill tab
+        # =============================================================================
+        self.fill_gaps_technique.currentTextChanged.connect(lambda: fill_page.setup_gap_settings(self))
+        self.fill_missing.clicked.connect(lambda: fill_page.apply_fill_missing(self))
+        self.apply_convert_outl.clicked.connect(lambda: fill_page.setup_convert_outliers(self))
+        self.gapsize_conv.valueChanged.connect(lambda: fill_page.assume_gapsize(self))
+
+        self.conv_outliers.clicked.connect(lambda: fill_page.convert_outl_to_mis(self))
+        self.fill_gaps.clicked.connect(lambda: fill_page.apply_fill_gaps(self))
+
+        # bottom buttens
+        self.print_missing_info.clicked.connect(lambda: fill_page.make_print_missing_obs(self))
+        self.print_gap_info.clicked.connect(lambda: fill_page.make_print_gaps(self))
+        self.print_dataset_info.clicked.connect(lambda: fill_page.make_print_dataset(self))
+
+        self.show_missing.clicked.connect(lambda: fill_page.show_df_missing_obs(self))
+        self.show_gaps.clicked.connect(lambda: fill_page.show_df_gaps(self))
+        self.show_dataset_4.clicked.connect(lambda: fill_page.show_df_dataset(self))
+
+        self.show_filled_missing.clicked.connect(lambda: fill_page.show_filled_df_missing_obs(self))
+        self.show_filled_gaps.clicked.connect(lambda: fill_page.show_filled_df_gaps(self))
+
+        self.plot_dataset_6.clicked.connect(lambda: fill_page.plot_dataset(self))
 
 
-#         # =============================================================================
-#         # Visualisation tab
-#         # =============================================================================
 
 
-#         # =============================================================================
-#         # Meta data tab
-#         # =============================================================================
-
-
-#         # =============================================================================
-#         # Model data tab
-#         # =============================================================================
-
-
-#         # =============================================================================
-#         # Analysis tab
-#         # =============================================================================
-
-
-
-
-# # ------- Initialize --------------
-
-
-
-#         # ----------P2 -----------------
-#         # self.set_possible_templates() #load available dataset
-#         # self.set_timezone_spinners()
-
-
-
-
-#         tlk_scripts.set_qc_default_settings(self)
-
-
-#         #----- Cleanup files ----------------
-#         path_handler.clear_dir(path_handler.TMP_dir) #cleanup tmp folder
 
 #%%
 # =============================================================================
@@ -242,155 +274,8 @@ class MainWindow(QMainWindow):
         return data_func_return[0]
 
 
-# =============================================================================
-# Init values
-# =============================================================================
-    # def set_templ_map_val(self):
-    #     # First try reading the datafile
-    #     data_columns = self.read_datafiles(self.data_file_T.text())
-
-    #     # Check if meta data is given, if so read the metadata columns
-    #     if len(self.metadata_file_T.text()) > 2:
-    #         metadata_columns = self.read_datafiles(self.metadata_file_T.text())
-    #     else:
-    #         metadata_columns = []
-
-    #     # Set defaults appropriate
-    #     template_func.set_templ_vals(self, data_columns, metadata_columns)
 
 
-
-    # def set_datapaths_init(self):
-    #     saved_vals = get_saved_vals()
-
-    #     # set datafile path
-    #     if 'data_file_path' in saved_vals:
-    #         self.data_file_T.setText(str(saved_vals['data_file_path']))
-    #         self.data_file_T_2.setText(str(saved_vals['data_file_path']))
-
-    #     # set metadata file path
-    #     if 'metadata_file_path' in saved_vals:
-    #         self.metadata_file_T.setText(str(saved_vals['metadata_file_path']))
-    #         self.metadata_file_T_2.setText(str(saved_vals['metadata_file_path']))
-
-
-    # def set_possible_templates(self):
-    #     templ_dict = template_func.get_all_templates()
-
-    #     # remove .csv for presenting
-    #     templ_names = [name.replace('.csv', '') for name in templ_dict.keys()]
-
-    #     #update spinner
-    #     self.select_temp.clear()
-    #     self.select_temp.addItems(templ_names)
-
-    #     # Store information to pass between triggers
-    #     self.template_dict = templ_dict #dict templname : templpath
-
-
-
-
-# =============================================================================
-# Save values
-# =============================================================================
-    # def save_path(self, savebool, savekey, saveval):
-    #     if savebool:
-    #         savedict = {str(savekey): str(saveval)}
-    #         update_json_file(savedict)
-
-# =============================================================================
-# Triggers
-# =============================================================================
-
-    def browsefiles_data_p2(self):
-        fname=QFileDialog.getOpenFileName(self, 'Select data file', str(Path.home()))
-        self.data_file_T_2.setText(fname[0])
-
-
-
-    def browsefiles_metadata_p2(self):
-        fname=QFileDialog.getOpenFileName(self, 'Select metadata file', str(Path.home()))
-        self.metadata_file_T_2.setText(fname[0]) #update text
-
-
-
-    def read_datafiles(self, filepath):
-        if not path_handler.file_exist(filepath):
-            Error(f'{filepath} is not a file.')
-        _return = data_func.get_columns(filepath=filepath)
-        columns = self.get_val(_return)
-
-        return columns
-
-    # def build_template(self):
-    #     df = template_func.make_template_build(self)
-    #     if df.empty:
-    #         Error('There are no mapped values.')
-    #     self.templmodel.setDataFrame(df)
-
-    #     self.save_template.setEnabled(True) #enable the save button
-
-
-    def save_template_call(self):
-        # copy the template to the templates dir of the toolkit
-        templ_loc = os.path.join(path_handler.TMP_dir, 'template.csv')
-
-        filename = str(self.templatename.text())
-        if not filename.endswith('.csv'):
-            filename = filename + '.csv'
-
-        target_loc = os.path.join(path_handler.CACHE_dir, filename)
-
-        # check if templatefile already exists.
-        if path_handler.file_exist(target_loc):
-            Error(f'{target_loc} already exists! Change name of the template file.')
-            return
-        path_handler.copy_file(templ_loc, target_loc)
-
-        self.set_possible_templates() #update widget
-
-        Notification(f'Template ({filename}) is saved!')
-
-
-
-    def make_tlk_dataset(self):
-        self.dataset, self.merge_window.comb_df = tlk_scripts.load_dataset(self)
-
-        # trigger update in seperate window
-        self.merge_window.trigger_update()
-
-
-    def apply_qc_on_dataset(self):
-        self.merge_window.comb_df = tlk_scripts.apply_qualitycontrol(self)
-
-        # trigger update in seperate window
-        self.merge_window.trigger_update()
-
-    def show_dataset_info(self):
-        tlk_scripts.dataset_show_info(self)
-
-
-    def create_dataset_window(self):
-
-        self.merge_window.show()
-
-# =============================================================================
-# Testing
-# =============================================================================
-
-
-    def make_figure(self):
-        self.tswindow.set_dataset(self.dataset)
-        print(self.dataset)
-        self.tswindow.make_plot()
-        self.tswindow.show()
-
-
-#%%
-
-# =============================================================================
-# Main and protector
-# =============================================================================
 
 def main():
 
@@ -398,6 +283,10 @@ def main():
 
     mainwindow = MainWindow()
     mainwindow.show()
+
+
+    # html = _show_spatial_html('/home/thoverga/mymap.html')
+    # html.show()
     # widget = QtWidgets.QStackedWidget()
     # widget.addWidget(mainwindow)
     # widget.show()
@@ -437,13 +326,13 @@ def main():
 if __name__ == '__main__':
     matplotlib.use('Qt5Agg') #in protector because server runners do not support this, when this module is imported from the __init__
     app=QApplication(sys.argv)
-    # main()
+    main()
 
-    mainwindow = MainWindow()
-    mainwindow.show()
+    # mainwindow = MainWindow()
+    # mainwindow.show()
     # widget = main()
     # widget.show()
-    sys.exit(app.exec_())
+    # sys.exit(app.exec_())
 
 
 

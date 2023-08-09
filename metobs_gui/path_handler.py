@@ -27,11 +27,12 @@ GUI_dir = str( Path(__file__).resolve().parents[0])
 # =============================================================================
 
 TMP_dir = os.path.join(GUI_dir, 'tmp') #to use in a single session
-
 CACHE_dir = os.path.join(GUI_dir, 'cache') #to use over multiple sessions
 
-template_dir = CACHE_dir
-pkl_dir = CACHE_dir
+# subfolders
+template_dir = os.path.join(CACHE_dir, 'templates')
+dataset_dir = os.path.join(CACHE_dir, 'datasets')
+modeldata_dir = os.path.join(CACHE_dir, 'modeldata')
 
 # toolkit location of templates
 # tlk_default_template = os.path.join(TLK_dir, 'data_templates',
@@ -87,3 +88,12 @@ def clear_dir(directory):
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
 
+
+# =============================================================================
+# Create the cache and tmp dir if they do not exist
+# =============================================================================
+
+_create_paths = [TMP_dir, CACHE_dir, template_dir, dataset_dir, modeldata_dir]
+
+for _dir in _create_paths:
+    make_dir(_dir)

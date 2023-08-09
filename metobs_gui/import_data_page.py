@@ -22,7 +22,8 @@ from metobs_gui.json_save_func import get_saved_vals, update_json_file
 
 import metobs_gui.tlk_scripts as tlk_scripts
 import metobs_gui.log_displayer as log_displayer
-from metobs_gui.extra_windows import MergeWindow, TimeSeriesWindow
+
+from metobs_gui.extra_windows import _show_metadf, _show_obsspace, _show_timeseries
 
 from metobs_toolkit import loggers as toolkit_logger
 
@@ -120,7 +121,7 @@ def _get_specific_templ_widgets(MW):
             MW.Browse_specific_temp]
 
 def _get_input_pkl_widgets(MW):
-    return [MW.pkl_path, MW.pkl_browser, MW.pkl_path_save]
+    return [MW.upload_ext_checkbox, MW.pkl_path, MW.pkl_browser, MW.pkl_path_save]
 
 def _get_input_settings(MW):
     return [MW.gap_def_spinner, MW.freq_est_method,
@@ -327,14 +328,14 @@ def make_dataset(MW):
 
     else:
         # import from pkl
-        pkl_filename = str(MW.pkl_selector.currentText())
+        pkl_filename, pkl_folder =  get_pkl_location(MW)
         # get arguments for importing
         argdict, _cont = extract_input_values_for_dataset(MW)
         if not _cont:
             return
         MW.prompt.appendPlainText('---- Import data from pkl ---- \n')
         dataset, _cont, _msg = tlk_scripts.import_dataset_from_pkl(pkl_name=pkl_filename,
-                                                                   pkl_folder=path_handler.pkl_dir)
+                                                                   pkl_folder=pkl_folder)
         if not _cont:
             Error(_msg[0], _msg[1])
             return
@@ -390,7 +391,7 @@ def save_dataset(MW):
         pkl_name = pkl_name + '.pkl'
 
     # check if file already exists
-    pkl_path = os.path.join(path_handler.pkl_dir, pkl_name)
+    pkl_path = os.path.join(path_handler.dataset_dir, pkl_name)
     if path_handler.file_exist(pkl_path):
         Error('Save error', f'The file {pkl_path} already exist. Change the filename.')
         return
@@ -398,7 +399,7 @@ def save_dataset(MW):
     # save dataset
     _, _cont, _msg = tlk_scripts.save_dataset_to_pkl(dataset=MW.dataset,
                                                      pkl_name=pkl_name,
-                                                     pkl_folder=path_handler.pkl_dir)
+                                                     pkl_folder=path_handler.dataset_dir)
     if not _cont:
         Error(_msg[0], _msg[1])
         return
@@ -414,40 +415,14 @@ def save_dataset(MW):
 # =============================================================================
 
 def make_obsspace(MW):
-    # check if dataset is available
-    if MW.dataset is None:
-        Error('Show dataset', 'There is no dataset.')
-        return
-
-    combdf, _cont, _msg = tlk_scripts.combine_to_obsspace(MW.dataset)
-    if not _cont:
-        Error(_msg[0], _msg[1])
-        return
-
-    # create a seperate window containing the dataframe
-    window = MergeWindow(combdf, mode='mergedf')
-    window.show()
+    _show_obsspace(MW)
 
 def show_metadf(MW):
-    # check if dataset is available
-    if MW.dataset is None:
-        Error('Show dataset', 'There is no dataset.')
-        return
-    # create a seperate window containing the metadf
-    window = MergeWindow(MW.dataset.metadf, mode='metadf')
-    window.show()
+    _show_metadf(MW)
 
 
 def make_dataset_plot(MW):
-    # check if dataset is available
-    if MW.dataset is None:
-        Error('Show dataset', 'There is no dataset.')
-        return
-
-    # create a seperate window containing the plot
-    plot_window = TimeSeriesWindow(dataset = MW.dataset)
-    plot_window.make_plot()
-    plot_window.show()
+   _show_timeseries(MW)
 
 
 
@@ -460,6 +435,30 @@ def make_dataset_plot(MW):
 # =============================================================================
 #  Helper
 # =============================================================================
+def get_pkl_location(MW):
+    # either from the cache or form external:
+
+    if ((MW.use_pkl.isChecked()) & (not MW.upload_ext_checkbox.isChecked())):
+        print('from cache')
+        # from external
+        filename=str(MW.pkl_selector.currentText())
+        folder=path_handler.dataset_dir
+
+    elif ((MW.use_pkl.isChecked()) & (MW.upload_ext_checkbox.isChecked())):
+        print('form ext')
+        # from cache
+        filepath = str(MW.pkl_path.text())
+        # check if file exist
+        if not path_handler.file_exist(filepath):
+            Error('file not exist', f' The file {filepath} does not exist.')
+            return
+        folder = os.path.dirname(filepath)
+        filename = filepath.replace(folder, '')[1:] #This hopefully works on windows
+    else:
+        Error('CODE 101')
+
+    print(filename, folder)
+    return filename, folder
 
 def extract_input_values_for_dataset(MW):
     from datetime import datetime
@@ -514,7 +513,7 @@ def extract_input_values_for_dataset(MW):
     return argdict, True
 
 def set_possible_pickles(MW):
-    pkl_names, pkl_paths = path_handler.list_filenames(folderpath=path_handler.pkl_dir, fileextension='.pkl')
+    pkl_names, pkl_paths = path_handler.list_filenames(folderpath=path_handler.dataset_dir, fileextension='.pkl')
     #update spinner
     MW.pkl_selector.clear()
     MW.pkl_selector.addItems(pkl_names)

@@ -85,102 +85,13 @@ class CapturingPrint(list):
 #         del self._stringio_err    # free up some memory
 #         sys.stderr = self._stderr
 
-#%% Initialisation of widgets
 
-
-# def get_default_settings():
-#     "Get default settings for initiating the widgets"
-#     _dummy = metobs_toolkit.Dataset()
-#     return _dummy.settings
-
-
-
-# def set_qc_default_settings(main):
-#     # set default settings
-
-#     main.obstype_selector.addItems(['temp']) #TODO: for now only QC on temp
-#     obstype = main.obstype_selector.currentText()
-
-#     # Get standard tlk settings
-#     qc_set = main.default_settings.qc['qc_check_settings']
-
-#     for checkname in qc_set:
-#         if checkname in qc_not_in_gui:
-#             continue
-#         check_set = qc_set[checkname][obstype]
-#         for set_name, set_val in check_set.items():
-#             widgetname = checkname+'__'+set_name
-#             if widgetname in tlk_to_gui:
-#                 apl=list(tlk_to_gui[widgetname].keys())[0]
-#                 val =list(tlk_to_gui[widgetname].values())[0]
-
-#                 if apl == 'multiply': set_val = _multiply(set_val, val)
-#                 elif apl == 'devide': set_val = _div(set_val, val)
-#                 elif apl == 'append': set_val = _append(set_val, val)
-#                 elif apl == 'remove': set_val = _remove(set_val, val)
-
-
-
-#             print(f' {widgetname} : {set_val}')
-
-#             widg = getattr(main, widgetname)
-#             if isinstance(widg, type(QSpinBox())):
-#                 print('spinbox')
-#                 widg.setValue(int(set_val))
-#             elif isinstance(widg, type(QDoubleSpinBox())):
-#                 widg.setValue(float(set_val))
-#                 print('doublspinbox')
-
-
-# def apply_qualitycontrol(main):
-#     # check if dataset exist
-#     if isinstance(main.dataset, type(None)):
-#         Error('Cannot apply quality control, first make a Dataset.')
-
-#     with Capturing() as terminaloutput:
-#         main.dataset.apply_quality_control()
-#         print('QC IS DONE')
-
-#     # make mergedf for visualising
-#     with Capturing() as terminaloutput:
-#         comb_df = main.dataset.combine_all_to_obsspace()
-
-#     # write terminal output to
-#     main.prompt.append('\n \n ------ Qualtiy control ----- \n \n')
-#     for line in terminaloutput:
-#         main.prompt.append(line + '\n')
-
-#     return comb_df
-
-
-# def update_qc_settings(main, dataset, obstype):
-#     qc_set = dataset.settings.qc['qc_check_settings']
-
-#     for checkname in qc_set:
-#         if checkname in qc_not_in_gui:
-#             continue
-#         check_set = qc_set[checkname][obstype]
-#         for set_name, _ in check_set.items():
-#             widgetname = checkname+'__'+set_name
-
-#             widget = getattr(main, widgetname)
-#             widget_val = widget.value()
-
-#             if widgetname in gui_to_tlk:
-#                 apl=list(gui_to_tlk[widgetname].keys())[0]
-#                 val =list(gui_to_tlk[widgetname].values())[0]
-
-#                 if apl == 'multiply': set_val = _multiply(widget_val, val)
-#                 elif apl == 'devide': set_val = _div(widget_val, val)
-#                 elif apl == 'append': set_val = _append(widget_val, val)
-#                 elif apl == 'remove': set_val = _remove(widget_val, val)
-#             else:
-#                 set_val = widget_val
-#             #set value
-#             dataset.settings.qc['qc_check_settings'][checkname][obstype][set_name] = set_val
 
 #%%
 
+# =============================================================================
+# Dataset methods
+# =============================================================================
 
 
 def import_dataset_from_file(data_path, metadata_path, template_path,
@@ -291,6 +202,8 @@ def get_dataset_info(dataset):
 
 
 
+
+
 def combine_to_obsspace(dataset):
     try:
         comb_df = dataset.combine_all_to_obsspace()
@@ -338,8 +251,349 @@ def get_landcover(dataset, buffers, aggbool, gee_map, overwrite=True):
     return True, infolist, ['error_theme', 'error_msg']
 
 
+def update_qc_stats (dataset, obstype='temp', gapsize_in_records=None,
+                     dupl_timestamp_keep=None, persis_time_win_to_check=None,
+                     persis_min_num_obs=None, rep_max_valid_repetitions=None,
+                     gross_value_min_value=None, gross_value_max_value=None,
+                     win_var_max_increase_per_sec=None,
+                     win_var_max_decrease_per_sec=None,
+                     win_var_time_win_to_check=None,
+                     win_var_min_num_obs=None,
+                     step_max_increase_per_sec=None,
+                     step_max_decrease_per_sec=None,
+                     buddy_radius=None,
+                     buddy_num_min=None,
+                     buddy_threshold=None,
+                     buddy_max_elev_diff=None,
+                     buddy_elev_gradient=None,
+                     buddy_min_std=None,
+                     buddy_num_iterations=None,
+                     buddy_debug=None):
+
+    try:
+        with CapturingPrint() as infolist:
+            dataset.update_qc_settings(obstype=obstype,
+                                       gapsize_in_records=gapsize_in_records,
+                                       dupl_timestamp_keep=dupl_timestamp_keep,
+                                       persis_time_win_to_check=persis_time_win_to_check,
+                                       persis_min_num_obs=persis_min_num_obs,
+                                       rep_max_valid_repetitions=rep_max_valid_repetitions,
+                                       gross_value_min_value=gross_value_min_value,
+                                       gross_value_max_value=gross_value_max_value,
+                                       win_var_max_increase_per_sec=win_var_max_increase_per_sec,
+                                       win_var_max_decrease_per_sec=win_var_max_decrease_per_sec,
+                                       win_var_time_win_to_check=win_var_time_win_to_check,
+                                       win_var_min_num_obs=win_var_min_num_obs,
+                                       step_max_increase_per_sec= step_max_increase_per_sec,
+                                       step_max_decrease_per_sec=step_max_decrease_per_sec)
+
+            dataset.update_titan_qc_settings(
+                                obstype=obstype,
+                                buddy_radius=buddy_radius,
+                                buddy_num_min=buddy_num_min,
+                                buddy_threshold=buddy_threshold,
+                                buddy_max_elev_diff=buddy_max_elev_diff,
+                                buddy_elev_gradient=buddy_elev_gradient,
+                                buddy_min_std=buddy_min_std,
+                                buddy_num_iterations=buddy_num_iterations,
+                                buddy_debug=buddy_debug,
+                                )
+
+    except Exception as e:
+        error_msg = str(e)
+        return False, 'ERROR', ['update QC settings error',
+                       error_msg]
 
 
+    return True, infolist, ['error_theme', 'error_msg']
+
+def apply_qc(dataset, obstype,
+             gross_value, persistance,
+             repetitions, step, window_variation):
+
+    try:
+        with CapturingPrint() as infolist:
+            dataset.apply_quality_control(obstype=obstype,
+                                          gross_value=gross_value,
+                                          persistance=persistance,
+                                          repetitions=repetitions,
+                                          step=step,
+                                          window_variation=window_variation)
+
+
+
+    except Exception as e:
+        error_msg = str(e)
+        return False, 'ERROR', ['Apply quality control error',
+                       error_msg]
+
+
+    return True, infolist, ['error_theme', 'error_msg']
+
+def apply_titan_buddy(dataset, obstype, use_constant_altitude):
+
+    try:
+        with CapturingPrint() as infolist:
+            dataset.apply_titan_buddy_check(obstype=obstype,
+                                            use_constant_altitude=False)
+
+
+    except Exception as e:
+        error_msg = str(e)
+        return False, 'ERROR', ['Apply titan buddy check error',
+                       error_msg]
+
+
+    return True, infolist, ['error_theme', 'error_msg']
+
+
+
+
+def make_html_gee_map(dataset, html_path):
+    try:
+        with CapturingPrint() as infolist:
+            _ = dataset.make_gee_plot(gee_map='worldcover',
+                                      show_stations=True,
+                                      save=True,
+                                      outputfile = html_path)
+
+
+    except Exception as e:
+        error_msg = str(e)
+        return False, 'ERROR', ['Creating html map error',
+                       error_msg]
+
+
+    return True, infolist, ['error_theme', 'error_msg']
+
+
+
+
+def update_gap_and_missing_fill(dataset, gap_interpolation_method=None,
+                                gap_interpolation_max_consec_fill=None,
+                                gap_debias_prefered_leading_period_hours=None,
+                                gap_debias_prefered_trailing_period_hours=None,
+                                gap_debias_minimum_leading_period_hours=None,
+                                gap_debias_minimum_trailing_period_hours=None,
+                                automatic_max_interpolation_duration_str=None,
+                                missing_obs_interpolation_method=None):
+    try:
+        with CapturingPrint() as infolist:
+            dataset.update_gap_and_missing_fill_settings(
+                    gap_interpolation_method=gap_interpolation_method,
+                    gap_interpolation_max_consec_fill=gap_interpolation_max_consec_fill,
+                    gap_debias_prefered_leading_period_hours=gap_debias_prefered_leading_period_hours,
+                    gap_debias_prefered_trailing_period_hours=gap_debias_prefered_trailing_period_hours,
+                    gap_debias_minimum_leading_period_hours=gap_debias_minimum_leading_period_hours,
+                    gap_debias_minimum_trailing_period_hours=gap_debias_minimum_trailing_period_hours,
+                    automatic_max_interpolation_duration_str=automatic_max_interpolation_duration_str,
+                    missing_obs_interpolation_method=missing_obs_interpolation_method)
+
+
+    except Exception as e:
+        error_msg = str(e)
+        return dataset, False, 'ERROR', ['Updating gaps and missing fill settings',
+                       error_msg]
+
+
+    return dataset, True, infolist, ['error_theme', 'error_msg']
+
+def convert_outliers_to_missing_and_gaps(dataset, obstype, ngapsize):
+    try:
+        with CapturingPrint() as infolist:
+            dataset.update_gaps_and_missing_from_outliers(
+                            obstype=obstype,
+                            n_gapsize=ngapsize)
+
+    except Exception as e:
+        error_msg = str(e)
+        return dataset, False, 'ERROR', ['Updating outliers to missing and gaps',
+                       error_msg]
+
+
+    return dataset, True, infolist, ['error_theme', 'error_msg']
+
+def interpolate_gaps(dataset, obstype, overwrite):
+    try:
+        with CapturingPrint() as infolist:
+            dataset.fill_gaps_linear(obstype=obstype,
+                                     overwrite_fill=overwrite)
+
+    except Exception as e:
+        error_msg = str(e)
+        return dataset, False, 'ERROR', ['Fill gaps linear',
+                       error_msg]
+
+
+    return dataset, True, infolist, ['error_theme', 'error_msg']
+
+def debias_fill_gaps(dataset, modeldata, method,  obstype, overwrite):
+    try:
+        with CapturingPrint() as infolist:
+            _ = dataset.fill_gaps_era5(modeldata=modeldata,
+                                       obstype=obstype,
+                                       overwrite_fill=overwrite)
+
+    except Exception as e:
+        error_msg = str(e)
+        return dataset, False, 'ERROR', ['Fill gaps debias Modeldata',
+                       error_msg]
+
+
+    return dataset, True, infolist, ['error_theme', 'error_msg']
+
+def automatic_fill_gaps(dataset, modeldata, max_interp_dur_str, obstype, overwrite):
+    try:
+        with CapturingPrint() as infolist:
+            _ = dataset.fill_gaps_automatic(
+                        modeldata=modeldata,
+                        obstype=obstype,
+                        max_interpolate_duration_str=max_interp_dur_str,
+                        overwrite_fill=overwrite)
+
+    except Exception as e:
+        error_msg = str(e)
+        return dataset, False, 'ERROR', ['Fill gaps automatic',
+                       error_msg]
+
+
+    return dataset, True, infolist, ['error_theme', 'error_msg']
+
+
+
+def fill_missing_observations(dataset, obstype):
+    try:
+        with CapturingPrint() as infolist:
+            dataset.fill_missing_obs_linear(obstype=obstype)
+
+    except Exception as e:
+        error_msg = str(e)
+        return dataset, False, 'ERROR', ['Fill missing observations linear',
+                       error_msg]
+
+
+    return dataset, True, infolist, ['error_theme', 'error_msg']
+
+
+def get_missing_obs_info(dataset):
+    try:
+        with CapturingPrint() as infolist:
+            dataset.get_missing_obs_info()
+
+    except Exception as e:
+        error_msg = str(e)
+        return False, 'ERROR', ['Missing obs info',
+                       error_msg]
+
+
+    return True, infolist, ['error_theme', 'error_msg']
+
+def get_gaps_info(dataset):
+    try:
+        with CapturingPrint() as infolist:
+            dataset.get_gaps_info()
+
+    except Exception as e:
+        error_msg = str(e)
+        return False, 'ERROR', ['Gaps info',
+                       error_msg]
+
+
+    return True, infolist, ['error_theme', 'error_msg']
+
+
+
+# =============================================================================
+# Modeldata methods
+# =============================================================================
+
+
+def get_modeldata(dataset, modelname, modeldata, obstype, stations, startdt, enddt):
+    try:
+        with CapturingPrint() as infolist:
+            model = dataset.get_modeldata(modelname=modelname,
+                                              modeldata=modeldata,
+                                              obstype=obstype,
+                                              stations=stations,
+                                              startdt=startdt,
+                                              enddt=enddt)
+
+
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, 'ERROR', [f'Extracting {modelname} from GEE',
+                       error_msg]
+
+
+    return model, True, infolist, ['error_theme', 'error_msg']
+
+def import_modeldata(folder, pkl_file):
+    try:
+        with CapturingPrint() as infolist:
+            empty_modeldata = metobs_toolkit.Modeldata('ERA5_hourly')
+            modeldata = empty_modeldata.import_modeldata(folder_path=folder,
+                                                         filename=pkl_file)
+
+
+
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, 'ERROR', [f'Importing modeldata to pkl',
+                       error_msg]
+
+
+    return modeldata, True, infolist, ['error_theme', 'error_msg']
+
+
+
+def save_modeldata(modeldata, outputfolder, outputfile):
+    try:
+        with CapturingPrint() as infolist:
+            modeldata.save_modeldata(outputfolder=outputfolder,
+                                     filename=outputfile)
+
+
+    except Exception as e:
+        error_msg = str(e)
+        return False, 'ERROR', [f'Saving modeldata to pkl',
+                       error_msg]
+
+
+    return True, infolist, ['error_theme', 'error_msg']
+
+def import_modeldata_from_csv(modelname, csvpath):
+    try:
+        with CapturingPrint() as infolist:
+            modeldata = metobs_toolkit.Modeldata(modelname)
+            modeldata.set_model_from_csv(csvpath=csvpath)
+
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, 'ERROR', [f'Importing model from csv',
+                       error_msg]
+
+
+    return modeldata, True, infolist, ['error_theme', 'error_msg']
+
+
+def get_modeldata_info(modeldata):
+    return str(modeldata)
+
+def conv_modeldata_units(modeldata, obstype, target_unit, expression):
+    try:
+        with CapturingPrint() as infolist:
+
+            modeldata.convert_units_to_tlk(obstype=obstype,
+                                           target_unit_name=target_unit,
+                                           conv_expr=expression)
+
+    except Exception as e:
+        error_msg = str(e)
+        return modeldata, False, 'ERROR', [f'Converting unit error.',
+                       error_msg]
+
+
+    return modeldata, True, infolist, ['error_theme', 'error_msg']
 #%% Toolkit functions
 
 

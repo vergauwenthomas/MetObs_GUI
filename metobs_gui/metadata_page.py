@@ -6,24 +6,13 @@ Created on Fri Aug  4 09:43:52 2023
 @author: thoverga
 """
 
-
 import os
-import copy
-import pytz
-from PyQt5.QtWidgets import QFileDialog, QComboBox
+
+from metobs_gui.extra_windows import _show_metadf, _show_spatial_html
 
 
-# from main import MainWindow as MW
-
-# from metobs_gui.json_save_func import get_saved_vals, update_json_file
-# from metobs_gui.data_func import readfile, isvalidfile, get_columns
-from metobs_gui.extra_windows import MergeWindow
-
-
-
-import metobs_gui.template_func as template_func
-import metobs_gui.path_handler as path_handler
 import metobs_gui.tlk_scripts as tlk_scripts
+import metobs_gui.path_handler as path_handler
 
 from metobs_gui.errors import Error, Notification
 
@@ -129,19 +118,47 @@ def submit_gee_code(MW):
 
 
 def preview_metadata(MW):
-    # check if dataset is available
-    if MW.dataset is None:
-        Error('Show dataset', 'There is no dataset.')
-        return
-    # create a seperate window containing the metadf
-    window = MergeWindow(MW.dataset.metadf, mode='metadf')
-    window.show()
+    _show_metadf(MW)
+
+
 
 
 
 
 def spatial_plot(MW):
-    pass
+
+    # Check if dataset and coordinates exist
+    if not _coordinates_available(MW):
+        return
+
+    MW.prompt_metadata.appendPlainText(f'\n---- Create interactive map ---- \n')
+
+    # Create path to save the html file
+    # save in the TMP dir
+    filename = 'metadata_html.html'
+    filepath = os.path.join(path_handler.TMP_dir, filename)
+
+    # create the html map
+    _cont, terminal, _msg = tlk_scripts.make_html_gee_map(dataset=MW.dataset,
+                                                          html_path=filepath)
+
+    if not _cont:
+        Error(_msg[0], _msg[1])
+        return
+
+    # write output to prompt
+    for line in terminal:
+        MW.prompt_metadata.appendPlainText(line)
+
+
+    MW.prompt_metadata.appendPlainText(f'\n---- Create interactive map ---> Done! ---- \n')
+
+
+    print(f'trigger : {filepath}')
+    _show_spatial_html(MW, filepath)
+    MW.html.show()
+    print('returned and shown')
+
 
 
 

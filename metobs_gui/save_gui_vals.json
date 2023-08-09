@@ -1,5 +1,6 @@
 {
     "data_file_path": "/home/thoverga/Documents/VLINDER_github/MetObs_toolkit/metobs_toolkit/datafiles/demo_datafile.csv",
     "metadata_file_path": "/home/thoverga/Documents/VLINDER_github/MetObs_toolkit/static_data/vlinder_metadata.csv",
-    "input_pkl_file_path": "/home/thoverga/mymap.html"
+    "input_pkl_file_path": "/home/thoverga/Documents/VLINDER_github/MetObs_GUI/metobs_gui/cache/datasets/your_dataset.pkl",
+    "external_modeldata_path": "/home/thoverga/uhi_plot.py"
 }
