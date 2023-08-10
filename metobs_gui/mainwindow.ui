@@ -36,7 +36,7 @@
         <item>
          <widget class="QTabWidget" name="tabWidget">
           <property name="currentIndex">
-           <number>3</number>
+           <number>6</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="title">
@@ -3960,6 +3960,24 @@
               </widget>
              </item>
             </layout>
+           </widget>
+          </widget>
+          <widget class="QWidget" name="tab_7">
+           <attribute name="title">
+            <string>Page</string>
+           </attribute>
+           <widget class="QPushButton" name="ee_test">
+            <property name="geometry">
+             <rect>
+              <x>130</x>
+              <y>130</y>
+              <width>451</width>
+              <height>25</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Siebe klik hier</string>
+            </property>
            </widget>
           </widget>
          </widget>

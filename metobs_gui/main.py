@@ -260,10 +260,57 @@ class MainWindow(QMainWindow):
         self.plot_dataset_6.clicked.connect(lambda: fill_page.plot_dataset(self))
 
 
-
+        # =============================================================================
+        #         debugging
+        # =============================================================================
+        self.ee_test.clicked.connect(lambda: self.fix_gee_problem())
 
 
 #%%
+
+    def fix_gee_problem(self):
+        print('GEE proberen openenen en initialiseren attempt 1 \n\n\n')
+
+        import ee
+        print('CREDENTIALS: ', ee.data._credentials)
+
+
+        try:
+            print('localhost')
+            ee.Authenticate(auth_mode="localhost", quiet=False)
+            print('succes')
+        except:
+            print('Fail localhost')
+
+        try:
+            print('notebook')
+            ee.Authenticate(auth_mode="notebook", quiet=False)
+            print('succes')
+        except:
+            print('FAIL notebook')
+
+        try:
+            print('appdefault')
+            ee.Authenticate(auth_mode="appdefault", quiet=False)
+            print('succes')
+        except:
+            print('FAIL appdefault')
+
+        try:
+            print('gcloud')
+            ee.Authenticate(auth_mode="gcloud", quiet=False)
+            print('succes')
+        except:
+            print('FAIL gcloud')
+
+
+
+        print('AUTHENTICATION KLAAR !!!')
+        ee.Initialize()
+
+        print('YESSSS')
+
+
 # =============================================================================
 # Helpers
 # =============================================================================
