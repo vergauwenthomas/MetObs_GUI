@@ -26,7 +26,7 @@ PyQtWebEngine = "~5.12.1"
 #pyqt5-sip = "^12.12.1"
 #pyqt5-qt5 = "^5.15.2"
 #metobs-toolkit = {git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", rev = "master"}
-metobs-toolkit = { git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", branch = "dev"}
+metobs-toolkit = { git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", branch = "GUI_toolkit"}
 #pyqt5 = "^5.15.9"
 
 
