@@ -17,7 +17,7 @@ keywords = ["meteorology", "observations", "urban climate", "GUI"]
 #requests = { git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", branch = "master"}
 python = "^3.9"
 PyQt5 = "=5.12.3" #Technical: this version is the latest to build from source
-PyQtWebEngine "^5.12"
+PyQtWebEngine "~5.12.1"
 #pyQt5 = "^5.12.2" # This installs Version 5.15.9, which works
 #pyqt5.15.9 installs--> PyQt5-Qt5 >=5.15.2 and +PyQt5-sip = ">=12.11,<13"
 #pyqt5-sip = "^12.12.1"
