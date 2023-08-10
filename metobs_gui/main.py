@@ -282,28 +282,6 @@ class MainWindow(QMainWindow):
         except:
             print('Fail localhost')
 
-        try:
-            print('notebook')
-            ee.Authenticate(auth_mode="notebook", quiet=False)
-            print('succes')
-        except:
-            print('FAIL notebook')
-
-        try:
-            print('appdefault')
-            ee.Authenticate(auth_mode="appdefault", quiet=False)
-            print('succes')
-        except:
-            print('FAIL appdefault')
-
-        try:
-            print('gcloud')
-            ee.Authenticate(auth_mode="gcloud", quiet=False)
-            print('succes')
-        except:
-            print('FAIL gcloud')
-
-
 
         print('AUTHENTICATION KLAAR !!!')
         ee.Initialize()
