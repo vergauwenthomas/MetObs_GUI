@@ -152,12 +152,9 @@ def spatial_plot(MW):
 
 
     MW.prompt_metadata.appendPlainText(f'\n---- Create interactive map ---> Done! ---- \n')
-
-
-    print(f'trigger : {filepath}')
     _show_spatial_html(MW, filepath)
     MW.html.show()
-    print('returned and shown')
+
 
 
 

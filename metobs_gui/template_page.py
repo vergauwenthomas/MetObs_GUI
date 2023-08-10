@@ -257,8 +257,6 @@ def save_template_call(MW):
     # update cache templates
     MW.session['templates']['cache'] = template_func.get_all_templates() # name.csv : path
 
-    print(MW.session)
-
 def show_data_head(MW):
     # 1. THe data file
     datafile = MW.data_file_T.text()
