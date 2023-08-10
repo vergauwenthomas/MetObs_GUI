@@ -19,7 +19,7 @@ python = "^3.9"
 PyQt5 = "=5.12.3" #Technical: this version is the latest to build from source
 PyQtWebEngine = "~5.12.1"
 
-earthengine-api = "==0.1.329"
+#earthengine-api = "==0.1.329"
 
 
 #metobs-toolkit = {git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", rev = "master"}
