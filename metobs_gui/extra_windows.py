@@ -385,7 +385,7 @@ class MergeWindow(QMainWindow):
 
     def __init__(self, df, mode='mergedf'):
         super().__init__()
-        loadUi(os.path.join(path_handler.GUI_dir,'merge_overview.ui'), self)
+        loadUi(os.path.join(path_handler.GUI_dir,'tabular_data_window.ui'), self)
 
         # Define data attributes
         self.df = df.reset_index()
@@ -469,7 +469,7 @@ class HtmlWindow(QDialog):
 
     def __init__(self):
         super().__init__()
-        loadUi('/home/thoverga/Documents/VLINDER_github/MetObs_GUI/metobs_gui/html2.ui', self)
+        loadUi('/home/thoverga/Documents/VLINDER_github/MetObs_GUI/metobs_gui/html_map.ui', self)
 
     def feed_html(self, html_path):
         self.display_2.load(QtCore.QUrl().fromLocalFile(html_path))

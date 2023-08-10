@@ -40,7 +40,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         # Load gui widgets
-        loadUi(os.path.join(path_handler.GUI_dir,'last_attempt.ui'),
+        loadUi(os.path.join(path_handler.GUI_dir,'mainwindow.ui'),
                self) #open the ui file
 
         # -------- Information to pass beween different triggers ----------

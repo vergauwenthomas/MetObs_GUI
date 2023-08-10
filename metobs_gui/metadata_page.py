@@ -138,6 +138,10 @@ def spatial_plot(MW):
     filename = 'metadata_html.html'
     filepath = os.path.join(path_handler.TMP_dir, filename)
 
+    # remove the file if it already exists
+    if path_handler.file_exist(filepath):
+        os.remove(filepath)
+
     # create the html map
     _cont, terminal, _msg = tlk_scripts.make_html_gee_map(dataset=MW.dataset,
                                                           html_path=filepath)
@@ -149,7 +153,6 @@ def spatial_plot(MW):
     # write output to prompt
     for line in terminal:
         MW.prompt_metadata.appendPlainText(line)
-
 
     MW.prompt_metadata.appendPlainText(f'\n---- Create interactive map ---> Done! ---- \n')
     _show_spatial_html(MW, filepath)
