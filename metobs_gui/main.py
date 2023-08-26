@@ -32,7 +32,7 @@ import metobs_gui.metadata_page as metadata_page
 import metobs_gui.qc_page as qc_page
 import metobs_gui.modeldata_page as modeldata_page
 import metobs_gui.fill_page as fill_page
-
+import metobs_gui.analysis_page as analysis_page
 
 
 
@@ -46,6 +46,9 @@ class MainWindow(QMainWindow):
         # -------- Information to pass beween different triggers ----------
         self.dataset = None #the vlindertoolkit dataset instance
         self.modeldata = None
+        self.analysis = None
+        self.cycle_stats = None #test
+
         self.modeldata_temporar = None #for termporal storage on direct input from gee
 
         self.long_storage = {} #will read the json file to store info over mulitple settings
@@ -68,6 +71,9 @@ class MainWindow(QMainWindow):
 
         # P6 INIT
         fill_page.init_fill_page(self)
+
+        # P7 INIT
+        analysis_page.init_analysis_page(self)
 
 
 
@@ -260,33 +266,27 @@ class MainWindow(QMainWindow):
         self.plot_dataset_6.clicked.connect(lambda: fill_page.plot_dataset(self))
 
 
+
         # =============================================================================
-        #         debugging
+        # Analysis tab
         # =============================================================================
-        self.ee_test.clicked.connect(lambda: self.fix_gee_problem())
+
+        self.create_analysis.clicked.connect(lambda: analysis_page.create_analysis(self))
+        self.groupdef_custom.textChanged.connect(lambda: analysis_page.update_horizontal_axis_possibilities(self))
+
+        self.apply_filter.clicked.connect(lambda: analysis_page.filter_analysis(self))
+        self.plot_diurnal.clicked.connect(lambda: analysis_page.diurnal_plot_trigger(self))
+        self.plot_anual.clicked.connect(lambda: analysis_page.anual_plot_trigger(self))
+        self.plot_custom.clicked.connect(lambda: analysis_page.custom_cycle_plot_trigger(self))
+        self.get_cor.clicked.connect(lambda: analysis_page.get_lc_correlations(self))
+        self.make_heat_plot.clicked.connect(lambda: analysis_page.make_heatmap_plot(self))
 
 
-#%%
 
-    def fix_gee_problem(self):
-        print('GEE proberen openenen en initialiseren attempt 1 \n\n\n')
+        self.startdt_check_diurnal.stateChanged.connect(lambda: analysis_page.dirunal_start_end(self))
+        self.startdt_check_anual.stateChanged.connect(lambda: analysis_page.anual_start_end(self))
+        self.startdt_check_custom.stateChanged.connect(lambda: analysis_page.custom_start_end(self))
 
-        import ee
-        print('CREDENTIALS: ', ee.data._credentials)
-
-
-        try:
-            print('localhost')
-            ee.Authenticate(auth_mode="localhost", quiet=False)
-            print('succes')
-        except:
-            print('Fail localhost')
-
-
-        print('AUTHENTICATION KLAAR !!!')
-        ee.Initialize()
-
-        print('YESSSS')
 
 
 # =============================================================================

@@ -594,6 +594,179 @@ def conv_modeldata_units(modeldata, obstype, target_unit, expression):
 
 
     return modeldata, True, infolist, ['error_theme', 'error_msg']
+
+
+
+# =============================================================================
+# Analysis stuff
+# =============================================================================
+
+def create_analysis_instance(dataset, add_gapfilled_values):
+    try:
+        with CapturingPrint() as infolist:
+            ana = dataset.get_analysis(add_gapfilled_values=add_gapfilled_values)
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, 'ERROR', [f'Creating Analysis', error_msg]
+
+    return ana, True, infolist, ['error_theme', 'error_msg']
+
+
+
+
+def apply_filter_on_analysis(analysis, filterstring):
+    try:
+        with CapturingPrint() as infolist:
+            ana = analysis.apply_filter(expression=filterstring)
+    except Exception as e:
+        error_msg = str(e)
+        return analysis, False, 'ERROR', [f'Filtering Analysis', error_msg]
+
+    return ana, True, infolist, ['error_theme', 'error_msg']
+
+
+
+
+def apply_diurnal_cycle_without_ref(analysis, colorby, obstype, startdt,
+                                    enddt, plot=True,
+                                    stations=None,
+                                    title=None, y_label=None, legend=True,
+                                    errorbands=False,
+                                    ):
+
+    try:
+        with CapturingPrint() as infolist:
+            stats, all_stats, ax= analysis.get_diurnal_statistics(colorby=colorby, obstype=obstype,
+                                                                  stations=stations, startdt=startdt,
+                                                                  enddt=enddt, plot=plot,
+                                                                  title=title, y_label=y_label, legend=legend,
+                                                                  errorbands=errorbands,
+                                                                  _return_all_stats=True) #True so the axes is returned
+            all_stats.columns = all_stats.columns.to_flat_index()
+    except Exception as e:
+        error_msg = str(e)
+        return None, None, None, False, 'ERROR', [f'Analysis diurnal cycle', error_msg]
+
+    return stats, all_stats, ax, True, infolist, ['error_theme', 'error_msg']
+
+
+
+def apply_diurnal_cycle_with_ref(analysis, colorby, obstype, startdt,
+                                 tollerance, refstation,
+                                 enddt, plot=True,
+                                 stations=None,
+                                 title=None, y_label=None, legend=True,
+                                 errorbands=False,
+                                 ):
+
+    try:
+        with CapturingPrint() as infolist:
+            stats, all_stats, ax= analysis.get_diurnal_statistics_with_reference(colorby=colorby, obstype=obstype,
+                                                                                 tollerance=tollerance,
+                                                                                 refstation=refstation,
+                                                                                 stations=stations, startdt=startdt,
+                                                                                 enddt=enddt, plot=plot,
+                                                                                 title=title, y_label=y_label, legend=legend,
+                                                                                 errorbands=errorbands,
+                                                                                 _return_all_stats=True) #True so the axes is returned
+            all_stats.columns = all_stats.columns.to_flat_index()
+    except Exception as e:
+        error_msg = str(e)
+        return None, None, None, False, 'ERROR', [f'Analysis diurnal cycle with ref', error_msg]
+
+    return stats, all_stats, ax, True, infolist, ['error_theme', 'error_msg']
+
+def apply_anual_cycle(analysis, groupby, obstype,
+                             agg_method,
+                             startdt, enddt, plot=True,
+                             stations=None,
+                             errorbands=False, title=None, y_label=None,
+                             legend=True):
+
+    try:
+        with CapturingPrint() as infolist:
+            stats, all_stats, ax= analysis.get_anual_statistics(groupby=groupby,
+                                                                obstype=obstype,
+                                                                agg_method=agg_method,
+                                                                stations=stations,
+                                                                startdt=startdt,
+                                                                enddt=enddt,
+                                                                plot=plot,
+                                                                title=title,
+                                                                y_label=y_label,
+                                                                legend=legend,
+                                                                errorbands=errorbands,
+                                                                _return_all_stats=True) #True so the axes is returned
+            all_stats.columns = all_stats.columns.to_flat_index()
+    except Exception as e:
+        error_msg = str(e)
+        return None, None, None, False, 'ERROR', [f'Analysis anual cycle', error_msg]
+
+    return stats, all_stats, ax, True, infolist, ['error_theme', 'error_msg']
+
+
+def apply_custom_cycle(analysis, obstype, aggregation,
+                       aggregation_method, horizontal_axis,
+                       startdt, enddt,
+                       stations=None, plot=True,
+                       title=None, y_label=None, legend=True,
+                       errorbands=False, verbose=True,
+                       _obsdf=None, _show_zero_line=False):
+
+    try:
+        with CapturingPrint() as infolist:
+            stats, all_stats, ax= analysis.get_aggregated_cycle_statistics(
+                                                    obstype=obstype,
+                                                    aggregation=aggregation,
+                                                    aggregation_method=aggregation_method,
+                                                    horizontal_axis=horizontal_axis,
+                                                    startdt=startdt,
+                                                    enddt=enddt,
+                                                    stations=stations,
+                                                    plot=plot,
+                                                    title=title, y_label=y_label, legend=legend,
+                                                    errorbands=errorbands, verbose=True, #True so the axes is returned
+                                                    _obsdf=_obsdf, _show_zero_line=_show_zero_line)
+
+
+
+
+            all_stats.columns = all_stats.columns.to_flat_index()
+    except Exception as e:
+        error_msg = str(e)
+        return None, None, None, False, 'ERROR', [f'Analysis custom cycle', error_msg]
+
+    return stats, all_stats, ax, True, infolist, ['error_theme', 'error_msg']
+
+
+
+def get_lc_cor_info(analysis, obstype, groupby_labels):
+    try:
+        with CapturingPrint() as infolist:
+            cor_dict = analysis.get_lc_correlation_matrices(
+                                    obstype=obstype,
+                                    groupby_labels=groupby_labels)
+
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, 'ERROR', [f'Analysis get landcover correlations', error_msg]
+    return cor_dict, True, infolist, ['error_theme', 'error_msg']
+
+
+
+def create_cor_figure(analysis, groupby_value, title=None):
+    try:
+        with CapturingPrint() as infolist:
+            ax = analysis.plot_correlation_heatmap(groupby_value=groupby_value,
+                                                         title=title,
+                                                         _return_ax=True
+                                                         )
+
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, 'ERROR', [f'Analysis heatmap plot of landcover correlations', error_msg]
+    return ax, True, infolist, ['error_theme', 'error_msg']
+
 #%% Toolkit functions
 
 

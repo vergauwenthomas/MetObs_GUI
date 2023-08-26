@@ -374,6 +374,58 @@ class ModeldataTimeSeriesWindow(QMainWindow):
 
 
 
+# =============================================================================
+# Analysis cycles
+# =============================================================================
+
+
+
+
+class BasicWindow(QMainWindow):
+    """ Creates new window """
+
+    def __init__(self, ax):
+        super().__init__()
+        loadUi(os.path.join(path_handler.GUI_dir,'basic_fig.ui'), self)
+
+        self.fig = ax.get_figure()
+
+        self.canvas=FigureCanvasQTAgg(self.fig)
+        self.toolbar = NavigationToolbar(canvas=self.canvas)
+
+
+    def make_plot(self):
+        self.vert_layout.addWidget(self.toolbar)
+        self.vert_layout.addWidget(self.canvas)
+
+
+
+def make_a_cycle_plot(MW):
+    # create a seperate window containing the plot
+    MW.cyclewindow = BasicWindow(MW.cycle_ax)
+    MW.cyclewindow.make_plot()
+    MW.cyclewindow.show()
+
+
+
+def show_cycle_stats_df(MW):
+    # check if stats is available
+    if MW.cycle_stats is None:
+        Error('Show cycle statistics', 'There is no cycle.')
+        return
+    # create a seperate window containing the metadf
+    MW.testwindow = MergeWindow(MW.cycle_stats, mode='cycle')
+    MW.testwindow.show()
+
+def make_a_heatmap_plot(MW):
+    # check if ax is available
+    if MW.heatmap_ax is None:
+        Error('Show heatmap figure', 'There is no heatmap figure generated.')
+        return
+    MW.heatwindow = BasicWindow(MW.heatmap_ax)
+    MW.heatwindow.make_plot()
+    MW.heatwindow.show()
+
 
 
 # =============================================================================
@@ -407,7 +459,7 @@ class MergeWindow(QMainWindow):
 
     def set_obstype_subsetting_spinner(self):
         # if mode is metadata --> disable spinner
-        if ((self.mode == 'metadf') | (self.mode == 'missing_obsdf') | (self.mode == 'gapsdf')):
+        if ((self.mode == 'metadf') | (self.mode == 'missing_obsdf') | (self.mode == 'gapsdf') | (self.mode == 'cycle')):
             self.subset_merged_obstype.setEnabled(False)
             return
 
