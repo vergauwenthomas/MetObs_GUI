@@ -184,6 +184,7 @@ def set_datetime_defaults(main):
 
 
 def set_metadata_spinner_values(main, values):
+    print('Setting metadata spinners items with: ', values)
     # empty spinner values
     main.lat_col_CB.clear()
     main.lon_col_CB.clear()
@@ -347,7 +348,7 @@ def make_template_build(main):
 
     if possible_options['data_structure'] == 'wide':
         possible_options['obstype'] = str(main.wide_obs_type.currentText())
-        possible_options['obstype_units'] = str(main.wide_obs_units.text())
+        possible_options['obstype_unit'] = str(main.wide_obs_units.text())
         possible_options['obstype_description'] = str(main.wide_obs_desc.text())
 
 
@@ -473,7 +474,7 @@ def test_template(main, obsmapper, metamapper, dtmapper, optionsmapper):
     # check wide data
     if (fmt == 'wide'):
         print(optionsmapper)
-        if not 'obstype_units' in optionsmapper.keys():
+        if not 'obstype_unit' in optionsmapper.keys():
             Error('Invalid mapping', f'(wide - format) Specify the observation units for the {optionsmapper["obstype"]} records.')
             return False
 
@@ -505,8 +506,9 @@ def get_all_templates():
     template_dict['default_template.csv'] = path_handler.tlk_default_template
 
     # all templates in cache
-    filenames, filepaths = path_handler.list_filenames(path_handler.CACHE_dir,
+    filenames, filepaths = path_handler.list_filenames(path_handler.template_dir,
                                                        fileextension='.csv')
+
     template_dict.update(dict(zip(filenames, filepaths)))
 
     return template_dict

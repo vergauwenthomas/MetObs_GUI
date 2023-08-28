@@ -105,8 +105,6 @@ def import_dataset_from_file(data_path, metadata_path, template_path,
                              sync_force,
                              sync_force_freq):
 
-
-
     try:
         # init dataset
         dataset = metobs_toolkit.Dataset()
@@ -116,7 +114,9 @@ def import_dataset_from_file(data_path, metadata_path, template_path,
                                 )
         # update gap defenition
         dataset.update_qc_settings(gapsize_in_records=int(gap_def))
+
     except Exception as e:
+
         error_msg = str(e)
         return None, False, ['Dataset initialisation and settings update',
                              error_msg]
@@ -124,11 +124,14 @@ def import_dataset_from_file(data_path, metadata_path, template_path,
 
     # import data
     try:
+
+
         dataset.import_data_from_file(freq_estimation_method = freq_est_method,
                                       freq_estimation_simplify = freq_est_simplyfy,
                                       freq_estimation_simplify_error=freq_est_simplyfy_toll,
                                       kwargs_data_read=kwargs_data,
                                       kwargs_metadata_read=kwargs_metadata)
+
     except Exception as e:
         error_msg = str(e)
         return None, False, ['Dataset importing data', error_msg]
@@ -137,13 +140,12 @@ def import_dataset_from_file(data_path, metadata_path, template_path,
     if sync:
         try:
             if sync_force:
-                print('hierD')
                 dataset.sync_observations(tollerance = sync_tol,
                                       verbose=True,
                                       _force_resolution_minutes=sync_force_freq,
                                       _drop_target_nan_dt=False)
             else:
-                print('hierE')
+
                 dataset.sync_observations(tollerance = sync_tol,
                                       verbose=True,
                                       _force_resolution_minutes=None,
@@ -171,10 +173,13 @@ def coarsen_timeres(dataset, target_freq, origin, method):
 
 
 def import_dataset_from_pkl(pkl_name, pkl_folder):
+    print('A')
+    print(f'folder_path={pkl_folder},filename={pkl_name}')
     try:
         dataset = metobs_toolkit.Dataset()
         dataset = dataset.import_dataset(folder_path=pkl_folder,
                                          filename=pkl_name)
+        print('B')
     except Exception as e:
         error_msg = str(e)
         return None, False, ['Dataset import from pkl',

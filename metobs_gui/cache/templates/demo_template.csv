@@ -1,0 +1,7 @@
+varname,template column name,format,units,description,options,options_values
+datetime,Tijd,%Y-%m-%d %H:%M:%S,,,data_structure,wide
+name,name,,,,stationname,Station name/ID (data columns are used)
+lat,latitude,,,,obstype,temp
+lon,logitude,,,,obstype_description,2mT passive
+location,type of station,,,,timezone,Europe/Brussels
+,,,,,obstype_units,Celcius

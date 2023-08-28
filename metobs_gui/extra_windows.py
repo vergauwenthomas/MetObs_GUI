@@ -523,9 +523,11 @@ class MergeWindow(QMainWindow):
 
 
 def _show_spatial_html(MW, html_path):
+    print('hier')
     MW.html = HtmlWindow()
+    print('nu')
     MW.html.feed_html(html_path)
-
+    print('done')
 
 
 class HtmlWindow(QDialog):

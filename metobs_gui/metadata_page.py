@@ -143,9 +143,11 @@ def spatial_plot(MW):
         os.remove(filepath)
 
     # create the html map
+    print('A')
     _cont, terminal, _msg = tlk_scripts.make_html_gee_map(dataset=MW.dataset,
                                                           html_path=filepath)
 
+    print('B')
     if not _cont:
         Error(_msg[0], _msg[1])
         return
@@ -155,8 +157,11 @@ def spatial_plot(MW):
         MW.prompt_metadata.appendPlainText(line)
 
     MW.prompt_metadata.appendPlainText(f'\n---- Create interactive map ---> Done! ---- \n')
+    print('C')
     _show_spatial_html(MW, filepath)
+    print('D')
     MW.html.show()
+    print('E')
 
 
 

@@ -70,7 +70,6 @@ def init_import_page(MW):
 
 
 
-
 # =============================================================================
 # Triggers
 # =============================================================================
@@ -286,7 +285,6 @@ def make_dataset(MW):
         data_path, metadata_path, isvalid = _get_data_metadata_paths(MW)
         if not isvalid:
             return
-
         # get arguments for importing
         argdict, _cont = extract_input_values_for_dataset(MW)
         if not _cont:
@@ -329,6 +327,7 @@ def make_dataset(MW):
     else:
         # import from pkl
         pkl_filename, pkl_folder =  get_pkl_location(MW)
+        print('hier')
         # get arguments for importing
         argdict, _cont = extract_input_values_for_dataset(MW)
         if not _cont:
@@ -358,13 +357,13 @@ def make_dataset(MW):
 
 
 
-
     # enable inspect buttons
     MW.get_info.setEnabled(True)
     MW.show_metadata.setEnabled(True)
     MW.show_dataset.setEnabled(True)
     MW.plot_dataset.setEnabled(True)
     MW.save_pkl_B.setEnabled(True)
+
     Notification('Dataset is created!')
 
 def show_info(MW):
@@ -439,13 +438,11 @@ def get_pkl_location(MW):
     # either from the cache or form external:
 
     if ((MW.use_pkl.isChecked()) & (not MW.upload_ext_checkbox.isChecked())):
-        print('from cache')
         # from external
         filename=str(MW.pkl_selector.currentText())
         folder=path_handler.dataset_dir
 
     elif ((MW.use_pkl.isChecked()) & (MW.upload_ext_checkbox.isChecked())):
-        print('form ext')
         # from cache
         filepath = str(MW.pkl_path.text())
         # check if file exist
@@ -457,7 +454,6 @@ def get_pkl_location(MW):
     else:
         Error('CODE 101')
 
-    print(filename, folder)
     return filename, folder
 
 def extract_input_values_for_dataset(MW):

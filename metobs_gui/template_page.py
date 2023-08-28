@@ -17,6 +17,7 @@ from PyQt5.QtWidgets import QFileDialog, QComboBox
 from metobs_gui.json_save_func import get_saved_vals, update_json_file
 from metobs_gui.data_func import readfile, isvalidfile, get_columns
 
+from metobs_gui.import_data_page import set_possible_templates
 
 
 import metobs_gui.template_func as template_func
@@ -147,7 +148,7 @@ def enable_format_widgets(MW):
                 _get_name_box(MW).setEnabled(False)
                 lab_txt = 'Station name/ID (data columns are used)'
 
-        MW.stationname_labeltext.setText(lab_txt)
+        MW.stationname.setText(lab_txt)
 
 
 def prepare_for_mapping(MW):
@@ -252,10 +253,15 @@ def save_template_call(MW):
     temp_df.to_csv(path_or_buf=target_path, sep=',', index=False)
 
     Notification(f'Template ({filename}) is saved!')
+
     # update dict
     MW.session['templates']['in_use'] = {filename : target_path}
     # update cache templates
     MW.session['templates']['cache'] = template_func.get_all_templates() # name.csv : path
+
+    # Trigger update spinner on import page so the saved templ appears in the spinner there
+    set_possible_templates(MW)
+
 
 def show_data_head(MW):
     # 1. THe data file
@@ -283,7 +289,7 @@ def show_metadata_head(MW):
 def show_template(MW):
     if not 'template_df' in MW.session['mapping']:
         Error('View error', 'The template is not been succesfully build yet.')
-
+        return
     MW.templmodel.setDataFrame(MW.session['mapping']['template_df'])
 
 

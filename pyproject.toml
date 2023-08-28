@@ -23,8 +23,8 @@ PyQtWebEngine = "~5.12.1"
 
 
 #metobs-toolkit = {git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", rev = "master"}
-metobs-toolkit = { git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", branch = "GUI_toolkit"}
-
+#metobs-toolkit = { git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", branch = "GUI_toolkit"}
+metobs-toolkit = { git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", branch = "dev"}
 
 
 
