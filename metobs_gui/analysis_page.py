@@ -11,7 +11,7 @@ from datetime import datetime
 from metobs_gui.errors import Error, Notification
 import metobs_gui.tlk_scripts as tlk_scripts
 
-from metobs_gui.extra_windows import make_a_cycle_plot, show_cycle_stats_df, make_a_heatmap_plot
+from metobs_gui.extra_windows import make_a_cycle_plot, show_cycle_stats_df, make_a_heatmap_plot, show_cor_matix_df
 
 
 # =============================================================================
@@ -49,10 +49,6 @@ def activate_analysis_widgets(MW, setvalue=True):
 
 
     for widg in to_activate_list:
-        widg.setEnabled(setvalue)
-
-def activate_cor_widgets(MW, setvalue=True):
-    for widg in [MW.heat_cor_group, MW.make_heat_plot, MW.make_scatter_plot]:
         widg.setEnabled(setvalue)
 
 
@@ -119,7 +115,7 @@ def update_horizontal_axis_possibilities(MW):
 
 
 def activate_cor_plots(MW, setvalue=True):
-    for widg in [MW.make_heat_plot, MW.make_scatter_plot, MW.heat_cor_group]:
+    for widg in [MW.make_heat_plot, MW.make_scatter_plot, MW.show_cor_matrix, MW.heat_cor_group]:
         widg.setEnabled(setvalue)
 
 
@@ -467,7 +463,7 @@ def make_heatmap_plot(MW):
         Error('No correlations to plot', 'There are no stored landcover correlations to show.')
         return
 
-    # TODO: The type of the keys in the dictionary are not persee strings !!! Fix this
+    # need string mapper because keys are not always strings while cor_group (gui spinner) is
     cor_group = str(MW.heat_cor_group.currentText())
     string_mapper = {str(key): key for key in MW.analysis.lc_cor_dict.keys()}
     key=string_mapper[cor_group]
@@ -491,6 +487,47 @@ def make_heatmap_plot(MW):
     MW.heatmap_ax = ax
     make_a_heatmap_plot(MW) #show plot
 
+def display_cor_mat(MW):
+    if not bool(MW.analysis.lc_cor_dict):
+        Error('No correlations to plot', 'There are no stored landcover correlations to show.')
+        return
+
+    # need string mapper because keys are not always strings while cor_group (gui spinner) is
+    cor_group = str(MW.heat_cor_group.currentText())
+    string_mapper = {str(key): key for key in MW.analysis.lc_cor_dict.keys()}
+    key=string_mapper[cor_group]
+
+    df = MW.analysis.lc_cor_dict[key]
+    df = MW.analysis.lc_cor_dict[key]['combined matrix']
+
+    show_cor_matix_df(MW, df)
+
+
+
+
+
+def create_scatter_cor_plot(MW):
+    if not bool(MW.analysis.lc_cor_dict):
+        Error('No correlations to plot', 'There are no stored landcover correlations to show.')
+        return
+
+
+    MW.prompt_analysis.appendPlainText(f'\n---- Creating correlation scatter plot. ---- \n')
+    ax, _cont, terminal, _msg = tlk_scripts.make_scatter_cor_plot(analysis=MW.analysis)
+
+    if not _cont:
+        # deactivate the dashboard for analyis
+        activate_cor_plots(MW, setvalue=False)
+        Error(_msg[0], _msg[1])
+        return
+    for line in terminal:
+        MW.prompt_fill.appendPlainText(line)
+
+
+    MW.prompt_analysis.appendPlainText(f'\n---- Creating correlation scatter plot. ---> Done! ---- \n')
+    # Open up windows
+    MW.heatmap_ax = ax
+    make_a_heatmap_plot(MW) #show plot
 
 
 

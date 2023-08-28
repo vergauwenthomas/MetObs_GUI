@@ -280,6 +280,9 @@ class MainWindow(QMainWindow):
         self.plot_custom.clicked.connect(lambda: analysis_page.custom_cycle_plot_trigger(self))
         self.get_cor.clicked.connect(lambda: analysis_page.get_lc_correlations(self))
         self.make_heat_plot.clicked.connect(lambda: analysis_page.make_heatmap_plot(self))
+        self.show_cor_matrix.clicked.connect(lambda: analysis_page.display_cor_mat(self))
+
+        self.make_scatter_plot.clicked.connect(lambda: analysis_page.create_scatter_cor_plot(self))
 
 
 

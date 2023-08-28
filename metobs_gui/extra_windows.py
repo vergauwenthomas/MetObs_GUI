@@ -426,6 +426,18 @@ def make_a_heatmap_plot(MW):
     MW.heatwindow.make_plot()
     MW.heatwindow.show()
 
+def show_cor_matix_df(MW, cordf):
+    if cordf.empty:
+        Error('Show correlation matrix', 'There is data to show.')
+        return
+
+    # create a seperate window containing the metadf
+    MW.testwindow = MergeWindow(cordf, mode='cycle')
+    MW.testwindow.show()
+
+
+
+
 
 
 # =============================================================================

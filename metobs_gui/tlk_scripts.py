@@ -767,6 +767,18 @@ def create_cor_figure(analysis, groupby_value, title=None):
         return None, False, 'ERROR', [f'Analysis heatmap plot of landcover correlations', error_msg]
     return ax, True, infolist, ['error_theme', 'error_msg']
 
+def make_scatter_cor_plot(analysis):
+    try:
+        with CapturingPrint() as infolist:
+            ax = analysis.plot_correlation_variation()
+
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, 'ERROR', [f'Analysis scatter plot of landcover correlations variation', error_msg]
+    return ax, True, infolist, ['error_theme', 'error_msg']
+
+
+
 #%% Toolkit functions
 
 

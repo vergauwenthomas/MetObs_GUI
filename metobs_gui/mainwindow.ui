@@ -4576,6 +4576,9 @@
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
+                 <property name="text">
+                  <string>hour</string>
+                 </property>
                  <property name="placeholderText">
                   <string>hour</string>
                  </property>
@@ -4651,6 +4654,16 @@
                </property>
                <property name="text">
                 <string>Make plot</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="show_cor_matrix">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Show correlation matrix</string>
                </property>
               </widget>
              </item>
