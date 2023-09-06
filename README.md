@@ -10,7 +10,7 @@ Unstable:
 `pip install git+https://github.com/vergauwenthomas/MetObs_GUI.git`
 
 Prerelease:
-`pip install MetObs-GUI==0.0.0a1`
+`pip install MetObs-GUI --pre`
 
 # Usage
 In python:
