@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - dev
-      -os_testing
+      - os_testing
 
 jobs:
   test-os-installations:
