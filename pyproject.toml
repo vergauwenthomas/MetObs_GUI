@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "MetObs-GUI"
-version = "0.0.1"
+version = "0.0.1a0"
 description = "A GUI for the MetObs-toolkit"
 authors = ["Thomas Vergauwen <thomas.vergauwen@meteo.be>"]
 maintainers = ["Thomas Vergauwen <thomas.vergauwen@meteo.be>"]
