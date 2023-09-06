@@ -3,7 +3,7 @@ name: PyPi Installation testing
 on:
   push:
     branches:
-      - master
+      - main
       - dev
 
 
