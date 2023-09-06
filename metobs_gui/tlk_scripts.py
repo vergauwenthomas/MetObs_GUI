@@ -272,7 +272,6 @@ def update_qc_stats (dataset, obstype='temp', gapsize_in_records=None,
                      buddy_max_elev_diff=None,
                      buddy_elev_gradient=None,
                      buddy_min_std=None,
-                     buddy_num_iterations=None,
                      buddy_debug=None):
 
     try:
@@ -290,19 +289,25 @@ def update_qc_stats (dataset, obstype='temp', gapsize_in_records=None,
                                        win_var_time_win_to_check=win_var_time_win_to_check,
                                        win_var_min_num_obs=win_var_min_num_obs,
                                        step_max_increase_per_sec= step_max_increase_per_sec,
-                                       step_max_decrease_per_sec=step_max_decrease_per_sec)
+                                       step_max_decrease_per_sec=step_max_decrease_per_sec,
+                                       buddy_radius=buddy_radius,
+                                       buddy_min_sample_size=buddy_num_min,
+                                       buddy_max_elev_diff=buddy_max_elev_diff,
+                                       buddy_min_std=buddy_min_std,
+                                       buddy_threshold=buddy_threshold,
+                                       buddy_elev_gradient=buddy_elev_gradient)
 
-            dataset.update_titan_qc_settings(
-                                obstype=obstype,
-                                buddy_radius=buddy_radius,
-                                buddy_num_min=buddy_num_min,
-                                buddy_threshold=buddy_threshold,
-                                buddy_max_elev_diff=buddy_max_elev_diff,
-                                buddy_elev_gradient=buddy_elev_gradient,
-                                buddy_min_std=buddy_min_std,
-                                buddy_num_iterations=buddy_num_iterations,
-                                buddy_debug=buddy_debug,
-                                )
+            # dataset.update_titan_qc_settings(
+            #                     obstype=obstype,
+            #                     buddy_radius=buddy_radius,
+            #                     buddy_num_min=buddy_num_min,
+            #                     buddy_threshold=buddy_threshold,
+            #                     buddy_max_elev_diff=buddy_max_elev_diff,
+            #                     buddy_elev_gradient=buddy_elev_gradient,
+            #                     buddy_min_std=buddy_min_std,
+            #                     buddy_num_iterations=buddy_num_iterations,
+            #                     buddy_debug=buddy_debug,
+            #                     )
 
     except Exception as e:
         error_msg = str(e)
@@ -335,21 +340,39 @@ def apply_qc(dataset, obstype,
 
     return True, infolist, ['error_theme', 'error_msg']
 
-def apply_titan_buddy(dataset, obstype, use_constant_altitude):
+def apply_buddy(dataset, obstype, use_constant_altitude, haversine_approx,
+                metric_epsg):
 
     try:
         with CapturingPrint() as infolist:
-            dataset.apply_titan_buddy_check(obstype=obstype,
-                                            use_constant_altitude=False)
+            dataset.apply_buddy_check(obstype=obstype,
+                                      use_constant_altitude=False,
+                                      haversine_approx=haversine_approx,
+                                      metric_epsg=metric_epsg)
 
 
     except Exception as e:
         error_msg = str(e)
-        return False, 'ERROR', ['Apply titan buddy check error',
+        return False, 'ERROR', ['Apply buddy check error',
                        error_msg]
 
 
     return True, infolist, ['error_theme', 'error_msg']
+# def apply_titan_buddy(dataset, obstype, use_constant_altitude):
+
+#     try:
+#         with CapturingPrint() as infolist:
+#             dataset.apply_titan_buddy_check(obstype=obstype,
+#                                             use_constant_altitude=False)
+
+
+#     except Exception as e:
+#         error_msg = str(e)
+#         return False, 'ERROR', ['Apply titan buddy check error',
+#                        error_msg]
+
+
+#     return True, infolist, ['error_theme', 'error_msg']
 
 
 

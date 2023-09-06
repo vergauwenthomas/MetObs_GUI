@@ -97,9 +97,9 @@ def apply_qc(MW):
 
     # Check if buddy check could be executed
     if argdict['apply_buddy']:
-        if not _can_titan_run():
-            Error('Titanlib not installed', 'It seems that titanlib is not installed, which is necessary for the buddy check.')
-            return
+        # if not _can_titan_run():
+        #     Error('Titanlib not installed', 'It seems that titanlib is not installed, which is necessary for the buddy check.')
+        #     return
         if not ('altitude' in MW.dataset.metadf.columns):
             Error('Altitude unknown', 'The buddy check uses the altitude of the stations. This is not present in the metadf. Use the "Get Altitude" button in the metadata tab first.')
             return
@@ -134,7 +134,6 @@ def apply_qc(MW):
                 buddy_max_elev_diff=argdict['buddy_max_elev_diff'],
                 buddy_elev_gradient=argdict['buddy_lapsrate'],
                 buddy_min_std=argdict['buddy_min_std'],
-                buddy_num_iterations=argdict['buddy_iter'],
                 buddy_debug=False)
     if not _cont:
         Error(_msg[0], _msg[1])
@@ -159,17 +158,31 @@ def apply_qc(MW):
         MW.prompt_qc.appendPlainText(line)
 
 
-    # apply titan buddy check
+    # apply buddy check
     if argdict['apply_buddy']:
-        _cont, terminal, _msg = tlk_scripts.apply_titan_buddy(dataset = MW.dataset,
-                                                              obstype = obstype,
-                                                              use_constant_altitude=False)
+        _cont, terminal, _msg = tlk_scripts.apply_buddy(dataset = MW.dataset,
+                                                        obstype = obstype,
+                                                        use_constant_altitude=False,
+                                                        haversine_approx=True,
+                                                        metric_epsg="31370")
         if not _cont:
             Error(_msg[0], _msg[1])
             return
 
         for line in terminal:
             MW.prompt_qc.appendPlainText(line)
+
+    # # apply titan buddy check
+    # if argdict['apply_buddy']:
+    #     _cont, terminal, _msg = tlk_scripts.apply_titan_buddy(dataset = MW.dataset,
+    #                                                           obstype = obstype,
+    #                                                           use_constant_altitude=False)
+    #     if not _cont:
+    #         Error(_msg[0], _msg[1])
+    #         return
+
+    #     for line in terminal:
+    #         MW.prompt_qc.appendPlainText(line)
 
 
     MW.prompt_qc.appendPlainText(f'\n----  Apply Quality control on {obstype} ---> Done! ---- \n')
@@ -185,12 +198,12 @@ def apply_qc(MW):
 # Helpers
 # =============================================================================
 
-def _can_titan_run():
-    try:
-        import titanlib
-    except ModuleNotFoundError:
-        return False
-    return True
+# def _can_titan_run():
+#     try:
+#         import titanlib
+#     except ModuleNotFoundError:
+#         return False
+#     return True
 
 
 def _read_qc_args(MW):
@@ -232,7 +245,6 @@ def _read_qc_args(MW):
     argdict['buddy_threshold'] = float(MW.buddy_threshold.value())
     argdict['buddy_min_std'] = float(MW.buddy_min_std.value())
     argdict['buddy_max_elev_diff'] = float(MW.buddy_max_elev_diff.value())
-    argdict['buddy_iter'] = int(MW.buddy_iter.value())
     argdict['buddy_lapsrate'] = float(MW.buddy_lapsrate.value())
 
     return argdict

@@ -27,6 +27,7 @@ sys.path.insert(0,str(lib_folder))
 
 import metobs_toolkit
 
+print(f"TOOLKIT VERSION: {metobs_toolkit.__version__}")
 
 #%%
 

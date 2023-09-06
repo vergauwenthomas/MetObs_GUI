@@ -83,7 +83,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab">
              <attribute name="title">
@@ -2577,13 +2577,6 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_85">
-                   <property name="text">
-                    <string>Number of iterations</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
                   <widget class="QLabel" name="label_83">
                    <property name="text">
                     <string>Linear elevation gradient with height (obs_units/ meter)</string>
@@ -2605,7 +2598,7 @@
                <item row="1" column="0">
                 <widget class="QCheckBox" name="budd_check">
                  <property name="text">
-                  <string>Titan buddy check</string>
+                  <string>buddy check</string>
                  </property>
                 </widget>
                </item>
@@ -2753,16 +2746,6 @@
                    </property>
                    <property name="value">
                     <double>200.000000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QSpinBox" name="buddy_iter">
-                   <property name="maximum">
-                    <number>5</number>
-                   </property>
-                   <property name="value">
-                    <number>1</number>
                    </property>
                   </widget>
                  </item>
@@ -4708,6 +4691,24 @@
                 <width>679</width>
                 <height>279</height>
                </rect>
+              </property>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="tab_8">
+             <attribute name="title">
+              <string>GUI</string>
+             </attribute>
+             <widget class="QPushButton" name="clear_saved">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>90</y>
+                <width>381</width>
+                <height>25</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Clear all saved files (GUI)</string>
               </property>
              </widget>
             </widget>

@@ -33,6 +33,7 @@ import metobs_gui.qc_page as qc_page
 import metobs_gui.modeldata_page as modeldata_page
 import metobs_gui.fill_page as fill_page
 import metobs_gui.analysis_page as analysis_page
+import metobs_gui.gui_settings_page as gui_settings_page
 
 
 
@@ -290,7 +291,10 @@ class MainWindow(QMainWindow):
         self.startdt_check_anual.stateChanged.connect(lambda: analysis_page.anual_start_end(self))
         self.startdt_check_custom.stateChanged.connect(lambda: analysis_page.custom_start_end(self))
 
-
+        # =============================================================================
+        # GUI settings
+        # =============================================================================
+        self.clear_saved.clicked.connect(lambda: gui_settings_page.clear_cache(self))
 
 # =============================================================================
 # Helpers
