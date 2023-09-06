@@ -1,3 +1,7 @@
+[![Local Installation testing](https://github.com/vergauwenthomas/MetObs_GUI/actions/workflows/os_istall_test.yml/badge.svg)](https://github.com/vergauwenthomas/MetObs_GUI/actions/workflows/os_istall_test.yml)
+[![.github/workflows/os_pip_install_test.yml](https://github.com/vergauwenthomas/MetObs_GUI/actions/workflows/os_pip_install_test.yml/badge.svg)](https://github.com/vergauwenthomas/MetObs_GUI/actions/workflows/os_pip_install_test.yml)
+
+
 # MetObs_GUI
 A Graphical interface of the MetObs_toolkit
 
