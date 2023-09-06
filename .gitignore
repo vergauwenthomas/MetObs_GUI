@@ -1,5 +1,9 @@
 deploiment/*
 
+dist/*
+
+
+
 *.swp
 .spyproject
 

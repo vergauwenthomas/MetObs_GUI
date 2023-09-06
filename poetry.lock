@@ -2398,19 +2398,34 @@ tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
 
 [[package]]
 name = "pyqt5"
-version = "5.12.3"
-description = "Python bindings for the Qt cross platform UI and application toolkit"
+version = "5.15.9"
+description = "Python bindings for the Qt cross platform application toolkit"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "PyQt5-5.12.3-5.12.10-cp35.cp36.cp37.cp38.cp39-abi3-macosx_10_6_intel.whl", hash = "sha256:eb2e872a6f240459bc4a508aa53eb7df53e6406af95c2115f37abbe07d6b470b"},
-    {file = "PyQt5-5.12.3-5.12.10-cp35.cp36.cp37.cp38.cp39-abi3-manylinux1_x86_64.whl", hash = "sha256:54b02a18d95f4c6116aafc13f9d61da5ccbe912c5e08a8afde5a81468b9ff546"},
-    {file = "PyQt5-5.12.3-5.12.10-cp35.cp36.cp37.cp38.cp39-none-win32.whl", hash = "sha256:d93887bf9dc9a234467508f4f1294381e74043700529badb73a712f3ecbea063"},
-    {file = "PyQt5-5.12.3-5.12.10-cp35.cp36.cp37.cp38.cp39-none-win_amd64.whl", hash = "sha256:24b2c60644caae136f92dfe21c6a071badb121a6410f3f73760e70c9f3459dcf"},
+    {file = "PyQt5-5.15.9-cp37-abi3-macosx_10_13_x86_64.whl", hash = "sha256:883ba5c8a348be78c8be6a3d3ba014c798e679503bce00d76c666c2dc6afe828"},
+    {file = "PyQt5-5.15.9-cp37-abi3-manylinux_2_17_x86_64.whl", hash = "sha256:dd5ce10e79fbf1df29507d2daf99270f2057cdd25e4de6fbf2052b46c652e3a5"},
+    {file = "PyQt5-5.15.9-cp37-abi3-win32.whl", hash = "sha256:e45c5cc15d4fd26ab5cb0e5cdba60691a3e9086411f8e3662db07a5a4222a696"},
+    {file = "PyQt5-5.15.9-cp37-abi3-win_amd64.whl", hash = "sha256:e030d795df4cbbfcf4f38b18e2e119bcc9e177ef658a5094b87bb16cac0ce4c5"},
+    {file = "PyQt5-5.15.9.tar.gz", hash = "sha256:dc41e8401a90dc3e2b692b411bd5492ab559ae27a27424eed4bd3915564ec4c0"},
 ]
 
 [package.dependencies]
-PyQt5_sip = ">=4.19.14,<13"
+PyQt5-Qt5 = ">=5.15.2"
+PyQt5-sip = ">=12.11,<13"
+
+[[package]]
+name = "pyqt5-qt5"
+version = "5.15.2"
+description = "The subset of a Qt installation needed by PyQt5."
+optional = false
+python-versions = "*"
+files = [
+    {file = "PyQt5_Qt5-5.15.2-py3-none-macosx_10_13_intel.whl", hash = "sha256:76980cd3d7ae87e3c7a33bfebfaee84448fd650bad6840471d6cae199b56e154"},
+    {file = "PyQt5_Qt5-5.15.2-py3-none-manylinux2014_x86_64.whl", hash = "sha256:1988f364ec8caf87a6ee5d5a3a5210d57539988bf8e84714c7d60972692e2f4a"},
+    {file = "PyQt5_Qt5-5.15.2-py3-none-win32.whl", hash = "sha256:9cc7a768b1921f4b982ebc00a318ccb38578e44e45316c7a4a850e953e1dd327"},
+    {file = "PyQt5_Qt5-5.15.2-py3-none-win_amd64.whl", hash = "sha256:750b78e4dba6bdf1607febedc08738e318ea09e9b10aea9ff0d73073f11f6962"},
+]
 
 [[package]]
 name = "pyqt5-sip"
@@ -2444,19 +2459,35 @@ files = [
 
 [[package]]
 name = "pyqtwebengine"
-version = "5.12.1"
+version = "5.15.6"
 description = "Python bindings for the Qt WebEngine framework"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "PyQtWebEngine-5.12.1-5.12.10-cp35.cp36.cp37.cp38.cp39-abi3-macosx_10_6_intel.whl", hash = "sha256:ca6d4ec57b3c938fd172c3b8290f7e555db071bbadf64a08c7d40ba9d007cd56"},
-    {file = "PyQtWebEngine-5.12.1-5.12.10-cp35.cp36.cp37.cp38.cp39-abi3-manylinux1_x86_64.whl", hash = "sha256:37b7a245b0ed4ed6cdd032db2ebb02cb0239582dc72dad54c30df0c428c26aa2"},
-    {file = "PyQtWebEngine-5.12.1-5.12.10-cp35.cp36.cp37.cp38.cp39-none-win32.whl", hash = "sha256:01f767dc2abbd7218f27eeeab1e86ed08ef21d21c40b3acc45ed41d886a7d7ca"},
-    {file = "PyQtWebEngine-5.12.1-5.12.10-cp35.cp36.cp37.cp38.cp39-none-win_amd64.whl", hash = "sha256:dd0d5d2736daf81957707b73e2589db7650a7891b804a885410738ddff04f7ef"},
+    {file = "PyQtWebEngine-5.15.6-cp37-abi3-macosx_10_13_x86_64.whl", hash = "sha256:8c2fce2458e7b781d2cc3070b336f67d39a717c5eef2f823cae501d5d9f200de"},
+    {file = "PyQtWebEngine-5.15.6-cp37-abi3-manylinux1_x86_64.whl", hash = "sha256:67110bc9d5b7e633dcc242b8228cc54b1532abc039fdf534b383ac40a60b7ba3"},
+    {file = "PyQtWebEngine-5.15.6-cp37-abi3-win32.whl", hash = "sha256:a90c945606683a53c9b264a7509943fd835d50366d535c22ddde952f23d35748"},
+    {file = "PyQtWebEngine-5.15.6-cp37-abi3-win_amd64.whl", hash = "sha256:dbd1a768877040050d3159270f5ab95758af4954c4cb4e54195bd3cad519d5b6"},
+    {file = "PyQtWebEngine-5.15.6.tar.gz", hash = "sha256:ae241ef2a61c782939c58b52c2aea53ad99b30f3934c8358d5e0a6ebb3fd0721"},
 ]
 
 [package.dependencies]
-PyQt5 = ">=5.12"
+PyQt5 = ">=5.15.4"
+PyQt5-sip = ">=12.11,<13"
+PyQtWebEngine-Qt5 = ">=5.15.0"
+
+[[package]]
+name = "pyqtwebengine-qt5"
+version = "5.15.2"
+description = "The subset of a Qt installation needed by PyQtWebEngine."
+optional = false
+python-versions = "*"
+files = [
+    {file = "PyQtWebEngine_Qt5-5.15.2-py3-none-macosx_10_13_intel.whl", hash = "sha256:bc7b1fd1f4f8138d59b0b0245d601fb2c5c0aa1e1e7e853b713e52a3165d147e"},
+    {file = "PyQtWebEngine_Qt5-5.15.2-py3-none-manylinux2014_x86_64.whl", hash = "sha256:ec2acb1780c0124ef060c310e00ca701f388d8b6c35bba9127f7a6f0dc536f77"},
+    {file = "PyQtWebEngine_Qt5-5.15.2-py3-none-win32.whl", hash = "sha256:9e80b408d8de09d4e708d5d84c3ceaf3603292ff8f5e566ae44bb0320fa59c33"},
+    {file = "PyQtWebEngine_Qt5-5.15.2-py3-none-win_amd64.whl", hash = "sha256:24231f19e1595018779977de6722b5c69f3d03f34a5f7574ff21cd1e764ef76d"},
+]
 
 [[package]]
 name = "pyrsistent"
@@ -3216,4 +3247,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "f7d5a3cdd3a7bbdad21168efaf995ade4009586b666a85d25a3f74fa39b52746"
+content-hash = "98d0e02f4f93701c35716897b47fb08689f850c4c5a8b11719e8817917fae6fb"

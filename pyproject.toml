@@ -16,8 +16,8 @@ keywords = ["meteorology", "observations", "urban climate", "GUI"]
 # Get the latest revision on the branch named "next"
 #requests = { git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", branch = "master"}
 python = "^3.9"
-PyQt5 = "=5.14.0" #Technical: this version is the latest to build from source
-PyQtWebEngine = "~5.14.0"
+PyQt5 = "^5.14.0" #Technical: this version is the latest to build from source
+PyQtWebEngine = "^5.14.0"
 metobs_toolkit = "0.1.2"
 
 #metobs-toolkit = {git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", rev = "master"}
