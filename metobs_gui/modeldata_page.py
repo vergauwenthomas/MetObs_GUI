@@ -51,6 +51,32 @@ def init_modeldata_page(MW):
     setup_obstype_spinner(MW)
 
 
+def setup_modeldata_triggers(MW):
+    MW.model_method.currentTextChanged.connect(lambda: setup_model_settings(MW))
+
+    MW.use_startdt.clicked.connect(lambda: setup_model_dt(MW))
+    MW.use_enddt.clicked.connect(lambda: setup_model_dt(MW))
+
+    MW.get_gee_modeldata.clicked.connect(lambda: get_gee_modeldata(MW))
+    MW.import_modeldata.clicked.connect(lambda : import_modeldata(MW))
+
+    MW.external_browse.clicked.connect(lambda: browse_external_modeldata_file(MW))
+    MW.browse_drive.clicked.connect(lambda: browse_google_file(MW))
+
+    # MW.external_save_path.clicked.connect(lambda: template_page.save_path(
+    #                                                         MW=MW,
+    #                                                         savebool=True,
+    #                                                         savekey='external_modeldata_path',
+    #                                                         saveval=MW.external_path.text()))
+
+    MW.obstype_convertor.currentTextChanged.connect(lambda : get_tlk_unit(MW))
+    MW.use_expression.clicked.connect(lambda: setup_conv_expression(MW))
+    MW.conv_units.clicked.connect(lambda: convert_units(MW))
+
+    MW.get_modeldata_info.clicked.connect(lambda: show_modeldata_info(MW))
+    MW.plot_modeldata.clicked.connect(lambda: make_plot(MW))
+    MW.show_modeldata.clicked.connect(lambda: show_modeldata_df(MW))
+    MW.model_save.clicked.connect(lambda: save_modeldata(MW))
 
 def set_datapaths_init(MW):
     """
@@ -102,16 +128,17 @@ def setup_model_dt(MW):
         MW.gee_enddt.setEnabled(False)
 
 def setup_obstype_spinner(MW):
-    if str(MW.model_method.currentText()) == 'from GEE':
-        avail_gee_datasets = _get_all_possible_gee_dataset()
-        modelname=str(MW.gee_modelname.currentText())
-        if not modelname in avail_gee_datasets.keys():
-            Error('modelname not found', f'The modelname: {modelname} is not found in the list of known GEE (dynamical) datasets.')
-            return
-        mapped_obstypes = list(avail_gee_datasets[modelname]['band_of_use'].keys())
+    pass
+    # if str(MW.model_method.currentText()) == 'from GEE':
+    #     avail_gee_datasets = _get_all_possible_gee_dataset()
+    #     modelname=str(MW.gee_modelname.currentText())
+    #     if not modelname in avail_gee_datasets.keys():
+    #         Error('modelname not found', f'The modelname: {modelname} is not found in the list of known GEE (dynamical) datasets.')
+    #         return
+    #     mapped_obstypes = list(avail_gee_datasets[modelname]['band_of_use'].keys())
 
-        MW.model_obstype.clear()
-        MW.model_obstype.addItems(mapped_obstypes)
+    #     MW.model_obstype.clear()
+    #     MW.model_obstype.addItems(mapped_obstypes)
 
 
 def setup_convertor_widgets(MW):

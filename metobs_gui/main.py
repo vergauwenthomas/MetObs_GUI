@@ -15,6 +15,7 @@ import matplotlib
 
 from metobs_toolkit import loggers as toolkit_logger
 
+
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.uic import loadUi
@@ -49,6 +50,7 @@ class MainWindow(QMainWindow):
         self.modeldata = None
         self.analysis = None
         self.cycle_stats = None #test
+        self.extra_obstypes = {}
 
         self.modeldata_temporar = None #for termporal storage on direct input from gee
 
@@ -127,64 +129,12 @@ class MainWindow(QMainWindow):
         # =============================================================================
         # Mapping tab
         # =============================================================================
-        self.Browse_data_B.clicked.connect(lambda: template_page.browsefiles_data(self)) #browse datafile
-        self.Browse_metadata_B.clicked.connect(lambda: template_page.browsefiles_metadata(self)) #browse metadatafile
-        # save paths when selected
-        self.save_data_path.clicked.connect(lambda: template_page.save_path(
-                                                                MW=self,
-                                                                savebool=self.save_data_path.isChecked(),
-                                                                savekey='data_file_path',
-                                                                saveval=self.data_file_T.text()))
-        self.save_metadata_path.clicked.connect(lambda: template_page.save_path(
-                                                                MW=self,
-                                                                savebool=self.save_metadata_path.isChecked(),
-                                                                savekey='metadata_file_path',
-                                                                saveval=self.metadata_file_T.text()))
-
-        self.browse_format.currentTextChanged.connect(lambda: template_page.enable_format_widgets(self))
-
-        # initiate the start mapping module
-        self.start_mapping_B.clicked.connect(lambda: template_page.prepare_for_mapping(self))
-
-        # construnct the mappindict
-        self.build_B.clicked.connect(lambda: template_page.build_template(self))
-
-        # save template
-        self.save_template.clicked.connect(lambda: template_page.save_template_call(self))
-
-        # display df's
-        self.preview_data.clicked.connect(lambda: template_page.show_data_head(self))
-        self.preview_metadata.clicked.connect(lambda: template_page.show_metadata_head(self))
-        self.view_template.clicked.connect(lambda: template_page.show_template(self))
-
+        template_page.setup_template_triggers(self)
 
         # =============================================================================
         # Import data tab
         # =============================================================================
-        self.Browse_data_B_2.clicked.connect(lambda: import_page.browsefiles_data(self)) #browse datafile
-        self.Browse_metadata_B_2.clicked.connect(lambda: import_page.browsefiles_metadata(self)) #browse metadatafile
-        self.Browse_specific_temp.clicked.connect(lambda: import_page.browsefiles_templatefile(self)) #browse template
-        self.pkl_browser.clicked.connect(lambda: import_page.browsefiles_pklfile(self)) #browse pkl file
-
-
-        self.use_specific_temp.clicked.connect(lambda: import_page.setup_use_specific_temp(self))
-        self.use_pkl.clicked.connect(lambda: import_page.setup_use_input_pkl(self))
-        self.freq_simpl.clicked.connect(lambda: import_page.setup_freq_simplification(self))
-        self.sync_obs.clicked.connect(lambda: import_page.setup_syncronize(self))
-        self.use_origin.clicked.connect(lambda: import_page.setup_origin(self))
-        self.resample.clicked.connect(lambda: import_page.setup_resample_timeres(self))
-
-        self.pkl_path_save.clicked.connect(lambda: import_page.save_input_pkl_path(self))
-
-
-        self.make_dataset.clicked.connect(lambda: import_page.make_dataset(self))
-
-        self.get_info.clicked.connect(lambda: import_page.show_info(self))
-        self.show_dataset.clicked.connect(lambda: import_page.make_obsspace(self))
-        self.show_metadata.clicked.connect(lambda: import_page.show_metadf(self))
-        self.plot_dataset.clicked.connect(lambda: import_page.make_dataset_plot(self))
-
-        self.save_pkl_B.clicked.connect(lambda: import_page.save_dataset(self))
+        import_page.setup_import_triggers(self)
 
 
         # =============================================================================
@@ -202,44 +152,19 @@ class MainWindow(QMainWindow):
         # =============================================================================
         # QC tab
         # =============================================================================
-        self.obstype_spinner.currentTextChanged.connect(lambda: qc_page.obstype_change(self))
-        self.get_info_2.clicked.connect(lambda: qc_page.show_info(self))
-        self.show_metadata_2.clicked.connect(lambda: qc_page.show_metadf(self))
-        self.plot_dataset_2.clicked.connect(lambda: qc_page.show_timeseries(self))
-        self.show_dataset_2.clicked.connect(lambda: qc_page.show_dataset(self))
-
-        self.apply_qc.clicked.connect(lambda: qc_page.apply_qc(self))
-
+        qc_page.setup_qc_triggers(self)
 
         # =============================================================================
         # Modeldata tab
         # =============================================================================
-
-        self.model_method.currentTextChanged.connect(lambda: modeldata_page.setup_model_settings(self))
-
-        self.use_startdt.clicked.connect(lambda: modeldata_page.setup_model_dt(self))
-        self.use_enddt.clicked.connect(lambda: modeldata_page.setup_model_dt(self))
-
-        self.get_gee_modeldata.clicked.connect(lambda: modeldata_page.get_gee_modeldata(self))
-        self.import_modeldata.clicked.connect(lambda : modeldata_page.import_modeldata(self))
-
-        self.external_browse.clicked.connect(lambda: modeldata_page.browse_external_modeldata_file(self))
-        self.browse_drive.clicked.connect(lambda: modeldata_page.browse_google_file(self))
-
+        modeldata_page.setup_modeldata_triggers(self)
         self.external_save_path.clicked.connect(lambda: template_page.save_path(
                                                                 MW=self,
                                                                 savebool=True,
                                                                 savekey='external_modeldata_path',
                                                                 saveval=self.external_path.text()))
 
-        self.obstype_convertor.currentTextChanged.connect(lambda : modeldata_page.get_tlk_unit(self))
-        self.use_expression.clicked.connect(lambda: modeldata_page.setup_conv_expression(self))
-        self.conv_units.clicked.connect(lambda: modeldata_page.convert_units(self))
 
-        self.get_modeldata_info.clicked.connect(lambda: modeldata_page.show_modeldata_info(self))
-        self.plot_modeldata.clicked.connect(lambda: modeldata_page.make_plot(self))
-        self.show_modeldata.clicked.connect(lambda: modeldata_page.show_modeldata_df(self))
-        self.model_save.clicked.connect(lambda: modeldata_page.save_modeldata(self))
 
         # =============================================================================
         # Fill tab
@@ -309,8 +234,10 @@ class MainWindow(QMainWindow):
 
 
 
-def main():
 
+
+def main():
+    # setup_logging()
     app=QApplication(sys.argv)
 
     mainwindow = MainWindow()

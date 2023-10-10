@@ -68,6 +68,31 @@ def init_import_page(MW):
     # toolkit_logger.addHandler(log_handler)
 
 
+def setup_import_triggers(MW):
+    MW.Browse_data_B_2.clicked.connect(lambda: browsefiles_data(MW)) #browse datafile
+    MW.Browse_metadata_B_2.clicked.connect(lambda: browsefiles_metadata(MW)) #browse metadatafile
+    MW.Browse_specific_temp.clicked.connect(lambda: browsefiles_templatefile(MW)) #browse template
+    MW.pkl_browser.clicked.connect(lambda: browsefiles_pklfile(MW)) #browse pkl file
+
+
+    MW.use_specific_temp.clicked.connect(lambda: setup_use_specific_temp(MW))
+    MW.use_pkl.clicked.connect(lambda: setup_use_input_pkl(MW))
+    MW.freq_simpl.clicked.connect(lambda: setup_freq_simplification(MW))
+    MW.sync_obs.clicked.connect(lambda: setup_syncronize(MW))
+    MW.use_origin.clicked.connect(lambda: setup_origin(MW))
+    MW.resample.clicked.connect(lambda: setup_resample_timeres(MW))
+
+    MW.pkl_path_save.clicked.connect(lambda: save_input_pkl_path(MW))
+
+
+    MW.make_dataset.clicked.connect(lambda: make_dataset(MW))
+
+    MW.get_info.clicked.connect(lambda: show_info(MW))
+    MW.show_dataset.clicked.connect(lambda: make_obsspace(MW))
+    MW.show_metadata.clicked.connect(lambda: show_metadf(MW))
+    MW.plot_dataset.clicked.connect(lambda: make_dataset_plot(MW))
+
+    MW.save_pkl_B.clicked.connect(lambda: save_dataset(MW))
 
 
 # =============================================================================

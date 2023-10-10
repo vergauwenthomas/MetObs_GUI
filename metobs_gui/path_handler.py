@@ -19,7 +19,7 @@ from metobs_toolkit import demo_template
 
 GUI_dir = str( Path(__file__).resolve().parents[0])
 
-# TLK_dir = str( Path(__file__).resolve().parents[1])
+repo_dir = str( Path(__file__).resolve().parents[1])
 
 
 # =============================================================================
@@ -34,6 +34,8 @@ template_dir = os.path.join(CACHE_dir, 'templates')
 dataset_dir = os.path.join(CACHE_dir, 'datasets')
 modeldata_dir = os.path.join(CACHE_dir, 'modeldata')
 
+gui_log_file = os.path.join(repo_dir, 'logfile.log')
+
 # toolkit location of templates
 # tlk_default_template = os.path.join(TLK_dir, 'data_templates',
 #                                     'template_defaults', 'default_template.csv')
@@ -42,6 +44,13 @@ tlk_default_template = demo_template
 # =============================================================================
 # Helper functions
 # =============================================================================
+
+
+def remove_file(file_path):
+    try:
+        os.remove(file_path)
+    except OSError:
+        pass
 
 def make_dir(dir_path):
     if os.path.isdir(dir_path):

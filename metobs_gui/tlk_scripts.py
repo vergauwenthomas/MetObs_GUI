@@ -90,6 +90,38 @@ class CapturingPrint(list):
 #%%
 
 # =============================================================================
+# Obstype methods
+# =============================================================================
+
+
+def get_default_obstypes():
+    from metobs_toolkit.obstypes import tlk_obstypes
+    return {obs.name: obs for obs in tlk_obstypes.values()}
+
+
+def test_new_obstype(obsname, std_unit, description, unit_aliases, unit_conv):
+    try:
+        # init newobs
+        newobs = metobs_toolkit.Obstype(obsname=obsname,
+                                        std_unit=std_unit,
+                                        description=description,
+                                        unit_aliases=unit_aliases,
+                                        unit_conversions=unit_conv)
+
+
+    except Exception as e:
+
+        error_msg = str(e)
+        return False, None,['Creating a new observation type.', error_msg]
+
+    if isinstance(newobs, metobs_toolkit.Obstype):
+        return True, newobs, None
+    else:
+        return False, None, ['Creating a new observation type.', 'Something went wrong, please check you input.']
+
+
+
+# =============================================================================
 # Dataset methods
 # =============================================================================
 

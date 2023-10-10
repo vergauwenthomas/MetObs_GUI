@@ -1,6 +1,6 @@
 {
-    "data_file_path": "/home/thoverga/Documents/demo/temperatuur.csv",
-    "metadata_file_path": "/home/thoverga/Documents/demo/locations.csv",
+    "data_file_path": "/home/thoverga/Documents/VLINDER_github/MetObs_toolkit/tests/test_data/vlinderdata_small.csv",
+    "metadata_file_path": "/home/thoverga/Documents/VLINDER_github/MetObs_toolkit/static_data/vlinder_metadata.csv",
     "input_pkl_file_path": "/home/thoverga/Documents/VLINDER_github/MetObs_GUI/metobs_gui/cache/datasets/your_dataset.pkl",
     "external_modeldata_path": "/home/thoverga/uhi_plot.py"
 }

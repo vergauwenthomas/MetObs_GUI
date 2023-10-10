@@ -42,7 +42,15 @@ def init_qc_page(MW):
 
     obstype_change(MW)
 
+def setup_qc_triggers(MW):
 
+    MW.obstype_spinner.currentTextChanged.connect(lambda: obstype_change(MW))
+    MW.get_info_2.clicked.connect(lambda: show_info(MW))
+    MW.show_metadata_2.clicked.connect(lambda: show_metadf(MW))
+    MW.plot_dataset_2.clicked.connect(lambda: show_timeseries(MW))
+    MW.show_dataset_2.clicked.connect(lambda: show_dataset(MW))
+
+    MW.apply_qc.clicked.connect(lambda: apply_qc(MW))
 
 # =============================================================================
 #  Triggers

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1338</width>
-    <height>942</height>
+    <height>980</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,7 +42,7 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
+         <y>-269</y>
          <width>1304</width>
          <height>1200</height>
         </rect>
@@ -83,7 +83,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab">
              <attribute name="title">
@@ -221,6 +221,9 @@
                  <property name="text">
                   <string>use metadata</string>
                  </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -272,11 +275,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="wide_obs_units">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
+                <widget class="QComboBox" name="wide_unit"/>
                </item>
                <item>
                 <widget class="QLabel" name="label_52">
@@ -320,340 +319,12 @@
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="gridLayoutWidget">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>240</y>
-                <width>551</width>
-                <height>329</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout">
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_8">
-                 <property name="text">
-                  <string>temp</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="3">
-                <widget class="QLabel" name="label_7">
-                 <property name="font">
-                  <font>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Description</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_11">
-                 <property name="text">
-                  <string>precip</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QLabel" name="label_6">
-                 <property name="font">
-                  <font>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Units</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="0">
-                <widget class="QLabel" name="label_12">
-                 <property name="text">
-                  <string>precip_sum</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QLabel" name="label_5">
-                 <property name="font">
-                  <font>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Column name</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_10">
-                 <property name="text">
-                  <string>humidity</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="9" column="0">
-                <widget class="QLabel" name="label_16">
-                 <property name="text">
-                  <string>pressure</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="0">
-                <widget class="QLabel" name="label_13">
-                 <property name="text">
-                  <string>wind_speed</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="7" column="0">
-                <widget class="QLabel" name="label_14">
-                 <property name="text">
-                  <string>wind_gust</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="0">
-                <widget class="QLabel" name="label_15">
-                 <property name="text">
-                  <string>wind_direction</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_9">
-                 <property name="text">
-                  <string>radiation_temp</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="10" column="0">
-                <widget class="QLabel" name="label_17">
-                 <property name="text">
-                  <string>pressure_at_sea_level</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QComboBox" name="temp_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QComboBox" name="radtemp_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <widget class="QComboBox" name="hum_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="QComboBox" name="pre_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="1">
-                <widget class="QComboBox" name="pre_s_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="1">
-                <widget class="QComboBox" name="wind_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="7" column="1">
-                <widget class="QComboBox" name="gust_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="1">
-                <widget class="QComboBox" name="dir_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="9" column="1">
-                <widget class="QComboBox" name="p_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="10" column="1">
-                <widget class="QComboBox" name="psea_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QComboBox" name="temp_units_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QComboBox" name="radtemp_units_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="2">
-                <widget class="QComboBox" name="hum_units_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="2">
-                <widget class="QComboBox" name="pre_units_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="2">
-                <widget class="QComboBox" name="pre_s_units_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="2">
-                <widget class="QComboBox" name="wind_units_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="7" column="2">
-                <widget class="QComboBox" name="gust_units_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="2">
-                <widget class="QComboBox" name="dir_units_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="9" column="2">
-                <widget class="QComboBox" name="p_units_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="10" column="2">
-                <widget class="QComboBox" name="psea_units_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="3">
-                <widget class="QLineEdit" name="temp_desc_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="3">
-                <widget class="QLineEdit" name="radtemp_desc_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="3">
-                <widget class="QLineEdit" name="pre_desc_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="3">
-                <widget class="QLineEdit" name="hum_desc_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="3">
-                <widget class="QLineEdit" name="pre_s_desc_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="3">
-                <widget class="QLineEdit" name="wind_desc_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="7" column="3">
-                <widget class="QLineEdit" name="gust_desc_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="3">
-                <widget class="QLineEdit" name="dir_desc_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="9" column="3">
-                <widget class="QLineEdit" name="p_desc_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="10" column="3">
-                <widget class="QLineEdit" name="psea_desc_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
              <widget class="QWidget" name="horizontalLayoutWidget_7">
               <property name="geometry">
                <rect>
                 <x>-1</x>
                 <y>210</y>
-                <width>571</width>
+                <width>711</width>
                 <height>31</height>
                </rect>
               </property>
@@ -677,357 +348,13 @@
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="horizontalLayoutWidget_8">
-              <property name="geometry">
-               <rect>
-                <x>570</x>
-                <y>210</y>
-                <width>361</width>
-                <height>31</height>
-               </rect>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_11">
-               <item>
-                <widget class="QLabel" name="label_4">
-                 <property name="font">
-                  <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                   <underline>true</underline>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Timestamp mapping</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="gridLayoutWidget_2">
-              <property name="geometry">
-               <rect>
-                <x>570</x>
-                <y>240</y>
-                <width>361</width>
-                <height>131</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_2">
-               <item row="0" column="1">
-                <widget class="QLabel" name="label_19">
-                 <property name="font">
-                  <font>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Map Column name</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QLabel" name="label_20">
-                 <property name="font">
-                  <font>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Format</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QComboBox" name="date_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QComboBox" name="datetime_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_24">
-                 <property name="text">
-                  <string>date</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_22">
-                 <property name="text">
-                  <string>datetime</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QLineEdit" name="date_fmt_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QLineEdit" name="datetime_fmt_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_23">
-                 <property name="text">
-                  <string>time</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <widget class="QComboBox" name="time_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="2">
-                <widget class="QLineEdit" name="time_fmt_T">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="horizontalLayoutWidget_9">
-              <property name="geometry">
-               <rect>
-                <x>570</x>
-                <y>370</y>
-                <width>361</width>
-                <height>27</height>
-               </rect>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_12">
-               <item>
-                <widget class="QLabel" name="label_18">
-                 <property name="font">
-                  <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                   <underline>true</underline>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Name column</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="name_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="horizontalLayoutWidget_10">
-              <property name="geometry">
-               <rect>
-                <x>570</x>
-                <y>400</y>
-                <width>361</width>
-                <height>31</height>
-               </rect>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_13">
-               <item>
-                <widget class="QLabel" name="label_21">
-                 <property name="font">
-                  <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                   <underline>true</underline>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Metadata mapping</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="gridLayoutWidget_3">
-              <property name="geometry">
-               <rect>
-                <x>570</x>
-                <y>430</y>
-                <width>361</width>
-                <height>174</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_3">
-               <item row="3" column="1">
-                <widget class="QComboBox" name="call_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="2">
-                <widget class="QLabel" name="label_38">
-                 <property name="text">
-                  <string>Pseudo name</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QLabel" name="label_34">
-                 <property name="text">
-                  <string>Location name (city name-</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_29">
-                 <property name="text">
-                  <string>lon</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_55">
-                 <property name="text">
-                  <string>lat</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QComboBox" name="lat_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="QComboBox" name="network_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QLabel" name="label_33">
-                 <property name="text">
-                  <string>Latitude</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QComboBox" name="loc_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_30">
-                 <property name="text">
-                  <string>call_name</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="2">
-                <widget class="QLabel" name="label_39">
-                 <property name="text">
-                  <string>Network name</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_35">
-                 <property name="text">
-                  <string>location</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QLabel" name="label_32">
-                 <property name="text">
-                  <string>Longitude</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QComboBox" name="lon_col_CB">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_31">
-                 <property name="text">
-                  <string>network</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="horizontalLayoutWidget_11">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>610</y>
-                <width>931</width>
-                <height>31</height>
-               </rect>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_14">
-               <item>
-                <widget class="QPushButton" name="build_B">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="text">
-                  <string>Build template</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="horizontalLayoutWidget_12">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>650</y>
-                <width>741</width>
-                <height>271</height>
-               </rect>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_15">
-               <item>
-                <widget class="QTableView" name="table"/>
-               </item>
-              </layout>
-             </widget>
              <widget class="QWidget" name="verticalLayoutWidget">
               <property name="geometry">
                <rect>
                 <x>750</x>
-                <y>650</y>
+                <y>560</y>
                 <width>181</width>
-                <height>131</height>
+                <height>151</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1057,8 +384,8 @@
              <widget class="QWidget" name="horizontalLayoutWidget_13">
               <property name="geometry">
                <rect>
-                <x>0</x>
-                <y>930</y>
+                <x>10</x>
+                <y>840</y>
                 <width>741</width>
                 <height>31</height>
                </rect>
@@ -1089,6 +416,104 @@
                 </widget>
                </item>
               </layout>
+             </widget>
+             <widget class="QWidget" name="verticalLayoutWidget_10">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>250</y>
+                <width>701</width>
+                <height>281</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_22">
+               <item>
+                <widget class="QPushButton" name="map_columns">
+                 <property name="text">
+                  <string>Map columns</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPlainTextEdit" name="mapping_info"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="reset_mapping">
+                 <property name="text">
+                  <string>Reset mapping</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_6">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="verticalLayoutWidget_11">
+              <property name="geometry">
+               <rect>
+                <x>720</x>
+                <y>210</y>
+                <width>211</width>
+                <height>121</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_23">
+               <item>
+                <widget class="QLabel" name="label_4">
+                 <property name="text">
+                  <string>Customize observations</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="add_obstype">
+                 <property name="text">
+                  <string>Create new obstype</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="add_unit">
+                 <property name="text">
+                  <string>Add new units</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QPushButton" name="build_B">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>530</y>
+                <width>929</width>
+                <height>25</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Build template</string>
+              </property>
+             </widget>
+             <widget class="QTableView" name="table">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>560</y>
+                <width>739</width>
+                <height>269</height>
+               </rect>
+              </property>
              </widget>
             </widget>
             <widget class="QWidget" name="tab_2">
@@ -1459,7 +884,7 @@
                <rect>
                 <x>0</x>
                 <y>300</y>
-                <width>441</width>
+                <width>467</width>
                 <height>181</height>
                </rect>
               </property>
@@ -1576,7 +1001,7 @@
                <rect>
                 <x>450</x>
                 <y>290</y>
-                <width>279</width>
+                <width>326</width>
                 <height>191</height>
                </rect>
               </property>
@@ -2502,7 +1927,7 @@
                <rect>
                 <x>650</x>
                 <y>60</y>
-                <width>611</width>
+                <width>701</width>
                 <height>371</height>
                </rect>
               </property>
@@ -3810,7 +3235,7 @@
                <rect>
                 <x>698</x>
                 <y>610</y>
-                <width>331</width>
+                <width>341</width>
                 <height>171</height>
                </rect>
               </property>
@@ -4229,7 +3654,7 @@
                <rect>
                 <x>390</x>
                 <y>260</y>
-                <width>291</width>
+                <width>306</width>
                 <height>241</height>
                </rect>
               </property>
