@@ -42,7 +42,7 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>-269</y>
+         <y>0</y>
          <width>1304</width>
          <height>1200</height>
         </rect>
@@ -359,6 +359,13 @@
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_3">
                <item>
+                <widget class="QPushButton" name="preview_data">
+                 <property name="text">
+                  <string>Preview Data</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QPushButton" name="preview_metadata">
                  <property name="text">
                   <string>Preview Metadata</string>
@@ -369,13 +376,6 @@
                 <widget class="QPushButton" name="view_template">
                  <property name="text">
                   <string>View template</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="preview_data">
-                 <property name="text">
-                  <string>Preview Data</string>
                  </property>
                 </widget>
                </item>

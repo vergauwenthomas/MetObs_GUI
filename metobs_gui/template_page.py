@@ -21,6 +21,7 @@ from metobs_gui.import_data_page import set_possible_templates
 
 
 import metobs_gui.template_func as template_func
+from metobs_gui.template_func import _get_all_obstypes_dict
 import metobs_gui.path_handler as path_handler
 
 from metobs_gui.errors import Error, Notification
@@ -594,16 +595,7 @@ def check_if_obstype_is_valid(MW):
     Notification(f'{obsname} added to the known observation types!')
     return True
 
-def _get_all_obstypes_dict(MW):
-    # all obstypes are a combination of
-    # * the default obstypes
-    # * the new created obstypes
-    # * (added units of corresponding obstypes)
 
-    all_obstypes = list(MW.session['mapping']['obstypes']['defaults'].values())
-    all_obstypes.extend(list(MW.session['mapping']['obstypes']['new_obstypes'].values()))
-    test = {obs.name: obs for obs in all_obstypes}
-    return test
 
 
 

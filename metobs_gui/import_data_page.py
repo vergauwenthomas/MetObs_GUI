@@ -17,7 +17,7 @@ from metobs_gui.path_handler import template_dir
 from metobs_gui.data_func import isvalidfile
 
 import metobs_gui.path_handler as path_handler
-from metobs_gui.template_func import get_all_templates
+from metobs_gui.template_func import get_all_templates, _get_all_obstypes_dict
 from metobs_gui.json_save_func import get_saved_vals, update_json_file
 
 import metobs_gui.tlk_scripts as tlk_scripts
@@ -260,6 +260,12 @@ def make_dataset(MW):
         # create dataset
         MW.prompt.appendPlainText('---- Import data from file ---- \n')
 
+        # update obstypes (add new obstypes and new units)
+        all_obstypes = list(_get_all_obstypes_dict(MW).values())
+        print('maak dataset')
+        for obs in all_obstypes:
+            obs.get_info()
+
         dataset, isvalid, err_msg = tlk_scripts.import_dataset_from_file(
             data_path = data_path,
             metadata_path = metadata_path,
@@ -273,7 +279,8 @@ def make_dataset(MW):
             sync = argdict['sync_bool'],
             sync_tol = argdict['sync_tol'],
             sync_force = argdict['force_bool'],
-            sync_force_freq = argdict['sync_force_freq']
+            sync_force_freq = argdict['sync_force_freq'],
+            all_obstypes_list=all_obstypes,
             )
         if not isvalid:
             Error(err_msg[0], err_msg[1])

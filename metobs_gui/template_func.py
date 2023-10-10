@@ -56,158 +56,6 @@ Meta_map_values = {
 # =============================================================================
 
 
-#     # =============================================================================
-#     # Observation types
-#     # =============================================================================
-# def set_obstype_spinner_values(main, values):
-#     # empty spinner values
-#     main.temp_col_CB.clear()
-#     main.radtemp_col_CB.clear()
-#     main.hum_col_CB.clear()
-#     main.pre_col_CB.clear()
-#     main.pre_s_col_CB.clear()
-#     main.wind_col_CB.clear()
-#     main.gust_col_CB.clear()
-#     main.dir_col_CB.clear()
-#     main.p_col_CB.clear()
-#     main.psea_col_CB.clear()
-#     # Fill with defaults
-#     main.temp_col_CB.addItems(values)
-#     main.radtemp_col_CB.addItems(values)
-#     main.hum_col_CB.addItems(values)
-#     main.pre_col_CB.addItems(values)
-#     main.pre_s_col_CB.addItems(values)
-#     main.wind_col_CB.addItems(values)
-#     main.gust_col_CB.addItems(values)
-#     main.dir_col_CB.addItems(values)
-#     main.p_col_CB.addItems(values)
-#     main.psea_col_CB.addItems(values)
-
-# def set_time_spinner_values(main, values):
-#     # empty spinner values
-#     main.datetime_col_CB.clear()
-#     main.date_col_CB.clear()
-#     main.time_col_CB.clear()
-#     # Fill with defaults
-#     main.datetime_col_CB.addItems(values)
-#     main.date_col_CB.addItems(values)
-#     main.time_col_CB.addItems(values)
-
-# def set_name_spinner_values(main, values_a, values_b):
-#     """ The valuese are the unique sum of values_a and values_b """
-#     if values_a is None:
-#         values_a = []
-#     if values_b is None:
-#         values_b = []
-#     values_a.extend(values_b)
-#     comb_val = list(set(values_a))
-
-#     # empty spinner values
-#     main.name_col_CB.clear()
-#     main.name_col_CB.addItems(comb_val)
-
-
-
-# def set_obstype_units_defaults(main):
-#     # empty spinner values
-#     main.temp_units_CB.clear()
-#     main.radtemp_units_CB.clear()
-#     main.hum_units_CB.clear()
-#     main.pre_units_CB.clear()
-#     main.pre_s_units_CB.clear()
-#     main.wind_units_CB.clear()
-#     main.gust_units_CB.clear()
-#     main.dir_units_CB.clear()
-#     main.p_units_CB.clear()
-#     main.psea_units_CB.clear()
-#     # Fill with defaults
-#     main.temp_units_CB.addItems(Obs_map_values['temp']['units'])
-#     main.radtemp_units_CB.addItems(Obs_map_values['radiation_temp']['units'])
-#     main.hum_units_CB.addItems(Obs_map_values['humidity']['units'])
-#     main.pre_units_CB.addItems(Obs_map_values['precip']['units'])
-#     main.pre_s_units_CB.addItems(Obs_map_values['precip_sum']['units'])
-#     main.wind_units_CB.addItems(Obs_map_values['wind_speed']['units'])
-#     main.gust_units_CB.addItems(Obs_map_values['wind_gust']['units'])
-#     main.dir_units_CB.addItems(Obs_map_values['wind_direction']['units'])
-#     main.p_units_CB.addItems(Obs_map_values['pressure']['units'])
-#     main.psea_units_CB.addItems(Obs_map_values['pressure_at_sea_level']['units'])
-
-# def set_obstype_desc_defaults(main):
-
-#     # Fill with defaults
-#     main.temp_desc_T.setText(Obs_map_values['temp']['description'])
-#     main.radtemp_desc_T.setText(Obs_map_values['radiation_temp']['description'])
-#     main.hum_desc_T.setText(Obs_map_values['humidity']['description'])
-#     main.pre_desc_T.setText(Obs_map_values['precip']['description'])
-#     main.pre_s_desc_T.setText(Obs_map_values['precip_sum']['description'])
-#     main.wind_desc_T.setText(Obs_map_values['wind_speed']['description'])
-#     main.gust_desc_T.setText(Obs_map_values['wind_gust']['description'])
-#     main.dir_desc_T.setText(Obs_map_values['wind_direction']['description'])
-#     main.p_desc_T.setText(Obs_map_values['pressure']['description'])
-#     main.psea_desc_T.setText(Obs_map_values['pressure_at_sea_level']['description'])
-
-# def set_datetime_defaults(main):
-
-#     # Fill with defaults
-#     main.datetime_fmt_T.setText(Dt_map_values['datetime']['format'])
-#     main.date_fmt_T.setText(Dt_map_values['_date']['format'])
-#     main.time_fmt_T.setText(Dt_map_values['_time']['format'])
-
-
-
-
-
-# def set_metadata_spinner_values(main, values):
-#     print('Setting metadata spinners items with: ', values)
-#     # empty spinner values
-#     main.lat_col_CB.clear()
-#     main.lon_col_CB.clear()
-#     main.loc_col_CB.clear()
-#     main.call_col_CB.clear()
-#     main.network_col_CB.clear()
-#     # fill values
-#     main.lat_col_CB.addItems(values)
-#     main.lon_col_CB.addItems(values)
-#     main.loc_col_CB.addItems(values)
-#     main.call_col_CB.addItems(values)
-#     main.network_col_CB.addItems(values)
-
-
-
-
-# def enable_all_boxes(main):
-#     main.temp_col_CB.setEnabled(True)
-#     main.temp_units_CB.setEnabled(True)
-
-#     main.radtemp_units_CB.setEnabled(True)
-#     main.radtemp_desc_T.setEnabled(True)
-#     main.hum_units_CB.setEnabled(True)
-#     main.hum_desc_T.setEnabled(True)
-
-#     main.pre_units_CB.setEnabled(True)
-#     main.pre_desc_T.setEnabled(True)
-
-#     main.pre_s_units_CB.setEnabled(True)
-#     main.pre_s_desc_T.setEnabled(True)
-
-#     main.wind_units_CB.setEnabled(True)
-#     main.wind_desc_T.setEnabled(True)
-
-#     main.gust_units_CB.setEnabled(True)
-#     main.gust_desc_T.setEnabled(True)
-
-#     main.dir_units_CB.setEnabled(True)
-#     main.dir_desc_T.setEnabled(True)
-
-#     main.p_units_CB.setEnabled(True)
-#     main.p_desc_T.setEnabled(True)
-
-#     main.psea_units_CB.setEnabled(True)
-#     main.psea_desc_T.setEnabled(True)
-
-#     main.build_B.setEnabled(True)
-
-
 def make_template_build(main):
       # 1 Make dict of obstypes to write in the template
       obsmapper = {}
@@ -311,10 +159,8 @@ def make_template_build(main):
       # add name:
 
       mapdf = pd.concat([mapdf, pd.Series({'varname':'name', 'template column name': namemapper['name']}).to_frame().transpose()])
-      print('mapdf1: ', mapdf)
       mapdf = mapdf.reset_index(drop=True)
       mapdf = pd.concat([mapdf,options_df], ignore_index=False, axis=1) #add optionscolumns
-      print('mapdf return: ', mapdf)
       return mapdf, True
 
 
@@ -438,7 +284,15 @@ def get_all_templates():
     return template_dict
 
 
+def _get_all_obstypes_dict(main):
+    # all obstypes are a combination of
+    # * the default obstypes
+    # * the new created obstypes
+    # * (added units of corresponding obstypes)
 
+    all_obstypes = list(main.session['mapping']['obstypes']['defaults'].values())
+    all_obstypes.extend(list(main.session['mapping']['obstypes']['new_obstypes'].values()))
+    return {obs.name: obs for obs in all_obstypes}
 
 
 

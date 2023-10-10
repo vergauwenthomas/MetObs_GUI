@@ -1,5 +1,11 @@
 deploiment/*
 
+#cache
+metobs_gui/cache/*
+metobs_gui/__pycache__
+
+metobs_gui/tmp/*
+
 *.swp
-.spyproject
+.spyproject/*
 

@@ -135,10 +135,12 @@ def import_dataset_from_file(data_path, metadata_path, template_path,
                              gap_def,
                              sync, sync_tol,
                              sync_force,
-                             sync_force_freq):
+                             sync_force_freq,
+                             all_obstypes_list):
 
+    # init dataset
     try:
-        # init dataset
+
         dataset = metobs_toolkit.Dataset()
         dataset.update_settings(input_data_file=data_path,
                                 input_metadata_file=metadata_path,
@@ -153,6 +155,15 @@ def import_dataset_from_file(data_path, metadata_path, template_path,
         return None, False, ['Dataset initialisation and settings update',
                              error_msg]
 
+
+    # update the default obstypes with user specific obstypes and units
+    try:
+        obsdict = {obs.name: obs for obs in all_obstypes_list}
+        dataset.obstypes.update(obsdict)
+    except Exception as e:
+        error_msg = str(e)
+        return None, False, ['Dataset observationtypes update',
+                             error_msg]
 
     # import data
     try:
