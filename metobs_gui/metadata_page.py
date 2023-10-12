@@ -9,7 +9,7 @@ Created on Fri Aug  4 09:43:52 2023
 import os
 
 from metobs_gui.extra_windows import _show_metadf, _show_spatial_html
-
+from metobs_gui.interactive_spatial_dialog import InteractiveSpatialDialogWindow
 
 import metobs_gui.tlk_scripts as tlk_scripts
 import metobs_gui.path_handler as path_handler
@@ -28,7 +28,16 @@ def init_metadata_page(MW):
     MW.lc_map.addItems(['worldcover'])
 
 
+def setup_metadatapage(MW):
+    MW.get_altitude.clicked.connect(lambda: get_altitude(MW))
+    MW.get_lcz.clicked.connect(lambda: get_lcz(MW))
+    MW.get_landcover.clicked.connect(lambda: get_landcover(MW))
 
+    MW.gee_submit.clicked.connect(lambda: get_altitude(MW))
+
+    MW.preview_metadata_2.clicked.connect(lambda: preview_metadata(MW))
+    MW.spatial_plot.clicked.connect(lambda: spatial_plot(MW))
+    MW.interactive_plot_button.clicked.connect(lambda: interactive_plot(MW))
 
 # =============================================================================
 # triggers
@@ -143,11 +152,9 @@ def spatial_plot(MW):
         os.remove(filepath)
 
     # create the html map
-    print('A')
     _cont, terminal, _msg = tlk_scripts.make_html_gee_map(dataset=MW.dataset,
                                                           html_path=filepath)
 
-    print('B')
     if not _cont:
         Error(_msg[0], _msg[1])
         return
@@ -157,14 +164,24 @@ def spatial_plot(MW):
         MW.prompt_metadata.appendPlainText(line)
 
     MW.prompt_metadata.appendPlainText(f'\n---- Create interactive map ---> Done! ---- \n')
-    print('C')
     _show_spatial_html(MW, filepath)
-    print('D')
     MW.html.show()
-    print('E')
 
 
 
+def interactive_plot(MW):
+    # Create path to save the html file
+    # save in the TMP dir
+    filename = 'interactive_spatial_html.html'
+    filepath = os.path.join(path_handler.TMP_dir, filename)
+
+    # remove the file if it already exists
+    if path_handler.file_exist(filepath):
+        os.remove(filepath)
+
+    MW.dial = InteractiveSpatialDialogWindow(dataset=MW.dataset,
+                                             default_filepath = filepath)
+    MW.dial.show()
 
 
 # =============================================================================

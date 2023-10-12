@@ -33,6 +33,23 @@ def init_analysis_page(MW):
 
     return
 
+def setup_analysis_page(MW):
+    MW.create_analysis.clicked.connect(lambda: create_analysis(MW))
+    MW.groupdef_custom.textChanged.connect(lambda: update_horizontal_axis_possibilities(MW))
+
+    MW.apply_filter.clicked.connect(lambda: filter_analysis(MW))
+    MW.plot_diurnal.clicked.connect(lambda: diurnal_plot_trigger(MW))
+    MW.plot_anual.clicked.connect(lambda: anual_plot_trigger(MW))
+    MW.plot_custom.clicked.connect(lambda: custom_cycle_plot_trigger(MW))
+    MW.get_cor.clicked.connect(lambda: get_lc_correlations(MW))
+    MW.make_heat_plot.clicked.connect(lambda: make_heatmap_plot(MW))
+    MW.show_cor_matrix.clicked.connect(lambda: display_cor_mat(MW))
+
+    MW.make_scatter_plot.clicked.connect(lambda: create_scatter_cor_plot(MW))
+
+    MW.startdt_check_diurnal.stateChanged.connect(lambda: dirunal_start_end(MW))
+    MW.startdt_check_anual.stateChanged.connect(lambda: anual_start_end(MW))
+    MW.startdt_check_custom.stateChanged.connect(lambda: custom_start_end(MW))
 
 
 # =============================================================================

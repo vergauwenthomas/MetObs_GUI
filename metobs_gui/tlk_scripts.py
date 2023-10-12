@@ -849,6 +849,35 @@ def make_scatter_cor_plot(analysis):
     return ax, True, infolist, ['error_theme', 'error_msg']
 
 
+def make_interactive_spatial_map(dataset, obstype='temp', save=True, outputfile=None,
+                                 starttime=None, endtime=None, vmin=None, vmax=None,
+                                 mpl_cmap_name='viridis', radius=13, fill_alpha=0.6,
+                                 max_fps=4,
+                                 outlier_col='red', ok_col='black', gap_col='orange',
+                                 fill_col='yellow'):
+
+    try:
+        dataset.make_interactive_plot(obstype=obstype,
+                                      save=save,
+                                      outputfile=outputfile,
+                                      starttime=starttime,
+                                      endtime=endtime,
+                                      vmin=vmin,
+                                      vmax=vmax,
+                                      mpl_cmap_name=mpl_cmap_name,
+                                      radius=radius,
+                                      fill_alpha=fill_alpha,
+                                      max_fps=max_fps,
+                                      outlier_col=outlier_col,
+                                      ok_col=ok_col,
+                                      gap_col=gap_col,
+                                      fill_col=fill_col)
+
+    except Exception as e:
+        error_msg = str(e)
+        return False, [f'Creating interactive plot', error_msg]
+    return True, []
+
 
 #%% Toolkit functions
 

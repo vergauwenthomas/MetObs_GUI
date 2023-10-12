@@ -68,6 +68,9 @@ def file_exist(filepath):
     else:
         return False
 
+def parent_dir_exist(filepath):
+    parent_dir = os.path.dirname(filepath)
+    return os.path.isdir(parent_dir)
 
 def copy_file(filepath, targetpath):
     shutil.copyfile(filepath, targetpath)

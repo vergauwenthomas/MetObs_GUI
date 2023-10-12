@@ -6,6 +6,9 @@ Created on Fri Oct  6 09:56:23 2023
 @author: thoverga
 """
 import os
+import matplotlib
+
+from datetime import timedelta, datetime
 from metobs_gui.path_handler import GUI_dir
 from metobs_gui.errors import Error, Notification
 from PyQt5.QtWidgets import QDialog, QMainWindow, QPushButton
@@ -344,6 +347,11 @@ class MapColumnDialogWindow(QDialog):
 
     def closeself(self):
         self.close()
+
+
+
+
+
 
 
 # =============================================================================

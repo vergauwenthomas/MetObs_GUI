@@ -58,6 +58,29 @@ def init_fill_page(MW):
     setup_gap_settings(MW)
 
 
+def setup_fill_page(MW):
+    MW.fill_gaps_technique.currentTextChanged.connect(lambda: setup_gap_settings(MW))
+    MW.fill_missing.clicked.connect(lambda: apply_fill_missing(MW))
+    MW.apply_convert_outl.clicked.connect(lambda: setup_convert_outliers(MW))
+    MW.gapsize_conv.valueChanged.connect(lambda: assume_gapsize(MW))
+
+    MW.conv_outliers.clicked.connect(lambda: convert_outl_to_mis(MW))
+    MW.fill_gaps.clicked.connect(lambda: apply_fill_gaps(MW))
+
+    # bottom buttens
+    MW.print_missing_info.clicked.connect(lambda: make_print_missing_obs(MW))
+    MW.print_gap_info.clicked.connect(lambda: make_print_gaps(MW))
+    MW.print_dataset_info.clicked.connect(lambda: make_print_dataset(MW))
+
+    MW.show_missing.clicked.connect(lambda: show_df_missing_obs(MW))
+    MW.show_gaps.clicked.connect(lambda: show_df_gaps(MW))
+    MW.show_dataset_4.clicked.connect(lambda: show_df_dataset(MW))
+
+    MW.show_filled_missing.clicked.connect(lambda: show_filled_df_missing_obs(MW))
+    MW.show_filled_gaps.clicked.connect(lambda: show_filled_df_gaps(MW))
+
+    MW.plot_dataset_6.clicked.connect(lambda: plot_dataset(MW))
+
 
 
 # =============================================================================

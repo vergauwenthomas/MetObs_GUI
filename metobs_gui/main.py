@@ -140,14 +140,7 @@ class MainWindow(QMainWindow):
         # =============================================================================
         # Metadata tab
         # =============================================================================
-        self.get_altitude.clicked.connect(lambda: metadata_page.get_altitude(self))
-        self.get_lcz.clicked.connect(lambda: metadata_page.get_lcz(self))
-        self.get_landcover.clicked.connect(lambda: metadata_page.get_landcover(self))
-
-        self.gee_submit.clicked.connect(lambda: metadata_page.get_altitude(self))
-
-        self.preview_metadata_2.clicked.connect(lambda: metadata_page.preview_metadata(self))
-        self.spatial_plot.clicked.connect(lambda: metadata_page.spatial_plot(self))
+        metadata_page.setup_metadatapage(self)
 
         # =============================================================================
         # QC tab
@@ -169,52 +162,15 @@ class MainWindow(QMainWindow):
         # =============================================================================
         # Fill tab
         # =============================================================================
-        self.fill_gaps_technique.currentTextChanged.connect(lambda: fill_page.setup_gap_settings(self))
-        self.fill_missing.clicked.connect(lambda: fill_page.apply_fill_missing(self))
-        self.apply_convert_outl.clicked.connect(lambda: fill_page.setup_convert_outliers(self))
-        self.gapsize_conv.valueChanged.connect(lambda: fill_page.assume_gapsize(self))
-
-        self.conv_outliers.clicked.connect(lambda: fill_page.convert_outl_to_mis(self))
-        self.fill_gaps.clicked.connect(lambda: fill_page.apply_fill_gaps(self))
-
-        # bottom buttens
-        self.print_missing_info.clicked.connect(lambda: fill_page.make_print_missing_obs(self))
-        self.print_gap_info.clicked.connect(lambda: fill_page.make_print_gaps(self))
-        self.print_dataset_info.clicked.connect(lambda: fill_page.make_print_dataset(self))
-
-        self.show_missing.clicked.connect(lambda: fill_page.show_df_missing_obs(self))
-        self.show_gaps.clicked.connect(lambda: fill_page.show_df_gaps(self))
-        self.show_dataset_4.clicked.connect(lambda: fill_page.show_df_dataset(self))
-
-        self.show_filled_missing.clicked.connect(lambda: fill_page.show_filled_df_missing_obs(self))
-        self.show_filled_gaps.clicked.connect(lambda: fill_page.show_filled_df_gaps(self))
-
-        self.plot_dataset_6.clicked.connect(lambda: fill_page.plot_dataset(self))
-
+        fill_page.setup_fill_page(self)
 
 
         # =============================================================================
         # Analysis tab
         # =============================================================================
 
-        self.create_analysis.clicked.connect(lambda: analysis_page.create_analysis(self))
-        self.groupdef_custom.textChanged.connect(lambda: analysis_page.update_horizontal_axis_possibilities(self))
+        analysis_page.setup_analysis_page(self)
 
-        self.apply_filter.clicked.connect(lambda: analysis_page.filter_analysis(self))
-        self.plot_diurnal.clicked.connect(lambda: analysis_page.diurnal_plot_trigger(self))
-        self.plot_anual.clicked.connect(lambda: analysis_page.anual_plot_trigger(self))
-        self.plot_custom.clicked.connect(lambda: analysis_page.custom_cycle_plot_trigger(self))
-        self.get_cor.clicked.connect(lambda: analysis_page.get_lc_correlations(self))
-        self.make_heat_plot.clicked.connect(lambda: analysis_page.make_heatmap_plot(self))
-        self.show_cor_matrix.clicked.connect(lambda: analysis_page.display_cor_mat(self))
-
-        self.make_scatter_plot.clicked.connect(lambda: analysis_page.create_scatter_cor_plot(self))
-
-
-
-        self.startdt_check_diurnal.stateChanged.connect(lambda: analysis_page.dirunal_start_end(self))
-        self.startdt_check_anual.stateChanged.connect(lambda: analysis_page.anual_start_end(self))
-        self.startdt_check_custom.stateChanged.connect(lambda: analysis_page.custom_start_end(self))
 
         # =============================================================================
         # GUI settings
