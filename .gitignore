@@ -3,3 +3,4 @@ deploiment/*
 *.swp
 .spyproject
 
+*__pycache__*

@@ -7,7 +7,7 @@ A Graphical interface of the MetObs_toolkit
 
 # Install
 Unstable: 
-`pip install git+https://github.com/vergauwenthomas/MetObs_GUI.git`
+`pip install git+https://github.com/vergauwenthomas/MetObs_GUI.git@v0.2.0_setareh_test`
 
 Prerelease:
 `pip install MetObs-GUI --pre`
