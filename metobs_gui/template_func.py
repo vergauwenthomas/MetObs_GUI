@@ -493,25 +493,25 @@ def test_template(main, obsmapper, metamapper, dtmapper, optionsmapper):
 
 
 
-def get_all_templates():
-    """
-    Returns a dict with keys the filenames of all available templates and keys the full paths.
-    :return: DESCRIPTION
-    :rtype: dict
+# def get_all_templates():
+#     """
+#     Returns a dict with keys the filenames of all available templates and keys the full paths.
+#     :return: DESCRIPTION
+#     :rtype: dict
 
-    """
-    template_dict = {}
+#     """
+#     template_dict = {}
 
-    # default templates
-    template_dict['default_template.csv'] = path_handler.tlk_default_template
+#     # default templates
+#     template_dict['default_template.csv'] = path_handler.tlk_default_template
 
-    # all templates in cache
-    filenames, filepaths = path_handler.list_filenames(path_handler.template_dir,
-                                                       fileextension='.csv')
+#     # all templates in cache
+#     filenames, filepaths = path_handler.list_filenames(path_handler.template_dir,
+#                                                        fileextension='.csv')
 
-    template_dict.update(dict(zip(filenames, filepaths)))
+#     template_dict.update(dict(zip(filenames, filepaths)))
 
-    return template_dict
+#     return template_dict
 
 
 

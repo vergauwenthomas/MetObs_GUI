@@ -1,6 +1,0 @@
-varname,template column name,format,description,units,options,options_values
-datetime,timestamps,%d/%m/%Y %H:%M,,,data_structure,long
-lat,﻿lat,,,,timezone,UTC
-lon,lon,,,,,
-temp,temperature,,2m - temperature,Celsius,,
-name,station,,,,,

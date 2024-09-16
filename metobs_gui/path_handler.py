@@ -7,6 +7,7 @@ Created on Thu Mar 30 14:05:22 2023
 """
 
 import os
+import json
 import shutil
 from pathlib import Path
 from metobs_toolkit import demo_template
@@ -34,11 +35,21 @@ template_dir = os.path.join(CACHE_dir, 'templates')
 dataset_dir = os.path.join(CACHE_dir, 'datasets')
 modeldata_dir = os.path.join(CACHE_dir, 'modeldata')
 
-# toolkit location of templates
-# tlk_default_template = os.path.join(TLK_dir, 'data_templates',
-#                                     'template_defaults', 'default_template.csv')
+# files
+cache_data_paths_file = os.path.join(CACHE_dir, 'saved_paths.json')
 
-tlk_default_template = demo_template
+
+#Defaults for files
+
+
+data_path_default = {"data_file_path": "",
+                    "metadata_file_path": "",
+                    "input_pkl_file_path": "",
+                    "external_modeldata_path": ""}
+
+
+
+
 # =============================================================================
 # Helper functions
 # =============================================================================
@@ -92,8 +103,55 @@ def clear_dir(directory):
 # =============================================================================
 # Create the cache and tmp dir if they do not exist
 # =============================================================================
+def update_json_file(update_dict, filepath=cache_data_paths_file):
 
-_create_paths = [TMP_dir, CACHE_dir, template_dir, dataset_dir, modeldata_dir]
+    # read the existing JSON data from the file or create an empty dict if it doesn't exist
+    try:
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = {}
 
-for _dir in _create_paths:
-    make_dir(_dir)
+    # update or add to the JSON data using the update_dict
+    for key, value in update_dict.items():
+        data[key] = value
+
+    # write the updated JSON data to the file
+    with open(filepath, 'w') as f:
+        json.dump(data, f, indent = 4)
+
+
+
+def read_json(jsonfilename):
+    with open(jsonfilename,'r') as file:
+          # First we load existing data into a dict.
+        file_data = json.load(file)
+
+    return file_data
+
+
+
+
+def _init_cache_dir():
+    """ Update the cache dir with target subfolders and files if they do not exist."""
+    
+    #create folders if they do not exist yet
+    _create_paths = [CACHE_dir, template_dir, dataset_dir, modeldata_dir]
+    for _dir in _create_paths:
+        make_dir(_dir)
+        
+    #create default (empty) data paths file
+    if not file_exist(cache_data_paths_file):
+        _clear_default_paths_file()
+
+
+def _clear_default_paths_file():
+    with open(cache_data_paths_file, 'w') as f:
+        json.dump(data_path_default, f, indent = 4)
+    
+
+def _init_temp_dir():
+    """ Create an empty teporary dirctory."""
+    make_dir(TMP_dir)
+    clear_dir(TMP_dir)
+

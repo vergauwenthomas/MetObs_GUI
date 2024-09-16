@@ -1,6 +1,0 @@
-varname,template column name,format,units,description,options,options_values
-_date,Datum,%Y/%m/%d,,,data_structure,long
-_time,Tijd (UTC),%H:%M:%S,,,timezone,UTC
-temp,Temperatuur,,Celsius,2m - temperature,,
-humidity,Vochtigheid,,%,2m - relative humidity,,
-name,Vlinder,,,,,

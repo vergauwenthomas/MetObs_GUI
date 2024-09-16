@@ -14,10 +14,10 @@ from PyQt5.QtWidgets import QFileDialog, QComboBox
 
 # from main import MainWindow as MW
 
-from metobs_gui.json_save_func import get_saved_vals, update_json_file
+# from metobs_gui.json_save_func import get_saved_vals, update_json_file
 from metobs_gui.data_func import readfile, isvalidfile, get_columns
 
-from metobs_gui.import_data_page import set_possible_templates
+# from metobs_gui.import_data_page import set_possible_templates
 
 
 import metobs_gui.template_func as template_func
@@ -37,7 +37,7 @@ def init_template_page(MW):
 
     # list all templates in the cache
     MW.session['templates'] = {}
-    MW.session['templates']['cache'] = template_func.get_all_templates() # name.csv : path
+    # MW.session['templates']['cache'] = template_func.get_all_templates() # name.csv : path
     MW.session['templates']['in_use']: {} # name.csv : path
 
     # set data paths to saved files
@@ -52,13 +52,45 @@ def init_template_page(MW):
 
     # disable format options
     MW.wide_obs_type.setEnabled(False) # disable comboBox
-    MW.wide_obs_units.setEnabled(False)
+    MW.wide_unit.setEnabled(False)
     MW.wide_obs_desc.setEnabled(False)
     MW.stationname.setEnabled(False)
 
     # disable all widgest for the mapping
-    for box in _get_obstype_boxes(MW): box.setEnabled(False)
-    for box in _get_metadata_boxes(MW): box.setEnabled(False)
+    # for box in _get_obstype_boxes(MW): box.setEnabled(False)
+    # for box in _get_metadata_boxes(MW): box.setEnabled(False)
+
+
+def setup_triggers(MW):
+    MW.Browse_data_B.clicked.connect(lambda: browsefiles_data(MW)) #browse datafile
+    MW.Browse_metadata_B.clicked.connect(lambda: browsefiles_metadata(MW)) #browse metadatafile
+    # save paths when selected
+    MW.save_data_path.clicked.connect(lambda: save_path(
+                                                            MW=MW,
+                                                            savebool=MW.save_data_path.isChecked(),
+                                                            savekey='data_file_path',
+                                                            saveval=MW.data_file_T.text()))
+    MW.save_metadata_path.clicked.connect(lambda: save_path(
+                                                            MW=MW,
+                                                            savebool=MW.save_metadata_path.isChecked(),
+                                                            savekey='metadata_file_path',
+                                                            saveval=MW.metadata_file_T.text()))
+
+    MW.browse_format.currentTextChanged.connect(lambda: enable_format_widgets(MW))
+
+    # initiate the start mapping module
+    MW.start_mapping_B.clicked.connect(lambda: prepare_for_mapping(MW))
+
+    # construnct the mappindict
+    MW.build_B.clicked.connect(lambda: build_template(MW))
+
+    # save template
+    MW.save_template.clicked.connect(lambda: save_template_call(MW))
+
+    # display df's
+    MW.preview_data.clicked.connect(lambda: show_data_head(MW))
+    MW.preview_metadata.clicked.connect(lambda: show_metadata_head(MW))
+    MW.view_template.clicked.connect(lambda: show_template(MW))
 
 
 
@@ -67,7 +99,7 @@ def set_datapaths_init(MW):
     Read saved values to look for a path for the data and metadata file.
 
     """
-    saved_vals = get_saved_vals()
+    saved_vals = path_handler.read_json(path_handler.cache_data_paths_file)
 
     # set datafile path
     if 'data_file_path' in saved_vals:
@@ -100,7 +132,7 @@ def browsefiles_metadata(MW):
 def save_path(MW, savebool, savekey, saveval):
     if savebool:
         savedict = {str(savekey): str(saveval)}
-        update_json_file(savedict)
+        path_handler.update_json_file(savedict)
 
 # ----- enable specific format settings --------
 def enable_format_widgets(MW):
@@ -260,7 +292,7 @@ def save_template_call(MW):
     MW.session['templates']['cache'] = template_func.get_all_templates() # name.csv : path
 
     # Trigger update spinner on import page so the saved templ appears in the spinner there
-    set_possible_templates(MW)
+    # set_possible_templates(MW)
 
 
 def show_data_head(MW):
