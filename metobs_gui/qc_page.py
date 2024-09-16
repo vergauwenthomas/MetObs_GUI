@@ -18,16 +18,16 @@ from metobs_gui.path_handler import template_dir
 from metobs_gui.data_func import isvalidfile
 
 import metobs_gui.path_handler as path_handler
-from metobs_gui.template_func import Obs_map_values
+# from metobs_gui.template_func import Obs_map_values
 
-from metobs_gui.json_save_func import get_saved_vals, update_json_file
+# from metobs_gui.json_save_func import get_saved_vals, update_json_file
 
 
 import metobs_gui.tlk_scripts as tlk_scripts
 import metobs_gui.log_displayer as log_displayer
 from metobs_gui.extra_windows import _show_metadf, _show_obsspace, _show_timeseries
 
-from metobs_toolkit import loggers as toolkit_logger
+from metobs_toolkit import rootlog as toolkit_logger
 
 
 

@@ -17,15 +17,15 @@ from metobs_gui.path_handler import template_dir
 from metobs_gui.data_func import isvalidfile
 
 import metobs_gui.path_handler as path_handler
-from metobs_gui.template_func import get_all_templates
-from metobs_gui.json_save_func import get_saved_vals, update_json_file
+# from metobs_gui.template_func import get_all_templates
+# from metobs_gui.json_save_func import get_saved_vals, update_json_file
 
 import metobs_gui.tlk_scripts as tlk_scripts
 import metobs_gui.log_displayer as log_displayer
 
 from metobs_gui.extra_windows import _show_metadf, _show_obsspace, _show_timeseries
 
-from metobs_toolkit import loggers as toolkit_logger
+from metobs_toolkit import rootlog as toolkit_logger
 
 # =============================================================================
 # Initialise values
@@ -59,7 +59,7 @@ def init_import_page(MW):
     MW.metadata_file_T_2.setText(MW.metadata_file_T.text())
 
     # init pkl path if saved
-    saved_vals = get_saved_vals()
+    saved_vals = path_handler.read_json(path_handler.saved_paths)
     if 'input_pkl_file_path' in saved_vals:
         MW.pkl_path.setText(saved_vals['input_pkl_file_path'])
 
@@ -97,7 +97,7 @@ def save_input_pkl_path(MW):
     if MW.use_pkl.isChecked():
         pkl_path = MW.pkl_path.text()
         savedict = {'input_pkl_file_path' : str(pkl_path)}
-        update_json_file(savedict)
+        path_handler.update_json_file(savedict, filepath=path_handler.saved_paths)
 
 
 

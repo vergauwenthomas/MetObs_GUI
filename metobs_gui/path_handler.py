@@ -7,6 +7,7 @@ Created on Thu Mar 30 14:05:22 2023
 """
 
 import os
+import json
 import shutil
 from pathlib import Path
 from metobs_toolkit import demo_template
@@ -18,8 +19,6 @@ from metobs_toolkit import demo_template
 # =============================================================================
 
 GUI_dir = str( Path(__file__).resolve().parents[0])
-
-# TLK_dir = str( Path(__file__).resolve().parents[1])
 
 
 # =============================================================================
@@ -33,6 +32,9 @@ CACHE_dir = os.path.join(GUI_dir, 'cache') #to use over multiple sessions
 template_dir = os.path.join(CACHE_dir, 'templates')
 dataset_dir = os.path.join(CACHE_dir, 'datasets')
 modeldata_dir = os.path.join(CACHE_dir, 'modeldata')
+
+# files that contains saved info
+saved_paths = os.path.join(CACHE_dir, 'saved_paths.json')
 
 # toolkit location of templates
 # tlk_default_template = os.path.join(TLK_dir, 'data_templates',
@@ -92,8 +94,78 @@ def clear_dir(directory):
 # =============================================================================
 # Create the cache and tmp dir if they do not exist
 # =============================================================================
+def _setup_cache_dir():
+    """ Setup cache dir if not exists."""
 
-_create_paths = [TMP_dir, CACHE_dir, template_dir, dataset_dir, modeldata_dir]
+    _create_paths = [CACHE_dir, template_dir, dataset_dir, modeldata_dir]
+    
+    for _dir in _create_paths:
+        make_dir(_dir)
+        
+    _setup_default_paths_file() #write an empyt defautl paths file if it does not exist
+        
+def _setup_temp_dir():
+    """ Setup temporary dir if it does not exist."""
+    _create_paths = [TMP_dir]
+    
+    for _dir in _create_paths:
+        make_dir(_dir)
+    
+    
+# =============================================================================
+# Saved paths 
+# =============================================================================
 
-for _dir in _create_paths:
-    make_dir(_dir)
+
+
+
+default_paths = {
+    "data_file_path": "",
+    "metadata_file_path": "",
+    "input_pkl_file_path": "",
+    "external_modeldata_path": ""
+    }
+
+def _setup_default_paths_file():
+    """ Create a (empty) saved paths file if it does not exists. """
+    if not file_exist(saved_paths):
+        with open(saved_paths, "w") as outfile:
+            json.dump(default_paths, outfile, indent=4)
+            
+
+
+def update_json_file(update_dict, filepath=saved_paths):
+    # if isinstance(filepath, type(None)):
+    #     filepath=saved_paths
+    # read the existing JSON data from the file or create an empty dict if it doesn't exist
+    try:
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = {}
+
+    # update or add to the JSON data using the update_dict
+    for key, value in update_dict.items():
+        data[key] = value
+
+    # write the updated JSON data to the file
+    with open(filepath, 'w') as f:
+        json.dump(data, f, indent = 4)
+
+
+def read_json(jsonfilename):
+    with open(jsonfilename,'r') as file:
+          # First we load existing data into a dict.
+        file_data = json.load(file)
+
+    return file_data
+
+
+# def get_saved_vals():
+#     vals = read_json(saved_paths)
+#     vals = {key: val for key, val in vals.items() if val != ""}
+#     return vals
+
+
+
+

@@ -8,7 +8,7 @@ Created on Fri Aug  4 09:43:52 2023
 
 import os
 
-from metobs_gui.extra_windows import _show_metadf, _show_spatial_html
+# from metobs_gui.extra_windows import _show_metadf, _show_spatial_html
 
 
 import metobs_gui.tlk_scripts as tlk_scripts

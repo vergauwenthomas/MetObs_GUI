@@ -13,7 +13,7 @@ from datetime import datetime
 from PyQt5.QtWidgets import QFileDialog
 # from metobs_gui.extra_windows import _show_metadf, _show_spatial_html
 
-from metobs_gui.json_save_func import get_saved_vals
+# from metobs_gui.json_save_func import get_saved_vals
 from metobs_gui.extra_windows import (_show_missing_obs_df,
                                       _show_gaps_df,
                                       _show_obsspace,
@@ -26,7 +26,7 @@ from metobs_gui.extra_windows import (_show_missing_obs_df,
 import metobs_gui.tlk_scripts as tlk_scripts
 import metobs_gui.path_handler as path_handler
 from metobs_gui.errors import Error, Notification
-from metobs_gui.template_func import Obs_map_values
+# from metobs_gui.template_func import Obs_map_values
 from metobs_gui.metadata_page import _coordinates_available
 
 # =============================================================================

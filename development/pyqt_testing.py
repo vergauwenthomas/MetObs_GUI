@@ -11,7 +11,7 @@ import os
 import sys
 from pathlib import Path
 import logging
-from metobs_toolkit import loggers as toolkit_logger
+from metobs_toolkit import rootlog as toolkit_logger
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPlainTextEdit
 from PyQt5.uic import loadUi
@@ -58,7 +58,7 @@ class QPlainTextEditLogger(logging.Handler):
 #%%
 
 
-from metobs_toolkit import loggers as toolkit_logger
+from metobs_toolkit import rootlog as toolkit_logger
 
 class MainWindow(QMainWindow):
     def __init__(self):

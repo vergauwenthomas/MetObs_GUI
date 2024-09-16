@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-ENVNAME=gui_env
-yes | conda create -n ${ENVNAME} -c conda-forge python=3.9 spyder pyqt pyqtwebengine
-
-
-# install metobs
-pip install Metobs-toolkit

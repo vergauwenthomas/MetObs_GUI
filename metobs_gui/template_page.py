@@ -9,22 +9,22 @@ from pathlib import Path
 import os
 import copy
 import pytz
-from PyQt5.QtWidgets import QFileDialog, QComboBox
-
+from PyQt5.QtWidgets import QFileDialog, QComboBox, QDialog
+from PyQt5.uic import loadUi
 
 # from main import MainWindow as MW
 
-from metobs_gui.json_save_func import get_saved_vals, update_json_file
 from metobs_gui.data_func import readfile, isvalidfile, get_columns
 
 from metobs_gui.import_data_page import set_possible_templates
 
 
-import metobs_gui.template_func as template_func
+import metobs_gui.template_mapping as template_mapping
+
+# import metobs_gui.template_func as template_func
 import metobs_gui.path_handler as path_handler
 
 from metobs_gui.errors import Error, Notification
-
 
 
 # =============================================================================
@@ -36,29 +36,67 @@ def init_template_page(MW):
     MW.session['mapping']['started'] = False
 
     # list all templates in the cache
-    MW.session['templates'] = {}
-    MW.session['templates']['cache'] = template_func.get_all_templates() # name.csv : path
-    MW.session['templates']['in_use']: {} # name.csv : path
+    # MW.session['templates'] = {}
+    # MW.session['templates']['cache'] = template_func.get_all_templates() # name.csv : path
+    # MW.session['templates']['in_use']: {} # name.csv : path
 
     # set data paths to saved files
     set_datapaths_init(MW)
 
     # set static spinners
     MW.browse_format.addItems(['long', 'wide', 'single-station'])
-    MW.wide_obs_type.addItems(list(template_func.Obs_map_values.keys()))
+    # MW.wide_obs_type.addItems(list(template_func.Obs_map_values.keys()))
 
     MW.timezone_spinner.addItems(pytz.common_timezones)
     MW.timezone_spinner.setCurrentText('UTC')
 
     # disable format options
     MW.wide_obs_type.setEnabled(False) # disable comboBox
-    MW.wide_obs_units.setEnabled(False)
+    MW.wide_unit.setEnabled(False)
     MW.wide_obs_desc.setEnabled(False)
     MW.stationname.setEnabled(False)
 
     # disable all widgest for the mapping
-    for box in _get_obstype_boxes(MW): box.setEnabled(False)
-    for box in _get_metadata_boxes(MW): box.setEnabled(False)
+    # for box in _get_obstype_boxes(MW): box.setEnabled(False)
+    # for box in _get_metadata_boxes(MW): box.setEnabled(False)
+
+# =============================================================================
+# Triggers
+# =============================================================================
+
+def _setup_triggers(MW):
+    MW.Browse_data_B.clicked.connect(lambda: browsefiles_data(MW)) #browse datafile
+    MW.Browse_metadata_B.clicked.connect(lambda: browsefiles_metadata(MW)) #browse metadatafile
+    # save paths when selected
+    MW.save_data_path.clicked.connect(lambda: save_path(
+                                                            MW=MW,
+                                                            savebool=MW.save_data_path.isChecked(),
+                                                            savekey='data_file_path',
+                                                            saveval=MW.data_file_T.text()))
+    MW.save_metadata_path.clicked.connect(lambda: save_path(
+                                                            MW=MW,
+                                                            savebool=MW.save_metadata_path.isChecked(),
+                                                            savekey='metadata_file_path',
+                                                            saveval=MW.metadata_file_T.text()))
+
+    MW.browse_format.currentTextChanged.connect(lambda: enable_format_widgets(MW))
+
+    MW.start_mapping_B.clicked.connect(lambda: launch_data_mapping(MW))
+
+    # initiate the start mapping module
+    # MW.start_mapping_B.clicked.connect(lambda: prepare_for_mapping(MW))
+
+    # # construnct the mappindict
+    # MW.build_B.clicked.connect(lambda: build_template(MW))
+
+    # # save template
+    # MW.save_template.clicked.connect(lambda: save_template_call(MW))
+
+    # # display df's
+    MW.preview_data.clicked.connect(lambda: show_data_head(MW))
+    MW.preview_metadata.clicked.connect(lambda: show_metadata_head(MW))
+    MW.view_template.clicked.connect(lambda: show_template(MW))
+
 
 
 
@@ -67,19 +105,32 @@ def set_datapaths_init(MW):
     Read saved values to look for a path for the data and metadata file.
 
     """
-    saved_vals = get_saved_vals()
+    saved_vals = path_handler.read_json(path_handler.saved_paths)
 
-    # set datafile path
-    if 'data_file_path' in saved_vals:
-        MW.data_file_T.setText(str(saved_vals['data_file_path']))
+    # # set datafile path
+    # if 'data_file_path' in saved_vals:
+    MW.data_file_T.setText(str(saved_vals['data_file_path']))
         # MW.data_file_T_2.setText(str(saved_vals['data_file_path']))
 
     # set metadata file path
-    if 'metadata_file_path' in saved_vals:
-        MW.metadata_file_T.setText(str(saved_vals['metadata_file_path']))
+    # if 'metadata_file_path' in saved_vals:
+    MW.metadata_file_T.setText(str(saved_vals['metadata_file_path']))
         # MW.metadata_file_T_2.setText(str(saved_vals['metadata_file_path']))
 
 
+# =============================================================================
+# Toolkit functions
+# =============================================================================
+
+def launch_data_mapping(MW):
+    MW.Dialogwindow = template_mapping.Data_map_Window(
+        datafile=MW.data_file_T.text(),
+        Dataset = MW.Dataset) #launched when created
+    
+    #todo capture singal when closed
+    # Dialogwindow.exec_()
+    print('hier na exec')
+    # print(Dialogwindow.browse_format.currentText()) 
 
 
 
@@ -100,7 +151,7 @@ def browsefiles_metadata(MW):
 def save_path(MW, savebool, savekey, saveval):
     if savebool:
         savedict = {str(savekey): str(saveval)}
-        update_json_file(savedict)
+        path_handler.update_json_file(savedict, filepath=path_handler.saved_paths)
 
 # ----- enable specific format settings --------
 def enable_format_widgets(MW):
@@ -149,6 +200,8 @@ def enable_format_widgets(MW):
                 lab_txt = 'Station name/ID (data columns are used)'
 
         MW.stationname.setText(lab_txt)
+
+
 
 
 def prepare_for_mapping(MW):

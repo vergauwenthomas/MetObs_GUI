@@ -28,7 +28,7 @@ from metobs_gui.tlk_scripts import combine_to_obsspace
 
 import metobs_gui.path_handler as path_handler
 from metobs_gui.pandasmodel import DataFrameModel
-import metobs_gui.template_func as template_func
+# import metobs_gui.template_func as template_func
 
 # =============================================================================
 # Notes to myself!
@@ -225,7 +225,7 @@ class DatasetTimeSeriesWindow(QMainWindow):
 
     def __init__(self, dataset):
         super().__init__()
-        loadUi(os.path.join(path_handler.GUI_dir,'fig_window.ui'), self)
+        loadUi(os.path.join(path_handler.GUI_dir,'qt_windows','fig_window.ui'), self)
 
         # setup canvas
         self.canvas=timeseriesCanvas(dataset=dataset, modeldata=None)
@@ -288,7 +288,7 @@ class ModeldataTimeSeriesWindow(QMainWindow):
 
     def __init__(self, dataset, modeldata):
         super().__init__()
-        loadUi(os.path.join(path_handler.GUI_dir,'modeldata_fig_window.ui'), self)
+        loadUi(os.path.join(path_handler.GUI_dir,'qt_windows', 'modeldata_fig_window.ui'), self)
 
         if dataset is None:
             self.obs_available=False
@@ -386,7 +386,7 @@ class BasicWindow(QMainWindow):
 
     def __init__(self, ax):
         super().__init__()
-        loadUi(os.path.join(path_handler.GUI_dir,'basic_fig.ui'), self)
+        loadUi(os.path.join(path_handler.GUI_dir,'qt_windows','basic_fig.ui'), self)
 
         self.fig = ax.get_figure()
 
@@ -449,7 +449,7 @@ class MergeWindow(QMainWindow):
 
     def __init__(self, df, mode='mergedf'):
         super().__init__()
-        loadUi(os.path.join(path_handler.GUI_dir,'tabular_data_window.ui'), self)
+        loadUi(os.path.join(path_handler.GUI_dir,'qt_windows','tabular_data_window.ui'), self)
 
         # Define data attributes
         self.df = df.reset_index()
@@ -522,23 +522,23 @@ class MergeWindow(QMainWindow):
 # =============================================================================
 
 
-def _show_spatial_html(MW, html_path):
-    print('hier')
-    MW.html = HtmlWindow()
-    print('nu')
-    MW.html.feed_html(html_path)
-    print('done')
+# def _show_spatial_html(MW, html_path):
+#     print('hier')
+#     MW.html = HtmlWindow()
+#     print('nu')
+#     MW.html.feed_html(html_path)
+#     print('done')
 
 
-class HtmlWindow(QDialog):
-    """ Creates new window """
+# class HtmlWindow(QDialog):
+#     """ Creates new window """
 
-    def __init__(self):
-        super().__init__()
-        loadUi('/home/thoverga/Documents/VLINDER_github/MetObs_GUI/metobs_gui/html_map.ui', self)
+#     def __init__(self):
+#         super().__init__()
+        # loadUi('/home/thoverga/Documents/VLINDER_github/MetObs_GUI/metobs_gui/html_map.ui', self)
 
-    def feed_html(self, html_path):
-        self.display_2.load(QtCore.QUrl().fromLocalFile(html_path))
+#     def feed_html(self, html_path):
+#         self.display_2.load(QtCore.QUrl().fromLocalFile(html_path))
 
 
 

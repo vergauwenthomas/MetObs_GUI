@@ -1,5 +1,8 @@
 deploiment/*
 
+
+#temporary files and cached
 *.swp
 .spyproject
-
+*__pycache__*
+*/cache/*

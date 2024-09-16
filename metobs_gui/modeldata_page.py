@@ -14,7 +14,7 @@ from datetime import datetime
 from PyQt5.QtWidgets import QFileDialog
 # from metobs_gui.extra_windows import _show_metadf, _show_spatial_html
 
-from metobs_gui.json_save_func import get_saved_vals
+# from metobs_gui.json_save_func import get_saved_vals
 import metobs_gui.tlk_scripts as tlk_scripts
 import metobs_gui.path_handler as path_handler
 from metobs_gui.errors import Error, Notification
@@ -57,7 +57,7 @@ def set_datapaths_init(MW):
     Read saved values to look for a path for the data and metadata file.
 
     """
-    saved_vals = get_saved_vals()
+    saved_vals = path_handler.read_json(path_handler.saved_paths)
 
     # set datafile path
     if 'external_modeldata_path' in saved_vals:
@@ -449,14 +449,14 @@ def _widget_grouper(MW):
     dic['save_modeldata_pkl'] = [MW.save_model_pkl, MW.model_save]
     return dic
 
-def _get_all_possible_gee_dataset():
-    from metobs_toolkit.settings_files.gee_settings import gee_datasets
-    # usefull_gee_dataset = {name: val for name, val in gee_datasets.items() if val["dynamical"]}
+# def _get_all_possible_gee_dataset():
+#     from metobs_toolkit.settings_files.gee_settings import gee_datasets
+#     # usefull_gee_dataset = {name: val for name, val in gee_datasets.items() if val["dynamical"]}
 
-    usefull_gee_dataset = {}
-    for key, val in gee_datasets.items():
-        if val["dynamical"]:
-            usefull_gee_dataset[key] = val
+#     usefull_gee_dataset = {}
+#     for key, val in gee_datasets.items():
+#         if val["dynamical"]:
+#             usefull_gee_dataset[key] = val
 
 
-    return usefull_gee_dataset
+#     return usefull_gee_dataset
