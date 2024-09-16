@@ -1,5 +1,12 @@
 deploiment/*
 
-*.swp
-.spyproject
 
+
+#cache and temp files
+*.swp
+*__pycache__*
+*/cache/*`
+
+
+#spyder related
+*.spyproject/*
