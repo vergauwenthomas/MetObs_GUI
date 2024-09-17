@@ -47,20 +47,15 @@ class Data_map_Window(QDialog):
         #initialize values
         self._init_data_mapping_dialog()
         
-        #setup values
-        self._setup_data_mapping_dialog()
+        # #setup values
+        # self._setup_data_mapping_dialog()
         
         #set triggers
         self._set_triggers_data_mapping_dialog()
 
 
-
-
-        
-    
-    
     def _init_data_mapping_dialog(self):
-        
+        """ set default widget values and set data holders"""
         #read columnnames
         self.colnames = list(_read_datafile(self.datafile).columns)
         self.avail_to_map = copy.copy(self.colnames)
@@ -71,68 +66,80 @@ class Data_map_Window(QDialog):
         
         self.column_spinner.addItems(self.avail_to_map)
         
+        self.browse_format.clear()
+        self.browse_format.addItems(['Long data', 'Wide data'])
         
-        
+        self.name_repr.clear()
+        self.name_repr.addItems(['A single column',
+                                 'All columns represent stations',
+                                 'Not a column (= single station)'])
         
         return
 
         
         
-    
-    def _setup_data_mapping_dialog(self):
-        """ enable/disable widgets by values """
-        mapped_columns = {} 
-        
-        #Long-wide setup
-        
+
+     
+    # =============================================================================
+    # Reactions 
+    # =============================================================================
+    def _react_data_structure(self):
+        "triggerd when data changed (long vs wide)"
         datafmt = self.browse_format.currentText()
+        
+        self.name_repr.clear()
         name_repr_options = ['A single column',
                              'All columns represent stations',
                              'Not a column (= single station)']
-        
+       
         if datafmt == 'Wide data':
             self.column_spinner.setEnabled(False)
-            self.name_repr.clear()
-            print(name_repr_options[1:])
-            self.name_repr.addItems(name_repr_options[1:])
             
+            self.name_repr.addItems(name_repr_options[1:])
         elif datafmt == 'Long data':
             self.column_spinner.setEnabled(True)
-            
-            self.name_repr.clear()
+            name_repr_options.remove('All columns represent stations')
             self.name_repr.addItems(name_repr_options)
-        else:
-            Error(f'{datafmt} is not a valid format.')
             
+        else:
+            print(f'{datafmt} is not a valid format.')
+            # Error(f'{datafmt} is not a valid format.')
+            
+    def _react_timestamp_repr(self):
+        "when specified if timestamps are one or two columns "
         #datetime fmt setup
         timestamp_rep = self.timestamp_repr_spinner.currentText()
         if timestamp_rep == 'A single column with datetimes':
             self.dt_label1.setText('Timestamp column')
-            
+            self.date_fmt_label.setText('Timestamp format')
             self.dt_col1_spinner.clear()
             self.dt_col1_spinner.addItems(self.avail_to_map)
             
             self.dt_col2_spinner.setEnabled(False)
+            self.time_fmt.setEnabled(False)
+            
         
-            mapped_columns[self.dt_col1_spinner.currentText()] = 'The timestamp column' 
+            # mapped_columns[self.dt_col1_spinner.currentText()] = 'The timestamp column' 
             
         elif timestamp_rep == 'A data column and a time column':
             self.dt_label1.setText('Date column: ')
+            self.date_fmt_label.setText('Date format')
             self.dt_col1_spinner.clear()
             self.dt_col1_spinner.addItems(self.avail_to_map)
             
             self.dt_label2.setText('Time column: ')
             self.dt_col2_spinner.setEnabled(True)
+            self.time_fmt.setEnabled(True)
             self.dt_col2_spinner.clear()
             self.dt_col2_spinner.addItems(self.avail_to_map)
             
-            mapped_columns[self.dt_col1_spinner.currentText()] = 'The Date column' 
-            mapped_columns[self.dt_col2_spinner.currentText()] = 'The time column' 
+            # mapped_columns[self.dt_col1_spinner.currentText()] = 'The Date column' 
+            # mapped_columns[self.dt_col2_spinner.currentText()] = 'The time column' 
             
         else:
-            Error(f'{timestamp_rep} is not a valid format.')
+            print(f'{timestamp_rep} is not a valid format.')
             
-            
+    def _react_name_repr(self):
         # name col setup
         name_rep = self.name_repr.currentText()
         if name_rep == 'A single column':
@@ -142,7 +149,7 @@ class Data_map_Window(QDialog):
             
             self.single_station_name.setEnabled(False)
             
-            mapped_columns[self.name_col_spinner.currentText()] = 'The station names (=ID)' 
+            # mapped_columns[self.name_col_spinner.currentText()] = 'The station names (=ID)' 
             
         elif name_rep == 'All columns represent stations':
             self.name_col_spinner.setEnabled(False)
@@ -153,26 +160,23 @@ class Data_map_Window(QDialog):
             self.single_station_name.setEnabled(True)
             
         else:
-            Error(f'{name_rep} is not a valid format.')
-            
+            print(f'{name_rep} is not a valid format.')
+            # Error(f'{name_rep} is not a valid format.')
+    
+    # =============================================================================
+    # Setup triggers 
+    # =============================================================================
         
-        # update printoutput
-        self._print_info(mapped_columns)
-     
-        
-
         
     def _set_triggers_data_mapping_dialog(self):
         print("define triggers")
         
-        self.browse_format.currentTextChanged.connect(lambda: self._setup_data_mapping_dialog())
-        self.timestamp_repr_spinner.currentTextChanged.connect(lambda: self._setup_data_mapping_dialog())
-        self.name_repr.currentTextChanged.connect(lambda: self._setup_data_mapping_dialog())
+        self.browse_format.activated.connect(lambda: self._react_data_structure())
+        self.timestamp_repr_spinner.activated.connect(lambda: self._react_timestamp_repr())
+        self.name_repr.activated.connect(lambda: self._react_name_repr())
 
 
     def _print_info(self, infodict):
-        
-        
         printstr = ' ----- Mapped columns ----- '
         for col in self.colnames:
             if col in infodict:

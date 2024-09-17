@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>645</width>
-    <height>740</height>
+    <height>806</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>700</y>
+     <y>770</y>
      <width>621</width>
      <height>32</height>
     </rect>
@@ -29,49 +29,26 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_49">
-   <property name="geometry">
-    <rect>
-     <x>4</x>
-     <y>10</y>
-     <width>150</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Data format</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="browse_format">
-   <property name="geometry">
-    <rect>
-     <x>110</x>
-     <y>10</y>
-     <width>150</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>Long data</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Wide data</string>
-    </property>
-   </item>
-  </widget>
   <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>330</y>
+     <x>20</x>
+     <y>410</y>
      <width>441</width>
-     <height>174</height>
+     <height>180</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_11">
+      <property name="text">
+       <string>Column</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QComboBox" name="column_spinner"/>
+    </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_50">
       <property name="text">
@@ -106,6 +83,13 @@
       </property>
      </widget>
     </item>
+    <item row="5" column="0" colspan="2">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>Map it!</string>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0" colspan="2">
      <widget class="QLabel" name="label_3">
       <property name="text">
@@ -114,22 +98,8 @@
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_11">
-      <property name="text">
-       <string>Column</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QComboBox" name="column_spinner"/>
-    </item>
-    <item row="5" column="0" colspan="2">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>Map it!</string>
+      <property name="textInteractionFlags">
+       <set>Qt::LinksAccessibleByMouse</set>
       </property>
      </widget>
     </item>
@@ -139,17 +109,17 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>530</y>
+     <y>600</y>
      <width>621</width>
-     <height>151</height>
+     <height>161</height>
     </rect>
    </property>
   </widget>
   <widget class="QWidget" name="verticalLayoutWidget_11">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>350</y>
+     <x>470</x>
+     <y>430</y>
      <width>171</width>
      <height>91</height>
     </rect>
@@ -181,101 +151,12 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="formLayoutWidget_2">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>50</y>
-     <width>601</width>
-     <height>111</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout_2">
-    <item row="0" column="0" colspan="2">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Timestamp mapping</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string>Timestamps representation</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QComboBox" name="timestamp_repr_spinner">
-      <property name="editable">
-       <bool>false</bool>
-      </property>
-      <property name="currentText">
-       <string>A single column with datetimes</string>
-      </property>
-      <item>
-       <property name="text">
-        <string>A single column with datetimes</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>A data column and a time column</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="2">
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QLabel" name="dt_label1">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="dt_col1_spinner"/>
-      </item>
-      <item>
-       <widget class="QLabel" name="dt_label2">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="dt_col2_spinner"/>
-      </item>
-     </layout>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_54">
-      <property name="maximumSize">
-       <size>
-        <width>342</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Data timezone</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QComboBox" name="timezone_spinner"/>
-    </item>
-   </layout>
-  </widget>
   <widget class="QWidget" name="formLayoutWidget_3">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>200</y>
-     <width>591</width>
+     <y>280</y>
+     <width>611</width>
      <height>112</height>
     </rect>
    </property>
@@ -334,15 +215,19 @@
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QLineEdit" name="single_station_name"/>
+     <widget class="QLineEdit" name="single_station_name">
+      <property name="text">
+       <string>dummy station</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
-     <x>7</x>
-     <y>180</y>
+     <x>0</x>
+     <y>260</y>
      <width>621</width>
      <height>20</height>
     </rect>
@@ -354,8 +239,8 @@
   <widget class="Line" name="line_2">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>310</y>
+     <x>10</x>
+     <y>390</y>
      <width>621</width>
      <height>20</height>
     </rect>
@@ -363,6 +248,164 @@
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>598</width>
+     <height>196</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Timestamp mapping</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Timestamps representation</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="timestamp_repr_spinner">
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+        <property name="currentText">
+         <string>A single column with datetimes</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>A single column with datetimes</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>A data column and a time column</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QLabel" name="dt_label1">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="dt_col1_spinner"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="dt_label2">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="dt_col2_spinner">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QLabel" name="date_fmt_label">
+        <property name="text">
+         <string>date format</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="date_fmt">
+        <property name="text">
+         <string>%Y/%m/%d</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>time format</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="time_fmt">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>%H:%M:%S</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label_54">
+        <property name="maximumSize">
+         <size>
+          <width>342</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Data timezone</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="timezone_spinner"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>601</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <item>
+     <widget class="QLabel" name="label_12">
+      <property name="text">
+       <string>Structure of your datafile</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="browse_format"/>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

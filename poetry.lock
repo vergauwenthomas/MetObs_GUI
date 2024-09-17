@@ -701,13 +701,13 @@ pgp = ["gpg"]
 
 [[package]]
 name = "earthengine-api"
-version = "1.0.0"
+version = "1.1.0"
 description = "Earth Engine Python API"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "earthengine_api-1.0.0-py3-none-any.whl", hash = "sha256:4d7c6c913b67789032b57493313877cdfa613434563f050a03d26e71ad68a817"},
-    {file = "earthengine_api-1.0.0.tar.gz", hash = "sha256:9f9241dba57ac56151b99b456160342fd71aca2860ff275454d5c6e8efb096ed"},
+    {file = "earthengine_api-1.1.0-py3-none-any.whl", hash = "sha256:a747428f3e7446b5ec305bf326bc3ed236b5f47cf02ee5bc99678224e0b6806b"},
+    {file = "earthengine_api-1.1.0.tar.gz", hash = "sha256:5585ed98b8e090ff81cca2918a413839add8b137caf1644d0b944baee9a4834e"},
 ]
 
 [package.dependencies]

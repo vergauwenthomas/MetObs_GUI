@@ -18,3 +18,5 @@ poetry install --no-root #So that the GUI is taking from local and not from the 
 
 cd ${DEVELOPDIR} 
 
+echo "now run: "
+echo "poetry run python local_launch.py"
