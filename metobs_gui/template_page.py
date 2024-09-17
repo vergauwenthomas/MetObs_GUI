@@ -43,22 +43,6 @@ def init_template_page(MW):
     # set data paths to saved files
     set_datapaths_init(MW)
 
-    # set static spinners
-    MW.browse_format.addItems(['long', 'wide', 'single-station'])
-    # MW.wide_obs_type.addItems(list(template_func.Obs_map_values.keys()))
-
-    MW.timezone_spinner.addItems(pytz.common_timezones)
-    MW.timezone_spinner.setCurrentText('UTC')
-
-    # disable format options
-    MW.wide_obs_type.setEnabled(False) # disable comboBox
-    MW.wide_unit.setEnabled(False)
-    MW.wide_obs_desc.setEnabled(False)
-    MW.stationname.setEnabled(False)
-
-    # disable all widgest for the mapping
-    # for box in _get_obstype_boxes(MW): box.setEnabled(False)
-    # for box in _get_metadata_boxes(MW): box.setEnabled(False)
 
 # =============================================================================
 # Triggers
@@ -79,7 +63,7 @@ def _setup_triggers(MW):
                                                             savekey='metadata_file_path',
                                                             saveval=MW.metadata_file_T.text()))
 
-    MW.browse_format.currentTextChanged.connect(lambda: enable_format_widgets(MW))
+    # MW.browse_format.currentTextChanged.connect(lambda: enable_format_widgets(MW))
 
     MW.start_mapping_B.clicked.connect(lambda: launch_data_mapping(MW))
 
@@ -129,9 +113,6 @@ def launch_data_mapping(MW):
     
     #todo capture singal when closed
     # Dialogwindow.exec_()
-    print('hier na exec')
-    # print(Dialogwindow.browse_format.currentText()) 
-
 
 
 # =============================================================================

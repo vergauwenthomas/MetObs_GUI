@@ -174,7 +174,26 @@
                <item>
                 <widget class="QPushButton" name="start_mapping_B">
                  <property name="text">
-                  <string>Start Mapping</string>
+                  <string>Start Mapping the Data</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkBox">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="text">
+                  <string>use data</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
@@ -191,30 +210,11 @@
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_6">
                <item>
-                <widget class="QLabel" name="label_49">
+                <widget class="QPushButton" name="pushButton">
                  <property name="text">
-                  <string>Data format</string>
+                  <string>Start Mapping the Metadata</string>
                  </property>
                 </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="browse_format"/>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_54">
-                 <property name="maximumSize">
-                  <size>
-                   <width>342</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Data timezone</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="timezone_spinner"/>
                </item>
                <item>
                 <widget class="QCheckBox" name="use_metadata">
@@ -223,25 +223,6 @@
                  </property>
                  <property name="checked">
                   <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="checkBox">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="text">
-                  <string>use data</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                 <property name="autoExclusive">
-                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
@@ -322,115 +303,6 @@
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="verticalLayoutWidget_10">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>200</y>
-                <width>701</width>
-                <height>281</height>
-               </rect>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_22">
-               <item>
-                <widget class="QLabel" name="label_5">
-                 <property name="text">
-                  <string>Long data format</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_8">
-                 <item>
-                  <widget class="QLabel" name="label_53">
-                   <property name="text">
-                    <string>Single Station name</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="stationname">
-                   <property name="enabled">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_7">
-                 <item>
-                  <widget class="QPushButton" name="map_columns">
-                   <property name="maximumSize">
-                    <size>
-                     <width>900</width>
-                     <height>16777215</height>
-                    </size>
-                   </property>
-                   <property name="text">
-                    <string>Map columns</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="reset_mapping">
-                   <property name="maximumSize">
-                    <size>
-                     <width>100</width>
-                     <height>16777215</height>
-                    </size>
-                   </property>
-                   <property name="text">
-                    <string>Reset mapping</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <widget class="QPlainTextEdit" name="mapping_info"/>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="verticalLayoutWidget_11">
-              <property name="geometry">
-               <rect>
-                <x>960</x>
-                <y>90</y>
-                <width>211</width>
-                <height>91</height>
-               </rect>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_23">
-               <item>
-                <widget class="QLabel" name="label_4">
-                 <property name="text">
-                  <string>Customize observations</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="add_obstype">
-                 <property name="text">
-                  <string>Create new obstype</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="add_unit">
-                 <property name="text">
-                  <string>Add new units</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
              <widget class="QPushButton" name="build_B">
               <property name="enabled">
                <bool>false</bool>
@@ -456,62 +328,6 @@
                 <height>301</height>
                </rect>
               </property>
-             </widget>
-             <widget class="QWidget" name="formLayoutWidget">
-              <property name="geometry">
-               <rect>
-                <x>710</x>
-                <y>200</y>
-                <width>461</width>
-                <height>112</height>
-               </rect>
-              </property>
-              <layout class="QFormLayout" name="formLayout">
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_50">
-                 <property name="text">
-                  <string>Observation type</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QComboBox" name="wide_obs_type"/>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_51">
-                 <property name="text">
-                  <string>Observation units</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QComboBox" name="wide_unit"/>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_52">
-                 <property name="text">
-                  <string>Observation description</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <widget class="QLineEdit" name="wide_obs_desc">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0" colspan="2">
-                <widget class="QLabel" name="label_3">
-                 <property name="text">
-                  <string>Wide data format</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-              </layout>
              </widget>
             </widget>
             <widget class="QWidget" name="tab_2">
