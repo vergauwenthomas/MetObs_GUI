@@ -35,10 +35,6 @@ def init_template_page(MW):
     MW.session['mapping'] = {}
     MW.session['mapping']['started'] = False
 
-    # list all templates in the cache
-    # MW.session['templates'] = {}
-    # MW.session['templates']['cache'] = template_func.get_all_templates() # name.csv : path
-    # MW.session['templates']['in_use']: {} # name.csv : path
 
     # set data paths to saved files
     set_datapaths_init(MW)
@@ -66,7 +62,7 @@ def _setup_triggers(MW):
     # MW.browse_format.currentTextChanged.connect(lambda: enable_format_widgets(MW))
 
     MW.start_mapping_B.clicked.connect(lambda: launch_data_mapping(MW))
-
+    MW.start_mapping_metadata.clicked.connect(lambda: launch_metadata_mapping(MW))
     # initiate the start mapping module
     # MW.start_mapping_B.clicked.connect(lambda: prepare_for_mapping(MW))
 
@@ -107,12 +103,53 @@ def set_datapaths_init(MW):
 # =============================================================================
 
 def launch_data_mapping(MW):
-    MW.Dialogwindow = template_mapping.Data_map_Window(
+    """ launch a dialog for mapping the data. """
+    dlg = template_mapping.Data_map_Window(
         datafile=MW.data_file_T.text(),
         Dataset = MW.Dataset) #launched when created
     
-    #todo capture singal when closed
-    # Dialogwindow.exec_()
+    if dlg.exec():
+        #when pushed the "ok" button
+    
+        #scrape the info of the closing window
+        dlg._read_users_settings_as_template() #get the latest data from dialog
+        #capture singlas
+        templatedict = dlg.template_dict
+        
+        #test
+        print(templatedict)
+        print(MW.Dataset.get_info())
+    else: 
+        #When closed or clicked on cancel
+        print ('Dialog closed, no mapping is saved.')
+        
+        
+        
+        
+def launch_metadata_mapping(MW):
+    """ launch a dialog for mapping the metadata. """
+    dlg = template_mapping.Metadata_map_Window(
+        metadatafile=MW.metadata_file_T.text()) #launched when created
+    
+    if dlg.exec():
+        #when pushed the "ok" button
+        pass
+    
+        #scrape the info of the closing window
+        dlg._read_users_settings_as_template() #get the latest data from dialog
+        #capture singlas
+        templatedict = dlg.template_dict
+        
+        # #test
+        print(templatedict)
+        # print(MW.Dataset.get_info())
+    else: 
+        #When closed or clicked on cancel
+        print ('Dialog closed, no mapping is saved.')
+        
+                
+
+
 
 
 # =============================================================================

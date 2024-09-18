@@ -20,3 +20,4 @@ cd ${DEVELOPDIR}
 
 echo "now run: "
 echo "poetry run python local_launch.py"
+

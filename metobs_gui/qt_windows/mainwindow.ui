@@ -210,7 +210,7 @@
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_6">
                <item>
-                <widget class="QPushButton" name="pushButton">
+                <widget class="QPushButton" name="start_mapping_metadata">
                  <property name="text">
                   <string>Start Mapping the Metadata</string>
                  </property>

@@ -129,19 +129,6 @@ for Fahrenheit:
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QPushButton" name="add_button">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>420</y>
-     <width>351</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Add it to the knonw units</string>
-   </property>
-  </widget>
  </widget>
  <resources/>
  <connections>

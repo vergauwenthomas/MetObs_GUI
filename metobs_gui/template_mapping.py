@@ -24,7 +24,7 @@ from metobs_gui.errors import Error
 
 
 # =============================================================================
-# Datafile mapping
+# popup dialogs
 # =============================================================================
 
 class New_obstype_Window(QDialog):
@@ -38,21 +38,9 @@ class New_obstype_Window(QDialog):
         
         self.Dataset = Dataset
         self.new_obs = None
+
         
-        self._triggers()
-        
-        
-    def _add_new_obstype(self):
-        self.new_obs = metobs_toolkit.Obstype(
-            obsname=self.obsname.text(),
-            std_unit=self.unit.text(),
-            description=self.desc.text(),
-            unit_aliases={},
-            unit_conversions=ast.literal_eval(self.unit_conv.text()))
-        
-    def _triggers(self):
-        self.add_button.clicked.connect(lambda: self._add_new_obstype())
-       
+  
         
 class New_unit_Window(QDialog):
     """ Create a new obstype window"""
@@ -62,25 +50,113 @@ class New_unit_Window(QDialog):
         
         loadUi(os.path.join(path_handler.GUI_dir, 'qt_windows','new_unit_dialog.ui'),
                self)
-        
-        self.new_unit = None
-        self.conv = None
-        
+    
         self.obsname.setText(trg_obstype.name)
         self.std_unit.setText(trg_obstype.get_standard_unit())
         
-        self._triggers()
-        
-        
-    def _add_new_unit(self):
-        self.new_unit = self.new_unit_box.text()
-        self.conv = ast.literal_eval(self.conv_box.text())
-        
-        
-    def _triggers(self):
-        self.add_button.clicked.connect(lambda: self._add_new_unit())
 
 
+
+# =============================================================================
+# Datafile mapping
+# =============================================================================
+class Metadata_map_Window(QDialog):
+    """ create dialog window for mapping the metadata"""
+    def __init__(self, metadatafile):
+        super().__init__()
+        loadUi(os.path.join(path_handler.GUI_dir, 'qt_windows','templ_build_meta_data.ui'),
+               self)
+
+        self.open()
+        
+        
+        #data attributes
+        metadf = _read_datafile(metadatafile,
+                                kwargsdict={})
+        
+        self.metacolumns = list(metadf.columns)
+        self.template_dict = _get_empty_templ_dict()
+        
+        self.available_columns = copy.deepcopy(self.metacolumns)
+        
+        #init spinners
+        self.name_spinner.addItems(self.available_columns)
+        self.lat_spinner.addItems(self.available_columns)
+        self.lon_spinner.addItems(self.available_columns)
+        
+        #init qlistwidget
+        self.othercols.addItems(self.available_columns)
+        
+        
+        self.setup_triggers()
+        
+    
+    
+    def _react_columnname_spin_change(self):
+        
+        self.available_columns = copy.copy(self.metacolumns) #start with all columns available
+        
+        #drop the name column from the available columns
+        to_drop_from_listwidget = [self.name_spinner.currentText()]
+        
+        if self.latbox.isChecked():
+            #if lat AND LON (automatically) is present
+            to_drop_from_listwidget.append(self.lat_spinner.currentText())
+            to_drop_from_listwidget.append(self.lon_spinner.currentText())
+        print(f'to drop list: {set(to_drop_from_listwidget)}')
+        print(f'available: {self.available_columns}')
+        for to_drop in set(to_drop_from_listwidget):
+            self.available_columns.remove(to_drop)
+            
+        #update the listwidget items
+        self.othercols.clear()
+        self.othercols.addItems(self.available_columns)
+        
+
+    def _react_latbox_change(self):
+        print('react lat')
+        if self.latbox.isChecked():
+            self.lonbox.setChecked(True)
+            self.lat_spinner.setEnabled(True)
+            self.lon_spinner.setEnabled(True)
+        else:
+            self.lonbox.setChecked(False)
+            self.lat_spinner.setEnabled(False)
+            self.lon_spinner.setEnabled(False)
+        
+
+    def _react_lonbox_change(self):
+        print('react lon')
+        if self.lonbox.isChecked():
+            self.latbox.setChecked(True)
+            self.lat_spinner.setEnabled(True)
+            self.lon_spinner.setEnabled(True)
+        else:
+            self.latbox.setChecked(False)
+            self.lat_spinner.setEnabled(False)
+            self.lon_spinner.setEnabled(False)
+    
+        
+    def setup_triggers(self):
+        #checkboxes
+        self.latbox.stateChanged.connect(lambda: self._react_latbox_change()) 
+        self.lonbox.stateChanged.connect(lambda: self._react_lonbox_change()) 
+        
+        #spinners
+        self.name_spinner.activated.connect(lambda: self._react_columnname_spin_change())
+        self.lat_spinner.activated.connect(lambda: self._react_columnname_spin_change())
+        self.lon_spinner.activated.connect(lambda: self._react_columnname_spin_change())
+        
+        
+    def _read_users_settings_as_template(self):
+        self.template_dict['metadata_related']['name_column'] = self.name_spinner.currentText()
+        if self.latbox.isChecked():
+            self.template_dict['metadata_related']['lat_column'] = self.lat_spinner.currentText()
+            self.template_dict['metadata_related']['lon_column'] = self.lon_spinner.currentText()
+            
+        other_columns = [select.text() for select in self.othercols.selectedItems()]
+        self.template_dict['metadata_related']['columns_to_include'] = other_columns
+        
 
 class Data_map_Window(QDialog):
     """ Creates new window """
@@ -93,11 +169,11 @@ class Data_map_Window(QDialog):
         self.open()
         
         #Data attributes
-        self.Dataset = Dataset #toolkit Dataset
+        self.Dataset = Dataset #toolkit Dataset LINK WITH MAIN AS POINTER!! 
         self.datafile = datafile
         self.colnames = []
         self.avail_to_map = [] #columns that are not mapped yet
-        self.avail_obstypes = Dataset.obstypes
+        self.avail_obstypes = copy.deepcopy(Dataset.obstypes)
         
         self.template_dict = _get_empty_templ_dict()
         
@@ -202,6 +278,8 @@ class Data_map_Window(QDialog):
                         
         else:
             print(f'{timestamp_rep} is not a valid format.')
+            
+        
     def _react_name_repr(self):
         # name col setup
         name_rep = self.name_repr.currentText()
@@ -224,6 +302,9 @@ class Data_map_Window(QDialog):
             print(f'{name_rep} is not a valid format.')
             # Error(f'{name_rep} is not a valid format.')
         self._print_info()
+        
+        
+        
     def _react_to_obstype_change(self):
         cur_obstype_name = self.obs_type.currentText()
         cur_obstype = self.Dataset.obstypes[cur_obstype_name]
@@ -271,18 +352,38 @@ class Data_map_Window(QDialog):
         
         new_obs_dialog = New_obstype_Window(Dataset=self.Dataset)
         new_obs_dialog.setWindowTitle("NEW OBSERVATIONTYPE")
-        new_obs_dialog.exec_()
-        
-        new_obs = new_obs_dialog.new_obs
-        
-        #add it to the Dataset
-        self.Dataset.add_new_observationtype(new_obs)
-        #add it to avail obstypes
-        self.avail_obstypes[new_obs.name] = new_obs
-        
-        #reload the spinners
-        self.obs_type.clear()
-        self.obs_type.addItems(self.avail_obstypes.keys())
+        # new_obs_dialog.exec_()
+        if new_obs_dialog.exec():
+            #scrape dialog
+            newobsname = new_obs_dialog.obsname.text()
+            std_unit = new_obs_dialog.unit.text()
+            desc = new_obs_dialog.desc.text()
+            unit_aliases={} #This is oke i guess
+            unit_conv = new_obs_dialog.unit_conv.text()
+            
+            #convert data
+            unit_conv = ast.literal_eval(unit_conv)
+            
+            #create obstype
+            newobstype = metobs_toolkit.Obstype(
+                obsname=newobsname,
+                std_unit=std_unit,
+                description=desc,
+                unit_aliases=unit_aliases,
+                unit_conversions=unit_conv)
+            
+            
+            #add it to the Dataset
+            self.Dataset.add_new_observationtype(newobstype)
+            #add it to avail obstypes
+            self.avail_obstypes[newobstype.name] = newobstype
+            
+            #reload the spinners
+            self.obs_type.clear()
+            self.obs_type.addItems(self.avail_obstypes.keys())
+        else:
+            #dialog is closed or canceled.
+            pass
         
         
         
@@ -292,42 +393,53 @@ class Data_map_Window(QDialog):
         active_obstypename = self.obs_type.currentText()
         new_unit_dialog = New_unit_Window(trg_obstype=self.Dataset.obstypes[active_obstypename])
         new_unit_dialog.setWindowTitle("NEW UNIT")
-        new_unit_dialog.exec_()
+        # new_unit_dialog.exec_()
+        if new_unit_dialog.exec():
+            
+            #scrape the data
+            new_unit = new_unit_dialog.new_unit_box.text()
+            new_conv = new_unit_dialog.conv_box.text()
+            
+            #convert data
+            new_conv = ast.literal_eval(new_conv)
+            
+            #add it to the Dataset
+            self.Dataset.add_new_unit(obstype=active_obstypename,
+                                      new_unit=new_unit,
+                                      conversion_expression=new_conv)
+            
+            #reload the spinners
+            self._react_to_obstype_change()
+        else:
+            #dialog is closed or canceled.
+            pass
+            
         
-        new_unit = new_unit_dialog.new_unit
-        new_conv = new_unit_dialog.conv
-        
-        #add it to the Dataset
-        self.Dataset.add_new_unit(obstype=active_obstypename,
-                                  new_unit=new_unit,
-                                  conversion_expression=new_conv)
-        
-        
-        #reload the spinners
-        self._react_to_obstype_change()
-        
-        
-        
+   
+    
     # =============================================================================
     # Setup triggers 
     # =============================================================================
         
         
     def _set_triggers_data_mapping_dialog(self):
-        print("define triggers")
-        
+        #spinners
         self.browse_format.activated.connect(lambda: self._react_data_structure())
         self.timestamp_repr_spinner.activated.connect(lambda: self._react_timestamp_repr())
         self.name_repr.activated.connect(lambda: self._react_name_repr())
         self.obs_type.activated.connect(lambda: self._react_to_obstype_change())
-        self.map_obstype_but.clicked.connect(lambda: self._map_an_obstype())
+        
+        #button triggers
         self.update_temp_button.clicked.connect(lambda: self._print_info())
         
         self.add_obstype.clicked.connect(lambda: self._react_add_new_obs())
         self.add_unit.clicked.connect(lambda: self._react_add_new_unit())
+   
+        self.map_obstype_but.clicked.connect(lambda: self._map_an_obstype()) 
+   
+    
     def _print_info(self):
         self._read_users_settings_as_template() #update template dict
-        
         self.mapping_info.clear()
         self.mapping_info.setPlainText(pprint.pformat(self.template_dict))
         
