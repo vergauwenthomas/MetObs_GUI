@@ -71,8 +71,8 @@ class Metadata_map_Window(QDialog):
         
         
         #data attributes
-        metadf = _read_datafile(metadatafile,
-                                kwargsdict={})
+        metadf = path_handler.read_csv_datafile(metadatafile,
+                                kwargsdict={'nrows':20})
         
         self.metacolumns = list(metadf.columns)
         self.template_dict = _get_empty_templ_dict()
@@ -190,7 +190,9 @@ class Data_map_Window(QDialog):
     def _init_data_mapping_dialog(self):
         """ set default widget values and set data holders"""
         #read columnnames
-        self.colnames = list(_read_datafile(self.datafile).columns)
+        df = path_handler.read_csv_datafile(datafile=self.datafile, 
+                                            kwargsdict={'nrows': 20})
+        self.colnames = list(df.columns)
         self.avail_to_map = copy.copy(self.colnames)
         
         #initiate spinners
@@ -492,6 +494,15 @@ class Data_map_Window(QDialog):
             self.template_dict['single_station_name'] = self.single_station_name.text()
             
         
+        #remove the None (default) obstype
+        only_mapped = []
+        for obs_map_dict in self.template_dict['data_related']['obstype_mapping']:
+            if obs_map_dict['columnname'] is not None:
+                only_mapped.append(obs_map_dict)
+        
+        self.template_dict['data_related']['obstype_mapping'] = only_mapped
+        
+        
             
     def _display_avail_obstypes(self):
         self.obs_type.clear()
@@ -502,22 +513,4 @@ class Data_map_Window(QDialog):
         
 
 
-
-
-
-# =============================================================================
-# Special functions
-# =============================================================================
-
-
-def _read_datafile(datafile, kwargsdict={}):
-    from metobs_toolkit.data_import import _read_csv_to_df
-    
-    
-    kwargsdict['nrows'] = 20
-    df = _read_csv_to_df(filepath=datafile,
-                         kwargsdict=kwargsdict)
-    return df
-    
-    
     

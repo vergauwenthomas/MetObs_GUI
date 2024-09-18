@@ -8,13 +8,50 @@ Created on Wed Sep  6 13:01:22 2023
 
 from pathlib import Path
 import os
-
+import json
+import pprint
+import inspect
+import ast
+import pandas as pd
 import metobs_gui.path_handler as path_handler
+from metobs_gui.errors import Notification
 
+
+
+from PyQt5.QtWidgets import  QDialog
+from PyQt5.uic import loadUi
+
+
+
+        
+
+
+# =============================================================================
+# INIT
+# =============================================================================
+
+def _init_page(MW):
+    
+   pass
+    
+    
+    
+# =============================================================================
+# Triggers
+# =============================================================================
 
 def _setup_triggers(MW):
+    
+
+    #buttons
     MW.clear_saved.clicked.connect(lambda: clear_cache(MW))    
-    MW.clear_saved_paths.clicked.connect(lambda: clear_cached_paths(MW))    
+    MW.clear_saved_paths.clicked.connect(lambda: clear_cached_paths(MW))
+
+
+# =============================================================================
+# reactions    
+# =============================================================================
+
     
 
 def clear_cache(MW):
@@ -41,3 +78,6 @@ def clear_cached_paths(MW):
     #TODO update
     MW.data_file_T.clear()
     MW.metadata_file_T.clear()
+
+
+

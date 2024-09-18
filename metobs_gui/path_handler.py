@@ -36,6 +36,7 @@ modeldata_dir = os.path.join(CACHE_dir, 'modeldata')
 # files that contains saved info
 saved_paths = os.path.join(CACHE_dir, 'saved_paths.json')
 
+
 # toolkit location of templates
 # tlk_default_template = os.path.join(TLK_dir, 'data_templates',
 #                                     'template_defaults', 'default_template.csv')
@@ -116,9 +117,6 @@ def _setup_temp_dir():
 # Saved paths 
 # =============================================================================
 
-
-
-
 default_paths = {
     "data_file_path": "",
     "metadata_file_path": "",
@@ -145,8 +143,9 @@ def update_json_file(update_dict, filepath=saved_paths):
         data = {}
 
     # update or add to the JSON data using the update_dict
-    for key, value in update_dict.items():
-        data[key] = value
+    # for key, value in update_dict.items():
+    #     data[key] = value
+    data.update(update_dict)
 
     # write the updated JSON data to the file
     with open(filepath, 'w') as f:
@@ -161,11 +160,24 @@ def read_json(jsonfilename):
     return file_data
 
 
+
 # def get_saved_vals():
 #     vals = read_json(saved_paths)
 #     vals = {key: val for key, val in vals.items() if val != ""}
 #     return vals
 
 
+# =============================================================================
+# Reading/writing csv
+# =============================================================================
 
-
+#make use of the toolkit reader
+def read_csv_datafile(datafile, kwargsdict={}):
+    from metobs_toolkit.data_import import _read_csv_to_df
+    
+    
+    kwargsdict['nrows'] = 20
+    df = _read_csv_to_df(filepath=datafile,
+                         kwargsdict=kwargsdict)
+    return df
+    

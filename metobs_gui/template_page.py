@@ -7,16 +7,16 @@ Created on Fri Jul 28 13:30:48 2023
 """
 from pathlib import Path
 import os
+import pprint
+import json
 import copy
 import pytz
 from PyQt5.QtWidgets import QFileDialog, QComboBox, QDialog
 from PyQt5.uic import loadUi
 
-# from main import MainWindow as MW
 
-from metobs_gui.data_func import readfile, isvalidfile, get_columns
-
-from metobs_gui.import_data_page import set_possible_templates
+from metobs_toolkit.template import _get_empty_templ_dict
+from metobs_gui.tlk_scripts import gui_wrap
 
 
 import metobs_gui.template_mapping as template_mapping
@@ -32,12 +32,81 @@ from metobs_gui.errors import Error, Notification
 # =============================================================================
 def init_template_page(MW):
 
-    MW.session['mapping'] = {}
-    MW.session['mapping']['started'] = False
-
+    #Extra data attributes used on this page    
+    MW._templ_dict= _get_empty_templ_dict() 
+    MW._template_json_file=os.path.join(path_handler.TMP_dir, 'template.json')
+   
+    
 
     # set data paths to saved files
     set_datapaths_init(MW)
+   
+    #create an empty templatejson file
+    with open(MW._template_json_file, 'w') as f:
+        json.dump(MW._templ_dict, f, indent=4)
+   
+    #Display the template dict
+    _display_templ_dict(MW)
+
+
+
+
+def _update_templdict_to_json(MW):
+    """Write the current template to a json file"""
+   
+
+    path_handler.update_json_file(update_dict=MW._templ_dict,
+                                  filepath=MW._template_json_file)
+
+def _display_templ_dict(MW):
+    """Display the template json file on the page. """
+    #read template json
+    templatejson = path_handler.read_json(MW._template_json_file)
+    
+    #write to the text displayer
+    MW.template_info.clear()
+    MW.template_info.setPlainText(json.dumps(templatejson, indent=2))
+
+
+
+# =============================================================================
+# Reactions
+# =============================================================================
+
+def _react_use_data_change(MW):
+    if MW.use_data_box.isChecked():
+        MW.start_mapping_B.setEnabled(True)
+    else:
+        MW.start_mapping_B.setEnabled(False)
+    
+def _react_use_metadata_change(MW):
+    if MW.use_metadata_box.isChecked():
+        MW.start_mapping_metadata.setEnabled(True)
+    else:
+        MW.start_mapping_metadata.setEnabled(False)
+
+
+def _react_to_save_template(MW):
+    
+    filename = MW.templatename.text()
+    
+    if not filename.endswith('.json'):
+        filename += '.json'
+    trg_path = os.path.join(path_handler.template_dir, filename)
+    
+    if path_handler.file_exist(trg_path):
+        Error(f'The path {trg_path} already exists. The template could not be saved.')
+        return
+    
+    #copy the templatefile from tmp to cache
+    path_handler.copy_file(MW._template_json_file,
+                           trg_path)
+    
+    Notification(f'The template is saved as {filename}')
+    
+    
+    
+    
 
 
 # =============================================================================
@@ -63,14 +132,18 @@ def _setup_triggers(MW):
 
     MW.start_mapping_B.clicked.connect(lambda: launch_data_mapping(MW))
     MW.start_mapping_metadata.clicked.connect(lambda: launch_metadata_mapping(MW))
+    
+    MW.use_data_box.stateChanged.connect(lambda: _react_use_data_change(MW)) 
+    MW.use_metadata_box.stateChanged.connect(lambda: _react_use_metadata_change(MW))
+    
     # initiate the start mapping module
     # MW.start_mapping_B.clicked.connect(lambda: prepare_for_mapping(MW))
 
     # # construnct the mappindict
-    # MW.build_B.clicked.connect(lambda: build_template(MW))
+    MW.build_B.clicked.connect(lambda: build_template(MW))
 
     # # save template
-    # MW.save_template.clicked.connect(lambda: save_template_call(MW))
+    MW.save_template.clicked.connect(lambda:_react_to_save_template(MW))
 
     # # display df's
     MW.preview_data.clicked.connect(lambda: show_data_head(MW))
@@ -87,19 +160,15 @@ def set_datapaths_init(MW):
     """
     saved_vals = path_handler.read_json(path_handler.saved_paths)
 
-    # # set datafile path
-    # if 'data_file_path' in saved_vals:
+   
     MW.data_file_T.setText(str(saved_vals['data_file_path']))
-        # MW.data_file_T_2.setText(str(saved_vals['data_file_path']))
-
-    # set metadata file path
-    # if 'metadata_file_path' in saved_vals:
     MW.metadata_file_T.setText(str(saved_vals['metadata_file_path']))
-        # MW.metadata_file_T_2.setText(str(saved_vals['metadata_file_path']))
+       
+
 
 
 # =============================================================================
-# Toolkit functions
+# Launch dialogs
 # =============================================================================
 
 def launch_data_mapping(MW):
@@ -116,14 +185,21 @@ def launch_data_mapping(MW):
         #capture singlas
         templatedict = dlg.template_dict
         
-        #test
-        print(templatedict)
-        print(MW.Dataset.get_info())
+        #subset only to data part (needed when updating)
+        datatemplatedict={"data_related": templatedict["data_related"],
+                          "single_station_name": templatedict["single_station_name"]}
+        
+        #update the template dict attribute
+        
+        MW._templ_dict.update(datatemplatedict)
+        _update_templdict_to_json(MW)
+        
     else: 
         #When closed or clicked on cancel
         print ('Dialog closed, no mapping is saved.')
-        
-        
+    
+    #print current templatedict status
+    _display_templ_dict(MW)
         
         
 def launch_metadata_mapping(MW):
@@ -139,16 +215,65 @@ def launch_metadata_mapping(MW):
         dlg._read_users_settings_as_template() #get the latest data from dialog
         #capture singlas
         templatedict = dlg.template_dict
+        #subset only to metadata part (needed when updating)
+        metadatatemplatedict={"metadata_related": templatedict["metadata_related"]}
         
-        # #test
-        print(templatedict)
-        # print(MW.Dataset.get_info())
+        #update the template dict attribute
+        MW._templ_dict.update(metadatatemplatedict)
+        _update_templdict_to_json(MW)
+       
     else: 
         #When closed or clicked on cancel
         print ('Dialog closed, no mapping is saved.')
-        
+    
+    #print current templatedict status
+    _display_templ_dict(MW)
                 
 
+
+# =============================================================================
+# Toolkit functions
+# =============================================================================
+
+def build_template(MW):
+    """ Try to build a metobstoolkit.template form the current json file. """
+    #get files
+    datafile = MW.data_file_T.text()
+    metadatafile = MW.metadata_file_T.text()
+    templatefile = MW._template_json_file
+
+    #convert to none if needed    
+    if (datafile == '') | (not MW.use_data_box.isChecked()):
+        datafile=None
+        
+    if (metadatafile == '') | (not MW.use_metadata_box.isChecked()):
+        metadatafile=None
+    
+    import_kwargs = {'input_data_file':datafile,
+                     'input_metadata_file':metadatafile,
+                     'template_file':templatefile,
+                     'freq_estimation_method':'highest',
+                     'freq_estimation_simplify_tolerance':'2min',
+                     'origin_simplify_tolerance':'5min',
+                     'timestamp_tolerance':'4min',
+                     'kwargs_data_read':{},
+                     'kwargs_metadata_read':{},
+                     'templatefile_is_url':False}
+    
+    _ret, succes, msg = gui_wrap(MW.Dataset.import_data_from_file, import_kwargs)
+    if not succes:
+        Error('Could not import a Dataset', str(msg))
+        
+    else:
+        Notification(f'Succesfully tested the template: {MW.Dataset.template}')
+        MW.save_template.setEnabled(True)
+        
+    
+    
+    
+    
+    
+    
 
 
 
@@ -172,177 +297,19 @@ def save_path(MW, savebool, savekey, saveval):
         path_handler.update_json_file(savedict, filepath=path_handler.saved_paths)
 
 # ----- enable specific format settings --------
-def enable_format_widgets(MW):
-    dat_format = str(MW.browse_format.currentText())
-    if dat_format == 'long':
-        MW.wide_obs_type.setEnabled(False) # disable comboBox
-        MW.wide_obs_units.setEnabled(False)
-        MW.wide_obs_desc.setEnabled(False)
-        MW.stationname.setEnabled(False)
-    elif dat_format == 'wide':
-        MW.wide_obs_type.setEnabled(True) # disable comboBox
-        MW.wide_obs_units.setEnabled(True)
-        MW.wide_obs_desc.setEnabled(True)
-        MW.stationname.setEnabled(False)
-
-    else:
-        MW.wide_obs_type.setEnabled(False) # disable comboBox
-        MW.wide_obs_units.setEnabled(False)
-        MW.wide_obs_desc.setEnabled(False)
-        MW.stationname.setEnabled(True)
-
-    if MW.session['mapping']['started']:
-        if (dat_format == 'long') | (dat_format == 'single-station'):
-            # enable all
-            for box in _get_obstype_boxes(MW): box.setEnabled(True)
-            for box in _get_datetime_boxes(MW): box.setEnabled(True)
-            _get_name_box(MW).setEnabled(True)
-            if MW.use_metadata.isChecked():
-                for box in _get_metadata_boxes(MW): box.setEnabled(True)
-                lab_txt = 'Station name/ID (=column in BOTH data and metadata files)'
-            else:
-                # update label text for more info.
-                lab_txt = 'Station name/ID (=column in the data file)'
-
-        else:
-            for box in _get_obstype_boxes(MW): box.setEnabled(False)
-            for box in _get_datetime_boxes(MW): box.setEnabled(True)
-            if MW.use_metadata.isChecked():
-                for box in _get_metadata_boxes(MW): box.setEnabled(True)
-                _get_name_box(MW).setEnabled(True)
-                lab_txt = 'Station name/ID (=column in the metadata file)'
-            else:
-
-                MW.name_col_CB.setCurrentText(template_func.not_mapable)
-                _get_name_box(MW).setEnabled(False)
-                lab_txt = 'Station name/ID (data columns are used)'
-
-        MW.stationname.setText(lab_txt)
 
 
-
-
-def prepare_for_mapping(MW):
-    MW.session['mapping']['started'] = True
-
-    dat_format = str(MW.browse_format.currentText())
-    _get_name_box(MW).setEnabled(True)
-    if (dat_format == 'long') | (dat_format == 'single-station'):
-        # First try reading the datafile
-        # 1. THe data file
-        datafile = MW.data_file_T.text()
-        valid, _msg = isvalidfile(datafile, filetype='.csv')
-        if not valid:
-            Error(_msg)
-            return
-        # Read columns
-        df_head = readfile(datafile, nrows=20)[0]
-        df_cols = list(df_head.columns)
-        MW.session['mapping']['data_head'] = df_head.copy() #save for tests on template
-        MW.session['mapping']['data_cols'] = df_cols.copy() #save for tests on template
-        # Get the obstype spinners
-        csv_columns = df_cols
-        csv_columns.insert(0, template_func.not_mapable)
-
-        # enable all obs boxes for colum mapping
-        for box in _get_obstype_boxes(MW): box.setEnabled(True)
-        for box in _get_datetime_boxes(MW): box.setEnabled(True)
-
-
-        # set column and default values
-        template_func.set_obstype_spinner_values(MW, csv_columns)
-        template_func.set_time_spinner_values(MW, csv_columns)
-        template_func.set_obstype_desc_defaults(MW)
-        template_func.set_obstype_units_defaults(MW)
-        template_func.set_datetime_defaults(MW)
-    else:
-        csv_columns = []
-        if not MW.use_metadata.isChecked():
-            # no metadata and wide format
-            _get_name_box(MW).setEnabled(False)
-
-
-
-    #2. The metadata
-    if MW.use_metadata.isChecked():
-        metadatafile = MW.metadata_file_T.text()
-        valid, _msg = isvalidfile(metadatafile, filetype='.csv')
-        if not valid:
-            Error(_msg)
-            return
-        metadf_head = readfile(metadatafile, nrows=20)[0]
-        metadf_cols = list(metadf_head.columns)
-        MW.session['mapping']['metadata_head'] = metadf_head.copy() #save for tests on template
-        MW.session['mapping']['metadata_cols'] = metadf_cols.copy() #save for tests on template
-        metadf_cols.insert(0, template_func.not_mapable)
-
-        # enable all obs boxes for colum mapping
-        for box in _get_metadata_boxes(MW): box.setEnabled(True)
-
-        # set column and default values
-        template_func.set_metadata_spinner_values(MW, metadf_cols)
-    else:
-        metadf_cols = []
-
-    template_func.set_name_spinner_values(MW, csv_columns, metadf_cols)
-    # enable the build button
-    MW.build_B.setEnabled(True)
-
-
-# -------  Build template ---------
-
-def build_template(MW):
-    MW.session['mapping']['template_df'] = None
-    df, succes = template_func.make_template_build(MW)
-    if succes:
-        MW.session['mapping']['template_df'] = df.copy()
-        MW.templmodel.setDataFrame(df)
-        MW.save_template.setEnabled(True) #enable the save button
-
-def save_template_call(MW):
-    # test if template is not empty
-    if MW.session['mapping']['template_df'] is None:
-        Error('Template error', 'The template has not been succesfully build. It is not possible to save.')
-        return
-    if MW.session['mapping']['template_df'].empty:
-        Error('Template error', 'The template is empty. It is not possible to save.')
-        return
-    # form path to save the template
-    template_name = str(MW.templatename.text())
-    if not template_name.endswith('.csv'):
-        filename = template_name + '.csv'
-    else:
-        filename = template_name
-    target_path = os.path.join(path_handler.template_dir, filename)
-
-    if path_handler.file_exist(target_path):
-        Error(f'{target_path} already exists! Change name of the template file and save again.')
-        return
-
-    # save template
-    temp_df =MW.session['mapping']['template_df']
-    temp_df.to_csv(path_or_buf=target_path, sep=',', index=False)
-
-    Notification(f'Template ({filename}) is saved!')
-
-    # update dict
-    MW.session['templates']['in_use'] = {filename : target_path}
-    # update cache templates
-    MW.session['templates']['cache'] = template_func.get_all_templates() # name.csv : path
-
-    # Trigger update spinner on import page so the saved templ appears in the spinner there
-    set_possible_templates(MW)
 
 
 def show_data_head(MW):
     # 1. THe data file
-    datafile = MW.data_file_T.text()
-    valid, _msg = isvalidfile(datafile, filetype='.csv')
-    if not valid:
-        Error(_msg)
-        return
-    # Read columns
-    df_head = readfile(datafile, nrows=20)[0]
+    try:
+        df_head = path_handler.read_csv_datafile(datafile=MW.data_file_T.text(),
+                                       kwargsdict={"nrows": 20})
+    except Exception as e:
+        Error(str(e))
+    
+    # Display
     MW.templmodel.setDataFrame(df_head)
 
 def show_metadata_head(MW):
@@ -362,34 +329,5 @@ def show_template(MW):
         Error('View error', 'The template is not been succesfully build yet.')
         return
     MW.templmodel.setDataFrame(MW.session['mapping']['template_df'])
-
-
-# =============================================================================
-# helpers
-# =============================================================================
-def _get_obstype_boxes(MW):
-    return [MW.temp_col_CB, MW.temp_units_CB, MW.temp_desc_T,
-             MW.radtemp_col_CB, MW.radtemp_units_CB, MW.radtemp_desc_T,
-             MW.hum_col_CB, MW.hum_units_CB, MW.hum_desc_T,
-             MW.pre_col_CB, MW.pre_units_CB, MW.pre_desc_T,
-             MW.pre_s_col_CB, MW.pre_s_units_CB, MW.pre_s_desc_T,
-             MW.wind_col_CB, MW.wind_units_CB, MW.wind_desc_T,
-             MW.gust_col_CB, MW.gust_units_CB, MW.gust_desc_T,
-             MW.dir_col_CB, MW.dir_units_CB, MW.dir_desc_T,
-             MW.p_col_CB, MW.p_units_CB, MW.p_desc_T,
-             MW.psea_col_CB, MW.psea_units_CB, MW.psea_desc_T]
-
-def _get_datetime_boxes(MW):
-     return [MW.datetime_col_CB, MW.datetime_fmt_T,
-             MW.date_col_CB, MW.date_fmt_T,
-             MW.time_col_CB, MW.time_fmt_T]
-
-
-def _get_metadata_boxes(MW):
-    return [MW.lat_col_CB, MW.lon_col_CB,
-            MW.loc_col_CB, MW.call_col_CB, MW.network_col_CB]
-
-def _get_name_box(MW):
-    return MW.name_col_CB
 
 

@@ -89,6 +89,28 @@ class CapturingPrint(list):
 
 #%%
 
+def gui_wrap(func, func_kwargs):
+    """ A wrapper for the gui to call a function."""
+    
+        
+    try:
+        with CapturingPrint() as printed_output:
+            ret = func(**func_kwargs)
+        succes=True
+        msg='no error'
+        return ret, True, printed_output
+    
+    #something unforseen went wrong
+    except Exception as e:
+        msg=str(e)
+        return None, False, msg 
+    
+    #something forseen went wrong (sys exit catchment)
+    except SystemExit:
+        _type, msg, _traceback = sys.exc_info()
+        return None, False, msg
+            
+
 # =============================================================================
 # Dataset methods
 # =============================================================================

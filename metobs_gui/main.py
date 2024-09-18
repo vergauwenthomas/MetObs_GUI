@@ -81,6 +81,9 @@ class MainWindow(QMainWindow):
         # # P7 INIT
         # analysis_page.init_analysis_page(self)
 
+        gui_settings_page._init_page(self)
+    
+
         # ------- Setup (widgets and default values) ---------------
 
         # Setup error message dialog
