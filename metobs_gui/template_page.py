@@ -148,7 +148,7 @@ def _setup_triggers(MW):
     # # display df's
     MW.preview_data.clicked.connect(lambda: show_data_head(MW))
     MW.preview_metadata.clicked.connect(lambda: show_metadata_head(MW))
-    MW.view_template.clicked.connect(lambda: show_template(MW))
+    # MW.view_template.clicked.connect(lambda: show_template(MW))
 
 
 
@@ -268,6 +268,8 @@ def build_template(MW):
         Notification(f'Succesfully tested the template: {MW.Dataset.template}')
         MW.save_template.setEnabled(True)
         
+        
+        
     
     
     
@@ -313,21 +315,12 @@ def show_data_head(MW):
     MW.templmodel.setDataFrame(df_head)
 
 def show_metadata_head(MW):
-   metadatafile = MW.metadata_file_T.text()
-   valid, _msg = isvalidfile(metadatafile, filetype='.csv')
-   if not valid:
-       Error(_msg)
-       return
-   # Read columns
-   metadf_head = readfile(metadatafile, nrows=20)[0]
-   MW.templmodel.setDataFrame(metadf_head)
-
-
-
-def show_template(MW):
-    if not 'template_df' in MW.session['mapping']:
-        Error('View error', 'The template is not been succesfully build yet.')
-        return
-    MW.templmodel.setDataFrame(MW.session['mapping']['template_df'])
-
+    try:
+        metadf_head = path_handler.read_csv_datafile(datafile=MW.metadata_file_T.text(),
+                                       kwargsdict={"nrows": 20})
+    except Exception as e:
+        Error(str(e))
+ 
+    # Display
+    MW.templmodel.setDataFrame(metadf_head)
 

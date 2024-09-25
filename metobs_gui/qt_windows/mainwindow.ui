@@ -83,7 +83,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab">
              <attribute name="title">
@@ -249,13 +249,6 @@
                 <widget class="QPushButton" name="preview_metadata">
                  <property name="text">
                   <string>Preview Metadata</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="view_template">
-                 <property name="text">
-                  <string>View template</string>
                  </property>
                 </widget>
                </item>
@@ -447,12 +440,15 @@
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox_2">
+                <widget class="QCheckBox" name="use_data_T_2">
                  <property name="enabled">
-                  <bool>false</bool>
+                  <bool>true</bool>
                  </property>
                  <property name="text">
                   <string>use data</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
                  </property>
                  <property name="checked">
                   <bool>true</bool>
@@ -500,25 +496,12 @@
                </item>
               </layout>
              </widget>
-             <widget class="Line" name="line">
-              <property name="geometry">
-               <rect>
-                <x>-3</x>
-                <y>150</y>
-                <width>1011</width>
-                <height>20</height>
-               </rect>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
              <widget class="QWidget" name="horizontalLayoutWidget_18">
               <property name="geometry">
                <rect>
                 <x>0</x>
                 <y>160</y>
-                <width>1011</width>
+                <width>571</width>
                 <height>31</height>
                </rect>
               </property>
@@ -535,432 +518,10 @@
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="horizontalLayoutWidget_19">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>200</y>
-                <width>1011</width>
-                <height>31</height>
-               </rect>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_21">
-               <item>
-                <widget class="QCheckBox" name="resample">
-                 <property name="text">
-                  <string>Resample time resolution</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="resample_spinbox">
-                 <property name="autoFillBackground">
-                  <bool>false</bool>
-                 </property>
-                 <property name="suffix">
-                  <string/>
-                 </property>
-                 <property name="minimum">
-                  <number>5</number>
-                 </property>
-                 <property name="maximum">
-                  <number>2000</number>
-                 </property>
-                 <property name="singleStep">
-                  <number>5</number>
-                 </property>
-                 <property name="value">
-                  <number>60</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_44">
-                 <property name="text">
-                  <string>Minutes</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_65">
-                 <property name="text">
-                  <string>method:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="resample_method"/>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="use_origin">
-                 <property name="text">
-                  <string>Force origin:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QDateTimeEdit" name="origin_dt">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="dateTime">
-                  <datetime>
-                   <hour>13</hour>
-                   <minute>50</minute>
-                   <second>0</second>
-                   <year>2020</year>
-                   <month>1</month>
-                   <day>15</day>
-                  </datetime>
-                 </property>
-                 <property name="displayFormat">
-                  <string>dd/MM/yyyy HH:mm</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="horizontalLayoutWidget_20">
-              <property name="geometry">
-               <rect>
-                <x>-1</x>
-                <y>229</y>
-                <width>1011</width>
-                <height>31</height>
-               </rect>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_22">
-               <item>
-                <widget class="QLabel" name="label_56">
-                 <property name="text">
-                  <string>Gap defenition</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="gap_def_spinner">
-                 <property name="autoFillBackground">
-                  <bool>false</bool>
-                 </property>
-                 <property name="suffix">
-                  <string/>
-                 </property>
-                 <property name="minimum">
-                  <number>2</number>
-                 </property>
-                 <property name="maximum">
-                  <number>2000</number>
-                 </property>
-                 <property name="singleStep">
-                  <number>1</number>
-                 </property>
-                 <property name="value">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_57">
-                 <property name="text">
-                  <string># missing consecutive records</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="verticalLayoutWidget_2">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>260</y>
-                <width>1011</width>
-                <height>31</height>
-               </rect>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout">
-               <item>
-                <widget class="QLabel" name="label_45">
-                 <property name="text">
-                  <string>Special manipulations</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="Line" name="line_2">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>250</y>
-                <width>1011</width>
-                <height>20</height>
-               </rect>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-             <widget class="QWidget" name="gridLayoutWidget_4">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>300</y>
-                <width>467</width>
-                <height>181</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_4">
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_59">
-                 <property name="text">
-                  <string>Datafile read kwargs:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_46">
-                 <property name="text">
-                  <string>Frequency estimation method</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QComboBox" name="freq_est_method">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_47">
-                 <property name="text">
-                  <string>Frequency simplification error</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="QLineEdit" name="data_kwargs">
-                 <property name="text">
-                  <string>{}</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="0">
-                <widget class="QLabel" name="label_60">
-                 <property name="text">
-                  <string>Metadatafile read kwargs:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="1">
-                <widget class="QLineEdit" name="metadata_kwargs">
-                 <property name="text">
-                  <string>{}</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <layout class="QGridLayout" name="gridLayout_5">
-                 <item row="0" column="0">
-                  <widget class="QCheckBox" name="freq_simpl">
-                   <property name="text">
-                    <string>Frequency simplification</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QSpinBox" name="freq_simpl_spinner">
-                   <property name="enabled">
-                    <bool>false</bool>
-                   </property>
-                   <property name="autoFillBackground">
-                    <bool>false</bool>
-                   </property>
-                   <property name="suffix">
-                    <string/>
-                   </property>
-                   <property name="minimum">
-                    <number>1</number>
-                   </property>
-                   <property name="maximum">
-                    <number>120</number>
-                   </property>
-                   <property name="singleStep">
-                    <number>1</number>
-                   </property>
-                   <property name="value">
-                    <number>5</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QLabel" name="label_48">
-                   <property name="text">
-                    <string>Minutes</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-             <widget class="Line" name="line_3">
-              <property name="geometry">
-               <rect>
-                <x>433</x>
-                <y>310</y>
-                <width>20</width>
-                <height>161</height>
-               </rect>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-             <widget class="QWidget" name="gridLayoutWidget_6">
-              <property name="geometry">
-               <rect>
-                <x>450</x>
-                <y>290</y>
-                <width>326</width>
-                <height>191</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_6">
-               <item row="0" column="0">
-                <widget class="QCheckBox" name="sync_obs">
-                 <property name="text">
-                  <string>Syncronize observations</string>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_62">
-                 <property name="text">
-                  <string>Tollerance</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QCheckBox" name="sync_obs_force">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="text">
-                  <string>Force frequency</string>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_63">
-                 <property name="text">
-                  <string>Target frequency:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <layout class="QHBoxLayout" name="horizontalLayout_23">
-                 <item>
-                  <widget class="QSpinBox" name="sync_obs_force_spinner">
-                   <property name="enabled">
-                    <bool>false</bool>
-                   </property>
-                   <property name="autoFillBackground">
-                    <bool>false</bool>
-                   </property>
-                   <property name="suffix">
-                    <string/>
-                   </property>
-                   <property name="minimum">
-                    <number>1</number>
-                   </property>
-                   <property name="maximum">
-                    <number>2000</number>
-                   </property>
-                   <property name="singleStep">
-                    <number>10</number>
-                   </property>
-                   <property name="value">
-                    <number>60</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_81">
-                   <property name="text">
-                    <string>Minutes</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="1" column="1">
-                <layout class="QHBoxLayout" name="horizontalLayout_24">
-                 <item>
-                  <widget class="QSpinBox" name="sync_obs_tol_spinner">
-                   <property name="enabled">
-                    <bool>false</bool>
-                   </property>
-                   <property name="autoFillBackground">
-                    <bool>false</bool>
-                   </property>
-                   <property name="suffix">
-                    <string/>
-                   </property>
-                   <property name="minimum">
-                    <number>1</number>
-                   </property>
-                   <property name="maximum">
-                    <number>2000</number>
-                   </property>
-                   <property name="singleStep">
-                    <number>1</number>
-                   </property>
-                   <property name="value">
-                    <number>10</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_61">
-                   <property name="text">
-                    <string>Minutes</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-             <widget class="Line" name="line_4">
-              <property name="geometry">
-               <rect>
-                <x>570</x>
-                <y>0</y>
-                <width>20</width>
-                <height>161</height>
-               </rect>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
              <widget class="QWidget" name="horizontalLayoutWidget_24">
               <property name="geometry">
                <rect>
-                <x>590</x>
+                <x>720</x>
                 <y>0</y>
                 <width>441</width>
                 <height>41</height>
@@ -982,7 +543,7 @@
              <widget class="QWidget" name="horizontalLayoutWidget_23">
               <property name="geometry">
                <rect>
-                <x>589</x>
+                <x>720</x>
                 <y>40</y>
                 <width>441</width>
                 <height>31</height>
@@ -1004,7 +565,7 @@
              <widget class="QWidget" name="horizontalLayoutWidget_25">
               <property name="geometry">
                <rect>
-                <x>589</x>
+                <x>720</x>
                 <y>70</y>
                 <width>441</width>
                 <height>41</height>
@@ -1148,9 +709,9 @@
              <widget class="QWidget" name="horizontalLayoutWidget_47">
               <property name="geometry">
                <rect>
-                <x>590</x>
+                <x>720</x>
                 <y>110</y>
-                <width>421</width>
+                <width>441</width>
                 <height>41</height>
                </rect>
               </property>
@@ -1186,6 +747,139 @@
                  </property>
                  <property name="text">
                   <string>save path</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="formLayoutWidget">
+              <property name="geometry">
+               <rect>
+                <x>-1</x>
+                <y>189</y>
+                <width>571</width>
+                <height>191</height>
+               </rect>
+              </property>
+              <layout class="QFormLayout" name="formLayout">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_3">
+                 <property name="text">
+                  <string>Freq estimation method</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QComboBox" name="freq_method_spinner">
+                 <item>
+                  <property name="text">
+                   <string>highest</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>median</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_4">
+                 <property name="text">
+                  <string>Freq est. simpl tollerance</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                 <item>
+                  <widget class="QSpinBox" name="freq_simpl_tol_spinner">
+                   <property name="suffix">
+                    <string> mintes</string>
+                   </property>
+                   <property name="maximum">
+                    <number>10000</number>
+                   </property>
+                   <property name="value">
+                    <number>2</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_6">
+                 <property name="text">
+                  <string>Origin simpl tollerance</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <item>
+                  <widget class="QSpinBox" name="orig_simpl_tol_spinner">
+                   <property name="suffix">
+                    <string> minutes</string>
+                   </property>
+                   <property name="maximum">
+                    <number>10000</number>
+                   </property>
+                   <property name="value">
+                    <number>5</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>Timestamp tollerance</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <item>
+                  <widget class="QSpinBox" name="timestamp_tol_spinner">
+                   <property name="suffix">
+                    <string> minutes</string>
+                   </property>
+                   <property name="maximum">
+                    <number>10000</number>
+                   </property>
+                   <property name="value">
+                    <number>4</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_10">
+                 <property name="text">
+                  <string>Data read kwargs</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLineEdit" name="data_read_kwargs">
+                 <property name="text">
+                  <string>{&quot;engine&quot;: &quot;python&quot;}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_11">
+                 <property name="text">
+                  <string>Metadata read kwargs</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QLineEdit" name="metadata_read_kwargs">
+                 <property name="text">
+                  <string>{&quot;engine&quot;: &quot;python&quot;}</string>
                  </property>
                 </widget>
                </item>

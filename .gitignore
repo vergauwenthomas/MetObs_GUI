@@ -9,5 +9,7 @@ metobs_gui/tmp/*
 #temporary files and cached
 *.swp
 .spyproject
+.spyproject/*
 *__pycache__*
 */cache/*
+

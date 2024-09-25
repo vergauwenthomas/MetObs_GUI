@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
         template_page.init_template_page(self)
 
         # # P2 INIT
-        # import_page.init_import_page(self)
+        import_page.init_import_page(self)
 
         # # P3 INIT
         # metadata_page.init_metadata_page(self)
@@ -115,8 +115,13 @@ class MainWindow(QMainWindow):
         # =============================================================================
         # Windget cross links
         # =============================================================================
-        # self.data_file_T.textChanged.connect(self.data_file_T_2.setText) #link them
-        # self.metadata_file_T.textChanged.connect(self.metadata_file_T_2.setText) #link them
+        
+        self.data_file_T.textChanged.connect(self.data_file_T_2.setText) #link them
+        self.metadata_file_T.textChanged.connect(self.metadata_file_T_2.setText) #link them
+        
+        self.use_data_box.clicked.connect(self.use_data_T_2.setCheckState) #link them
+        self.use_metadata_box.clicked.connect(self.use_metadata_2.setCheckState) #link them
+        
         # self.use_startdt.clicked.connect(self.use_enddt.setCheckState) #link them
         # self.use_enddt.clicked.connect(self.use_startdt.setCheckState) #link them
 
@@ -125,40 +130,8 @@ class MainWindow(QMainWindow):
         # Setup triggers         
         # =============================================================================
         template_page._setup_triggers(self)
-
-        # =============================================================================
-        # Mapping tab
-        # =============================================================================
-        # self.Browse_data_B.clicked.connect(lambda: template_page.browsefiles_data(self)) #browse datafile
-        # self.Browse_metadata_B.clicked.connect(lambda: template_page.browsefiles_metadata(self)) #browse metadatafile
-        # # save paths when selected
-        # self.save_data_path.clicked.connect(lambda: template_page.save_path(
-        #                                                         MW=self,
-        #                                                         savebool=self.save_data_path.isChecked(),
-        #                                                         savekey='data_file_path',
-        #                                                         saveval=self.data_file_T.text()))
-        # self.save_metadata_path.clicked.connect(lambda: template_page.save_path(
-        #                                                         MW=self,
-        #                                                         savebool=self.save_metadata_path.isChecked(),
-        #                                                         savekey='metadata_file_path',
-        #                                                         saveval=self.metadata_file_T.text()))
-
-        # self.browse_format.currentTextChanged.connect(lambda: template_page.enable_format_widgets(self))
-
-        # # initiate the start mapping module
-        # self.start_mapping_B.clicked.connect(lambda: template_page.prepare_for_mapping(self))
-
-        # # construnct the mappindict
-        # self.build_B.clicked.connect(lambda: template_page.build_template(self))
-
-        # # save template
-        # self.save_template.clicked.connect(lambda: template_page.save_template_call(self))
-
-        # # display df's
-        # self.preview_data.clicked.connect(lambda: template_page.show_data_head(self))
-        # self.preview_metadata.clicked.connect(lambda: template_page.show_metadata_head(self))
-        # self.view_template.clicked.connect(lambda: template_page.show_template(self))
-
+        import_page._setup_triggers(self)
+       
 
         # # =============================================================================
         # # Import data tab
