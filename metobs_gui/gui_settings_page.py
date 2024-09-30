@@ -47,7 +47,6 @@ def _setup_triggers(MW):
     MW.clear_saved.clicked.connect(lambda: clear_cache(MW))    
     MW.clear_saved_paths.clicked.connect(lambda: clear_cached_paths(MW))
 
-
 # =============================================================================
 # reactions    
 # =============================================================================

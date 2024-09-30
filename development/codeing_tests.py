@@ -6,17 +6,33 @@ Created on Wed Sep 18 14:55:36 2024
 @author: thoverga
 """
 
+import sys, os
+sys.path.insert(0, '/home/thoverga/Documents/VLINDER_github/MetObs_toolkit')
+import metobs_toolkit
 
 
-import sys
+print(metobs_toolkit.__version__)
 
 
-try:
-    # sys.exit('balblabla')
-    assert 1 == 2, 'kan je dit lezen?'
-except Exception as e:
-    print(f' exception gevonden: {e}')
+#%%
 
-except SystemExit:
-    msg = sys.exc_info()[1]
-    print(f' syste exit met {msg}')
+dataset = metobs_toolkit.Dataset()
+
+dataset.import_data_from_file(input_data_file=metobs_toolkit.demo_datafile,
+                              input_metadata_file=metobs_toolkit.demo_metadatafile,
+                              template_file=metobs_toolkit.demo_template)
+
+
+
+#%%
+df = dataset.get_full_status_df()
+# df = df.reset_index()
+
+
+
+
+
+
+
+
+

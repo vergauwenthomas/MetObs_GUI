@@ -25,7 +25,7 @@ import metobs_gui.path_handler as path_handler
 
 import metobs_gui.tlk_scripts as tlk_scripts
 import metobs_gui.log_displayer as log_displayer
-from metobs_gui.extra_windows import _show_metadf, _show_obsspace, _show_timeseries
+# from metobs_gui.extra_windows import _show_metadf, _show_obsspace, _show_timeseries
 
 from metobs_toolkit import rootlog as toolkit_logger
 

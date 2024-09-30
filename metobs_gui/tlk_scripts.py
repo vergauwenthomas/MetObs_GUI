@@ -74,7 +74,11 @@ class CapturingPrint(list):
         self.extend(self._stringio.getvalue().splitlines())
         del self._stringio    # free up some memory
         sys.stdout = self._stdout
-
+    def __str__(self):
+        returnstr = ''
+        for stoutline in self:
+            returnstr+=f'{stoutline}\n'
+        return returnstr
 # class Capturing_logs(list):
 #     def __enter__(self):
 #         self._stderr = sys.stderr

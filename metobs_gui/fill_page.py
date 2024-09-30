@@ -14,12 +14,12 @@ from PyQt5.QtWidgets import QFileDialog
 # from metobs_gui.extra_windows import _show_metadf, _show_spatial_html
 
 # from metobs_gui.json_save_func import get_saved_vals
-from metobs_gui.extra_windows import (_show_missing_obs_df,
-                                      _show_gaps_df,
-                                      _show_obsspace,
-                                      _show_missing_obs_fill_df,
-                                      _show_gaps_fill_df,
-                                      _show_timeseries)
+# from metobs_gui.extra_windows import (_show_missing_obs_df,
+#                                       _show_gaps_df,
+#                                       _show_obsspace,
+#                                       _show_missing_obs_fill_df,
+#                                       _show_gaps_fill_df,
+#                                       _show_timeseries)
 
 
 

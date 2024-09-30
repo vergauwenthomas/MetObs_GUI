@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
 
         # -------- Information to pass beween different triggers ----------
         self.Dataset = metobs_toolkit.Dataset() #the toolkit dataset instance
+        self._Dataset_imported=False #bool if dataset is imported
         self.modeldata = None
         self.analysis = None
         self.cycle_stats = None #test

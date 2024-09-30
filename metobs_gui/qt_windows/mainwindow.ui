@@ -629,7 +629,7 @@
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_2">
                <item>
-                <widget class="QPushButton" name="get_info">
+                <widget class="QPushButton" name="get_info_T2">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -639,7 +639,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="show_metadata">
+                <widget class="QPushButton" name="show_metadata_T2">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -649,7 +649,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="show_dataset">
+                <widget class="QPushButton" name="show_dataset_T2">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -659,7 +659,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="plot_dataset">
+                <widget class="QPushButton" name="plot_dataset_T2">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -3681,6 +3681,19 @@
               </property>
               <property name="text">
                <string>Clear all saved paths</string>
+              </property>
+             </widget>
+             <widget class="QPushButton" name="follow_logs">
+              <property name="geometry">
+               <rect>
+                <x>480</x>
+                <y>80</y>
+                <width>371</width>
+                <height>25</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Follow logs</string>
               </property>
              </widget>
             </widget>

@@ -24,7 +24,7 @@ import metobs_gui.path_handler as path_handler
 import metobs_gui.tlk_scripts as tlk_scripts
 import metobs_gui.log_displayer as log_displayer
 
-from metobs_gui.extra_windows import _show_metadf, _show_obsspace, _show_timeseries
+from metobs_gui.extra_windows import MetadataDialog, DataDialog, DatasetTimeSeriesDialog
 
 import metobs_toolkit
 from metobs_toolkit import rootlog as toolkit_logger
@@ -40,28 +40,11 @@ def init_import_page(MW):
     # add all files in the cache to the selector spinner
     # ----- init spinners ------
     _setup_select_template_spinner(MW)
-    # set_possible_templates(MW)
-    # set_possible_pickles(MW)
-    # select template name from builder page if it is an item of the spinner
-    # buildname = MW.templatename.text()
-    # possible_templ = [MW.select_temp.itemText(i) for i in range(MW.select_temp.count())]
-    # if buildname in possible_templ:
-        # MW.select_temp.setCurrentText(buildname)
-
-    # set freq method spinners
-    # freq_estim_methods = ['median', 'highest']
-    # MW.freq_est_method.addItems(freq_estim_methods)
-    # MW.freq_est_method.setCurrentText('median') #default
-
-    # MW.resample_method.addItems(['nearest', 'bfill'])
-    # MW.resample_method.setCurrentText('nearest') #default
-
+    
 
     # init the same data path links
     MW.data_file_T_2.setText(MW.data_file_T.text())
     MW.metadata_file_T_2.setText(MW.metadata_file_T.text())
-
-
 
     # init pkl path if saved
     # saved_vals = path_handler.read_json(path_handler.saved_paths)
@@ -76,6 +59,7 @@ def init_import_page(MW):
 # =============================================================================
 # Reactions
 # =============================================================================
+
 
 def _react_use_data(MW):
     if MW.use_data_T_2.isChecked():
@@ -130,6 +114,52 @@ def save_input_pkl_path(MW):
         savedict = {'input_pkl_file_path' : str(pkl_path)}
         path_handler.update_json_file(savedict, filepath=path_handler.saved_paths)
 
+
+# =============================================================================
+# Open extra windows
+# =============================================================================
+
+# def make_obsspace(MW):
+#     _show_obsspace(MW)
+
+# def show_metadf(MW):
+#     _show_metadf(MW)
+
+# def make_dataset_plot(MW):
+#    _show_timeseries(MW)
+
+
+def _react_get_info(MW):
+    MW.prompt.clear()
+    MW.prompt.insertPlainText('------ Get info ---------')
+    
+    _, succes, stout = tlk_scripts.gui_wrap(MW.Dataset.get_info, {})
+    
+    # print(stout)
+    MW.prompt.insertPlainText(str(stout))
+    if not succes:
+        Error(f'.get_info() error on {MW.Dataset}. |n{stout}')
+
+    
+
+
+def _react_show_metadata(MW):
+    MW._dlg = MetadataDialog(df=MW.Dataset.metadf) #launched when created
+
+def _react_show_data(MW):
+    
+    returndf, succes, stout = tlk_scripts.gui_wrap(MW.Dataset.get_full_status_df, {})
+   
+    if succes:
+        
+        MW._dlg = DataDialog(df=returndf) #launched when created
+    else:
+        Error('Could not create a full status df.', stout)
+
+def _react_plot_dataset(MW):
+    MW._dlg = DatasetTimeSeriesDialog(dataset=MW.Dataset)
+
+
 # =============================================================================
 # Link widgets
 # =============================================================================
@@ -150,27 +180,13 @@ def _setup_triggers(MW):
     MW.pkl_browser.clicked.connect(lambda: browsefiles_pklfile(MW)) #browse pkl file
 
     MW.make_dataset.clicked.connect(lambda: make_dataset(MW))
-
-
-    # MW.use_specific_temp.clicked.connect(lambda: setup_use_specific_temp())
-    # MW.use_pkl.clicked.connect(lambda: MW.setup_use_input_pkl())
-    # MW.freq_simpl.clicked.connect(lambda: MW.setup_freq_simplification())
-    # MW.sync_obs.clicked.connect(lambda: MW.setup_syncronize())
-    # MW.use_origin.clicked.connect(lambda: MW.setup_origin())
-    # MW.resample.clicked.connect(lambda: MW.setup_resample_timeres())
-
-    # MW.pkl_path_save.clicked.connect(lambda: MW.save_input_pkl_path())
-
-
-    # MW.make_dataset.clicked.connect(lambda: MW.make_dataset())
-
-    # MW.get_info.clicked.connect(lambda: MW.show_info())
-    # MW.show_dataset.clicked.connect(lambda: MW.make_obsspace())
-    # MW.show_metadata.clicked.connect(lambda: MW.show_metadf())
-    # MW.plot_dataset.clicked.connect(lambda: MW.make_dataset_plot())
-
-    # MW.save_pkl_B.clicked.connect(lambda: MW.save_dataset())
-
+    
+    #buttons when dataset is loaded
+    MW.get_info_T2.clicked.connect(lambda: _react_get_info(MW))
+    MW.show_metadata_T2.clicked.connect(lambda: _react_show_metadata(MW))
+    MW.show_dataset_T2.clicked.connect(lambda: _react_show_data(MW))
+    MW.plot_dataset_T2.clicked.connect(lambda: _react_plot_dataset(MW))
+  
 
 def make_dataset(MW):
     
@@ -223,39 +239,57 @@ def make_dataset(MW):
         metadataonly_case = True
     
     #Try creating a dataset
-    try:
-        dataset = metobs_toolkit.Dataset()
-        if metadataonly_case:
-            dataset.import_only_metadata_from_file(
-                input_metadata_file=metadatafile,
-                template_file=templatefile,
-                kwargs_metadata_read=metadata_kwargs,
-                templatefile_is_url=False)
-        else:
-            dataset.import_data_from_file(
-                input_data_file=datafile,
-                input_metadata_file=metadatafile,
-                template_file=templatefile,
-                freq_estimation_method=freq_method,
-                freq_estimation_simplify_tolerance=freq_simpl_tol,
-                origin_simplify_tolerance=origin_simpl_tol,
-                timestamp_tolerance=timestamp_tol,
-                kwargs_data_read=data_kwargs,
-                kwargs_metadata_read=metadata_kwargs,
-                templatefile_is_url=False)
-        
+    MW._Dataset_imported=False
+    
+    dataset = metobs_toolkit.Dataset()
+    if metadataonly_case:
+        _return, succes, stout = tlk_scripts.gui_wrap(dataset.import_only_metadata_from_file,
+                                                      {'input_metadata_file':metadatafile,
+                                                       'template_file':templatefile,
+                                                       'kwargs_metadata_read':metadata_kwargs,
+                                                       'templatefile_is_url':False})
+    else:
+        _return, succes, stout = tlk_scripts.gui_wrap(dataset.import_data_from_file,
+                                                      {'input_data_file':datafile,
+                                                       'input_metadata_file':metadatafile,
+                                                       'template_file':templatefile,
+                                                       'freq_estimation_method':freq_method,
+                                                       'freq_estimation_simplify_tolerance':freq_simpl_tol,
+                                                       'origin_simplify_tolerance':origin_simpl_tol,
+                                                       'timestamp_tolerance':timestamp_tol,
+                                                       'kwargs_data_read':data_kwargs,
+                                                       'kwargs_metadata_read':metadata_kwargs,
+                                                       'templatefile_is_url':False})
+    if succes:
         MW.Dataset=dataset
-    except Exception as e:
-        Error(f'Cannot import the data into a Dataset.')
-
-    MW.Dataset.get_info()
+        MW._Dataset_imported=True
+        _setup_when_dataset_is_loaded(MW)
+        Notification("Dataset imported!")
+    
+    else:
+        _setup_when_dataset_is_loaded(MW)
+        Error(f'Cannot import the data into a Dataset.', stout)
+        
+   
 
 
 # =============================================================================
 # Setups
 # =============================================================================
-
-
+def _setup_when_dataset_is_loaded(MW):
+    if MW._Dataset_imported:
+        MW.get_info_T2.setEnabled(True)
+        MW.plot_dataset_T2.setEnabled(True)
+        MW.show_dataset_T2.setEnabled(True)
+        MW.show_metadata_T2.setEnabled(True)
+    else:
+        MW.get_info_T2.setEnabled(False)
+        MW.plot_dataset_T2.setEnabled(False)
+        MW.show_dataset_T2.setEnabled(False)
+        MW.show_metadata_T2.setEnabled(False)
+        
+        
+        
 def _setup_select_template_spinner(MW):
     """ Set select template spinner values with tempalte names from Cache."""
     
@@ -563,23 +597,6 @@ def _setup_select_template_spinner(MW):
 
 #     # update pkl spinner
 #     set_possible_pickles(MW)
-
-
-
-# =============================================================================
-# Open extra windows
-# =============================================================================
-
-def make_obsspace(MW):
-    _show_obsspace(MW)
-
-def show_metadf(MW):
-    _show_metadf(MW)
-
-
-def make_dataset_plot(MW):
-   _show_timeseries(MW)
-
 
 
 
