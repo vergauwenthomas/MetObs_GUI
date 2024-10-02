@@ -580,7 +580,11 @@
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="pkl_selector"/>
+                <widget class="QComboBox" name="pkl_selector">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -718,6 +722,9 @@
               <layout class="QHBoxLayout" name="horizontalLayout_51">
                <item>
                 <widget class="QCheckBox" name="upload_ext_checkbox">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
                  <property name="text">
                   <string>Upload pkl</string>
                  </property>

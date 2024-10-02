@@ -40,6 +40,10 @@ def init_import_page(MW):
     # add all files in the cache to the selector spinner
     # ----- init spinners ------
     _setup_select_template_spinner(MW)
+    _setup_select_dataset_pkl_spinner(MW)
+   
+    
+    _setup_saved_paths(MW)
     
 
     # init the same data path links
@@ -110,24 +114,76 @@ def browsefiles_pklfile(MW):
 
 def save_input_pkl_path(MW):
     if MW.use_pkl.isChecked():
-        pkl_path = MW.pkl_path.text()
-        savedict = {'input_pkl_file_path' : str(pkl_path)}
-        path_handler.update_json_file(savedict, filepath=path_handler.saved_paths)
+        if MW.upload_ext_checkbox.isChecked():
+            pkl_path = MW.pkl_path.text()
+            savedict = {'input_pkl_file_path' : str(pkl_path)}
+            path_handler.update_json_file(savedict, filepath=path_handler.saved_paths)
 
+def _react_dataset_from_pkl(MW):
+    
+    from_pkl_widgets=[MW.pkl_selector, MW.upload_ext_checkbox, MW.pkl_path, MW.pkl_browser,
+                      MW.pkl_path_save]
+    
+    from_template_widgets=[MW.select_temp, MW.use_specific_temp, MW.specific_temp_path, MW.Browse_specific_temp,
+                           MW.data_file_T_2, MW.Browse_data_B_2, MW.use_data_T_2,
+                           MW.metadata_file_T_2, MW.Browse_metadata_B_2, MW.use_metadata_2,
+                           MW.freq_method_spinner, MW.freq_simpl_tol_spinner, MW.orig_simpl_tol_spinner,
+                           MW.timestamp_tol_spinner, MW.data_read_kwargs, MW.metadata_read_kwargs]
+    if MW.use_pkl.isChecked():
+        for widg in from_pkl_widgets:
+            widg.setEnabled(True)
+        for widg in from_template_widgets:
+            widg.setEnabled(False)
+    else:
+        for widg in from_pkl_widgets:
+            widg.setEnabled(False)
+        for widg in from_template_widgets:
+            widg.setEnabled(True)
+    
+    _react_dataset_from_uploaded_pkl(MW)
+
+def _react_dataset_from_uploaded_pkl(MW):
+    if MW.upload_ext_checkbox.isChecked():
+        MW.pkl_path.setEnabled(True)
+        MW.pkl_browser.setEnabled(True)
+        MW.pkl_path_save.setEnabled(True)
+        
+        MW.pkl_selector.setEnabled(False)
+    else:
+        MW.pkl_path.setEnabled(False)
+        MW.pkl_browser.setEnabled(False)
+        MW.pkl_path_save.setEnabled(False)        
+        MW.pkl_selector.setEnabled(True)
+
+def _react_save_dataset_as_pkl(MW):
+    #construct target pkl filepath
+    trg_file = MW.pkl_save_filename.text()
+    if not trg_file.endswith('.pkl'):
+        Error("The filename to save your Dataset to does not end with '.pkl'", f'{trg_file}')
+        return
+    filepath = os.path.join(path_handler.dataset_dir, trg_file)
+    
+    #Check if file already exists
+    if path_handler.file_exist(filepath):
+        Error(f'The file to save your Dataset to already exists: {filepath}')
+        return
+    
+    #save the pickle
+    _, succes, stout = tlk_scripts.gui_wrap(MW.Dataset.save_dataset,
+                                                   {'outputfolder': path_handler.dataset_dir,
+                                                    'filename': trg_file,
+                                                    'overwrite': False})
+    if not succes:
+        Error('An error occured when saving the dataset to a pickle.', stout)
+        return
+    Notification(f'Your dataset is sucessfully saved as {trg_file}.')
+    
+    #update the input from pickle spinner
+    _setup_select_dataset_pkl_spinner(MW)
 
 # =============================================================================
 # Open extra windows
 # =============================================================================
-
-# def make_obsspace(MW):
-#     _show_obsspace(MW)
-
-# def show_metadf(MW):
-#     _show_metadf(MW)
-
-# def make_dataset_plot(MW):
-#    _show_timeseries(MW)
-
 
 def _react_get_info(MW):
     MW.prompt.clear()
@@ -139,9 +195,6 @@ def _react_get_info(MW):
     MW.prompt.insertPlainText(str(stout))
     if not succes:
         Error(f'.get_info() error on {MW.Dataset}. |n{stout}')
-
-    
-
 
 def _react_show_metadata(MW):
     MW._dlg = MetadataDialog(df=MW.Dataset.metadf) #launched when created
@@ -159,7 +212,6 @@ def _react_show_data(MW):
 def _react_plot_dataset(MW):
     MW._dlg = DatasetTimeSeriesDialog(dataset=MW.Dataset)
 
-
 # =============================================================================
 # Link widgets
 # =============================================================================
@@ -174,10 +226,15 @@ def _setup_triggers(MW):
     MW.use_metadata_2.stateChanged.connect(lambda: _react_use_metadata(MW)) 
     MW.use_specific_temp.stateChanged.connect(lambda: _react_use_specific_template(MW))
     
+    MW.use_pkl.stateChanged.connect(lambda: _react_dataset_from_pkl(MW))
+    MW.upload_ext_checkbox.stateChanged.connect(lambda: _react_dataset_from_uploaded_pkl(MW))
+    
     MW.Browse_data_B_2.clicked.connect(lambda: browsefiles_data(MW)) #browse datafile
     MW.Browse_metadata_B_2.clicked.connect(lambda: browsefiles_metadata(MW)) #browse metadatafile
     MW.Browse_specific_temp.clicked.connect(lambda: browsefiles_templatefile(MW)) #browse template
     MW.pkl_browser.clicked.connect(lambda: browsefiles_pklfile(MW)) #browse pkl file
+    MW.pkl_path_save.stateChanged.connect(lambda: save_input_pkl_path(MW))
+
 
     MW.make_dataset.clicked.connect(lambda: make_dataset(MW))
     
@@ -187,6 +244,7 @@ def _setup_triggers(MW):
     MW.show_dataset_T2.clicked.connect(lambda: _react_show_data(MW))
     MW.plot_dataset_T2.clicked.connect(lambda: _react_plot_dataset(MW))
   
+    MW.save_pkl_B.clicked.connect(lambda: _react_save_dataset_as_pkl(MW))
 
 def make_dataset(MW):
     
@@ -282,21 +340,50 @@ def _setup_when_dataset_is_loaded(MW):
         MW.plot_dataset_T2.setEnabled(True)
         MW.show_dataset_T2.setEnabled(True)
         MW.show_metadata_T2.setEnabled(True)
+        MW.save_pkl_B.setEnabled(True)
     else:
         MW.get_info_T2.setEnabled(False)
         MW.plot_dataset_T2.setEnabled(False)
         MW.show_dataset_T2.setEnabled(False)
         MW.show_metadata_T2.setEnabled(False)
+        MW.save_pkl_B.setEnabled(False)
         
         
         
 def _setup_select_template_spinner(MW):
     """ Set select template spinner values with tempalte names from Cache."""
     
+    
+    
     template_cache_dict = _list_saved_templates()
     MW.select_temp.clear()
     MW.select_temp.addItems(template_cache_dict.keys())
     
+
+def _setup_select_dataset_pkl_spinner(MW):
+    """ Set select dataset spinner with values from the Cache. """
+    
+    #get all files in the dataset dir
+    files = os.listdir(path_handler.dataset_dir)
+    files = [f for f in files if f.endswith('.pkl')]
+    
+    #Get rid of the extensions for displaying the name
+    displaynames = [f[:-4] for f in files]
+    
+    #update spinner
+    MW.pkl_selector.clear()
+    MW.pkl_selector.addItems(displaynames)
+    
+def _setup_saved_paths(MW):
+    #get saved path of target pickle 
+    saved_paths = path_handler.read_json(path_handler.saved_paths)
+    trg_path = saved_paths["input_pkl_file_path"]
+    
+    MW.pkl_path.setText(trg_path)
+
+
+
+
 
 # def _get_datapath_templ_widgets(MW):
 #     return[

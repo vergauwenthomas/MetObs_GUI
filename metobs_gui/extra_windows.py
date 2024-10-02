@@ -193,7 +193,6 @@ class DatasetTimeSeriesDialog(QDialog):
     def __init__(self, dataset):
         super().__init__()
         loadUi(os.path.join(path_handler.GUI_dir,'qt_windows','timeseries_plot_dialog.ui'), self)
-
         self.show()
         # setup canvas
         self.canvas=timeseriesCanvas(dataset=dataset, modeldata=None)
@@ -203,6 +202,9 @@ class DatasetTimeSeriesDialog(QDialog):
 
         # triggers
         self.update_plot_box.clicked.connect(lambda: self.update_plot())
+        
+        # plot
+        self.make_plot()
 
 
     def init_widgets(self, dataset):
@@ -215,7 +217,8 @@ class DatasetTimeSeriesDialog(QDialog):
         self.select_subset.addItems(stationnames)
 
         self.select_obstype.clear()
-        self.select_obstype.addItems(dataset.df.columns.to_list())
+        obstypes=dataset.df.index.get_level_values('obstype').unique().to_list()
+        self.select_obstype.addItems(obstypes)
 
 
 

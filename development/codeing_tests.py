@@ -16,16 +16,23 @@ print(metobs_toolkit.__version__)
 
 #%%
 
+inputdata = '/home/thoverga/Desktop/siebe_toolkit_scripts/Siebe_2024.csv'
+inputmetadata = '/home/thoverga/Desktop/siebe_toolkit_scripts/GPS meetpunten GENK.csv'
+inputtemplate='/home/thoverga/Documents/VLINDER_github/MetObs_GUI/metobs_gui/cache/templates/siebe_template.json'
+
+
+
+
 dataset = metobs_toolkit.Dataset()
 
-dataset.import_data_from_file(input_data_file=metobs_toolkit.demo_datafile,
-                              input_metadata_file=metobs_toolkit.demo_metadatafile,
-                              template_file=metobs_toolkit.demo_template)
+dataset.import_data_from_file(input_data_file=inputdata,
+                              input_metadata_file=inputmetadata,
+                              template_file=inputtemplate)
 
 
 
 #%%
-df = dataset.get_full_status_df()
+# df = dataset.get_full_status_df()
 # df = df.reset_index()
 
 
