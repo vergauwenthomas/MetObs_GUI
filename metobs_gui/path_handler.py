@@ -63,6 +63,14 @@ def file_exist(filepath):
         return False
 
 
+def get_parent_dir(filepath):
+    return Path(filepath).parent
+
+def get_filename_from_path(filepath):
+    return Path(filepath).name
+
+
+
 def copy_file(filepath, targetpath):
     shutil.copyfile(filepath, targetpath)
 

@@ -24,7 +24,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
 
-from metobs_gui.tlk_scripts import combine_to_obsspace
+# from metobs_gui.tlk_scripts import combine_to_obsspace
 
 import metobs_gui.path_handler as path_handler
 from metobs_gui.pandasmodel import DataFrameModel
@@ -247,6 +247,30 @@ class DatasetTimeSeriesDialog(QDialog):
         self.vert_layout.addWidget(self.canvas)
 
 
+
+# =============================================================================
+# Display html interactive plots
+# =============================================================================
+# def _show_spatial_html(html_path):
+#     print('hier')
+#     MW.html = HtmlWindow()
+#     print('nu')
+#     MW.html.feed_html(html_path)
+#     print('done')
+
+
+class HtmlDialog(QDialog):
+    """ Creates new window """
+
+    def __init__(self, htmlfile):
+        super().__init__()
+        loadUi(os.path.join(path_handler.GUI_dir,'qt_windows','html_map.ui'), self)
+
+        self.show()
+        self.display_2.load(QtCore.QUrl().fromLocalFile(htmlfile))
+
+
+   
 
 # =============================================================================
 # High order functions

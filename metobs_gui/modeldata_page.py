@@ -20,7 +20,7 @@ import metobs_gui.path_handler as path_handler
 from metobs_gui.errors import Error, Notification
 # from metobs_gui.extra_windows import _show_modeldata,  _show_modeldata_dataframe
 
-from metobs_gui.metadata_page import _coordinates_available
+# from metobs_gui.metadata_page import _coordinates_available
 # =============================================================================
 # init page
 # =============================================================================

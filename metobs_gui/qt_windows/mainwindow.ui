@@ -83,7 +83,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="tab">
              <attribute name="title">
@@ -983,7 +983,7 @@
              <widget class="QPlainTextEdit" name="prompt_metadata">
               <property name="geometry">
                <rect>
-                <x>0</x>
+                <x>-10</x>
                 <y>350</y>
                 <width>651</width>
                 <height>411</height>
@@ -1029,7 +1029,7 @@
                </rect>
               </property>
               <property name="text">
-               <string>Preview Metadata</string>
+               <string>Show Metadata</string>
               </property>
              </widget>
              <widget class="QPushButton" name="spatial_plot">
@@ -1045,17 +1045,27 @@
                <string>Spatial plot</string>
               </property>
              </widget>
-             <widget class="QPushButton" name="interactive_plot_button">
+             <widget class="QPushButton" name="show_gee_info">
               <property name="geometry">
                <rect>
                 <x>670</x>
-                <y>450</y>
+                <y>490</y>
                 <width>181</width>
-                <height>25</height>
+                <height>21</height>
                </rect>
               </property>
               <property name="text">
-               <string>Interactive spatial plot</string>
+               <string>Show GeeDataset info</string>
+              </property>
+             </widget>
+             <widget class="QComboBox" name="geedataset_spinner">
+              <property name="geometry">
+               <rect>
+                <x>870</x>
+                <y>490</y>
+                <width>181</width>
+                <height>21</height>
+               </rect>
               </property>
              </widget>
             </widget>
