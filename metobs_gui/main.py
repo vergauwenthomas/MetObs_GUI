@@ -74,7 +74,7 @@ class MainWindow(QMainWindow):
         qc_page.init_qc_page(self)
 
         # # P5 INIT
-        # modeldata_page.init_modeldata_page(self)
+        modeldata_page.init_modeldata_page(self)
 
         # # P6 INIT
         # fill_page.init_fill_page(self)
@@ -136,6 +136,7 @@ class MainWindow(QMainWindow):
         import_page._setup_triggers(self)
         metadata_page.setup_triggers(self)
         qc_page.setup_triggers(self)
+        modeldata_page.setup_triggers(self)
        
 
        

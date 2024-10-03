@@ -9,6 +9,7 @@ Created on Fri Mar 31 09:40:08 2023
 #%% Load vlinder toolkit (not shure what is best)
 import sys
 from io import StringIO
+import pprint
 
 from PyQt5.QtWidgets import QSpinBox, QDoubleSpinBox
 
@@ -95,11 +96,12 @@ class CapturingPrint(list):
 
 def gui_wrap(func, func_kwargs):
     """ A wrapper for the gui to call a function."""
-    
-        
+    print(f'Executing Metobs command: \n* {func}')
+    pprint.pp(func_kwargs)
     try:
         with CapturingPrint() as printed_output:
             ret = func(**func_kwargs)
+        print('succesfull')
         succes=True
         msg='no error'
         return ret, True, printed_output
@@ -107,11 +109,13 @@ def gui_wrap(func, func_kwargs):
     #something unforseen went wrong
     except Exception as e:
         msg=str(e)
+        print(f'Exception occured: {msg}')
         return None, False, msg 
     
     #something forseen went wrong (sys exit catchment)
     except SystemExit:
         _type, msg, _traceback = sys.exc_info()
+        print(f'Sysexit occured: {msg}')
         return None, False, msg
             
 
