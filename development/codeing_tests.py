@@ -30,6 +30,15 @@ dataset.import_data_from_file(input_data_file=inputdata,
                               template_file=inputtemplate)
 
 
+#%%
+import inspect 
+def get_default_args(func):
+    signature = inspect.signature(func)
+    return {k:v.default for k,v in signature.parameters.items()}
+
+
+print(get_default_args(metobs_toolkit.Dataset.make_plot))
+
 
 #%%
 # df = dataset.get_full_status_df()

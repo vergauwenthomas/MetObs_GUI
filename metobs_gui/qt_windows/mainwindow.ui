@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1337</width>
+    <width>1437</width>
     <height>980</height>
    </rect>
   </property>
@@ -43,7 +43,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1303</width>
+         <width>1403</width>
          <height>1200</height>
         </rect>
        </property>
@@ -83,7 +83,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>4</number>
             </property>
             <widget class="QWidget" name="tab">
              <attribute name="title">
@@ -1334,7 +1334,13 @@
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="obstype_spinner"/>
+                <widget class="QComboBox" name="obstype_spinner">
+                 <item>
+                  <property name="text">
+                   <string>No dataset loaded</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -1387,7 +1393,7 @@
                <item>
                 <widget class="QPushButton" name="apply_qc">
                  <property name="text">
-                  <string>Apply Quality control on ???</string>
+                  <string>Apply Quality control</string>
                  </property>
                 </widget>
                </item>
@@ -3729,7 +3735,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1337</width>
+     <width>1437</width>
      <height>22</height>
     </rect>
    </property>

@@ -6,9 +6,8 @@ Created on Fri Aug  4 09:43:52 2023
 @author: thoverga
 """
 
-import os
 
-# from metobs_gui.extra_windows import _show_metadf, _show_spatial_html
+import os
 
 
 import metobs_gui.tlk_scripts as tlk_scripts
@@ -22,16 +21,10 @@ from metobs_gui.errors import Error, Notification
 # init page
 # =============================================================================
 
-
 def init_metadata_page(MW):
-    # add all landcover maps
-    # MW.lc_map.addItems(['worldcover'])
 
-    #initialize spinners
     setup_spinners(MW)
     
-
-
 
 # =============================================================================
 # Setup
@@ -186,64 +179,6 @@ def _react_spatial_plot(MW):
     MW.prompt_metadata.appendPlainText(f'\n---- Create interactive map ---> Done! ---- \n')
     
     MW._dlg = HtmlDialog(trg_html)
-    
-
-
-# =============================================================================
-# helpers
-# =============================================================================
-
-
-
-
-
-# def preview_metadata(MW):
-#     _show_metadf(MW)
-
-
-
-
-
-
-# def spatial_plot(MW):
-
-#     # Check if dataset and coordinates exist
-#     if not _coordinates_available(MW):
-#         return
-
-#     MW.prompt_metadata.appendPlainText(f'\n---- Create interactive map ---- \n')
-
-#     # Create path to save the html file
-#     # save in the TMP dir
-#     filename = 'metadata_html.html'
-#     filepath = os.path.join(path_handler.TMP_dir, filename)
-
-#     # remove the file if it already exists
-#     if path_handler.file_exist(filepath):
-#         os.remove(filepath)
-
-#     # create the html map
-#     print('A')
-#     _cont, terminal, _msg = tlk_scripts.make_html_gee_map(dataset=MW.dataset,
-#                                                           html_path=filepath)
-
-#     print('B')
-#     if not _cont:
-#         Error(_msg[0], _msg[1])
-#         return
-
-#     # write output to prompt
-#     for line in terminal:
-#         MW.prompt_metadata.appendPlainText(line)
-
-#     MW.prompt_metadata.appendPlainText(f'\n---- Create interactive map ---> Done! ---- \n')
-#     print('C')
-#     _show_spatial_html(MW, filepath)
-#     print('D')
-#     MW.html.show()
-#     print('E')
-
-
 
 
 

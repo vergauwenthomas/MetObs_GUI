@@ -252,8 +252,7 @@ def make_dataset(MW):
             return
         
         #import dataset from PKL
-        import_the_dataset_from_pkl(MW, trg_pkl)        
-        
+        import_the_dataset_from_pkl(MW, trg_pkl)       
         
     else:
         make_dataset_from_files(MW)
@@ -374,6 +373,7 @@ def make_dataset_from_files(MW):
 # Setups
 # =============================================================================
 def _setup_when_dataset_is_loaded(MW):
+    MW.update_all_obstype_spinners()
     if MW._Dataset_imported:
         MW.get_info_T2.setEnabled(True)
         MW.plot_dataset_T2.setEnabled(True)

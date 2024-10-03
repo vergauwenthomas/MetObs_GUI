@@ -71,7 +71,7 @@ class MainWindow(QMainWindow):
         metadata_page.init_metadata_page(self)
 
         # # P4 INIT
-        # qc_page.init_qc_page(self)
+        qc_page.init_qc_page(self)
 
         # # P5 INIT
         # modeldata_page.init_modeldata_page(self)
@@ -130,62 +130,15 @@ class MainWindow(QMainWindow):
         # =============================================================================
         # Setup triggers         
         # =============================================================================
+        
+        
         template_page._setup_triggers(self)
         import_page._setup_triggers(self)
         metadata_page.setup_triggers(self)
+        qc_page.setup_triggers(self)
        
 
-        # # =============================================================================
-        # # Import data tab
-        # # =============================================================================
-        # self.Browse_data_B_2.clicked.connect(lambda: import_page.browsefiles_data(self)) #browse datafile
-        # self.Browse_metadata_B_2.clicked.connect(lambda: import_page.browsefiles_metadata(self)) #browse metadatafile
-        # self.Browse_specific_temp.clicked.connect(lambda: import_page.browsefiles_templatefile(self)) #browse template
-        # self.pkl_browser.clicked.connect(lambda: import_page.browsefiles_pklfile(self)) #browse pkl file
-
-
-        # self.use_specific_temp.clicked.connect(lambda: import_page.setup_use_specific_temp(self))
-        # self.use_pkl.clicked.connect(lambda: import_page.setup_use_input_pkl(self))
-        # self.freq_simpl.clicked.connect(lambda: import_page.setup_freq_simplification(self))
-        # self.sync_obs.clicked.connect(lambda: import_page.setup_syncronize(self))
-        # self.use_origin.clicked.connect(lambda: import_page.setup_origin(self))
-        # self.resample.clicked.connect(lambda: import_page.setup_resample_timeres(self))
-
-        # self.pkl_path_save.clicked.connect(lambda: import_page.save_input_pkl_path(self))
-
-
-        # self.make_dataset.clicked.connect(lambda: import_page.make_dataset(self))
-
-        # self.get_info.clicked.connect(lambda: import_page.show_info(self))
-        # self.show_dataset.clicked.connect(lambda: import_page.make_obsspace(self))
-        # self.show_metadata.clicked.connect(lambda: import_page.show_metadf(self))
-        # self.plot_dataset.clicked.connect(lambda: import_page.make_dataset_plot(self))
-
-        # self.save_pkl_B.clicked.connect(lambda: import_page.save_dataset(self))
-
-
-        # # =============================================================================
-        # # Metadata tab
-        # # =============================================================================
-        # self.get_altitude.clicked.connect(lambda: metadata_page.get_altitude(self))
-        # self.get_lcz.clicked.connect(lambda: metadata_page.get_lcz(self))
-        # self.get_landcover.clicked.connect(lambda: metadata_page.get_landcover(self))
-
-        # self.gee_submit.clicked.connect(lambda: metadata_page.get_altitude(self))
-
-        # self.preview_metadata_2.clicked.connect(lambda: metadata_page.preview_metadata(self))
-        # self.spatial_plot.clicked.connect(lambda: metadata_page.spatial_plot(self))
-
-        # # =============================================================================
-        # # QC tab
-        # # =============================================================================
-        # self.obstype_spinner.currentTextChanged.connect(lambda: qc_page.obstype_change(self))
-        # self.get_info_2.clicked.connect(lambda: qc_page.show_info(self))
-        # self.show_metadata_2.clicked.connect(lambda: qc_page.show_metadf(self))
-        # self.plot_dataset_2.clicked.connect(lambda: qc_page.show_timeseries(self))
-        # self.show_dataset_2.clicked.connect(lambda: qc_page.show_dataset(self))
-
-        # self.apply_qc.clicked.connect(lambda: qc_page.apply_qc(self))
+       
 
 
         # # =============================================================================
@@ -273,14 +226,35 @@ class MainWindow(QMainWindow):
         # # =============================================================================
         gui_settings_page._setup_triggers(self)
 
-# =============================================================================
-# Helpers
-# =============================================================================
-    def get_val(self, data_func_return):
 
-        if not data_func_return[1]:
-            self.error_dialog.showMessage(data_func_return[2])
-        return data_func_return[0]
+    # =============================================================================
+    # Cross-page helpers     
+    # =============================================================================
+    
+    def update_all_obstype_spinners(self):
+        """ Update all spinners in the gui that reflect present obstypes."""
+        
+        if self.Dataset.df.empty:
+            return
+        present_obstypes = self.Dataset._get_present_obstypes()
+        
+        #update spinners
+        #TODO extend list !!!!
+        to_reset_spinners = [self.obstype_spinner]         
+        for spinner in to_reset_spinners:
+            spinner.clear()
+            spinner.addItems(present_obstypes)
+
+
+
+    # =============================================================================
+    # Helpers
+    # =============================================================================
+    # def get_val(self, data_func_return):
+
+    #     if not data_func_return[1]:
+    #         self.error_dialog.showMessage(data_func_return[2])
+    #     return data_func_return[0]
 
 
 
