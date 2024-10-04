@@ -43,9 +43,9 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>280</x>
      <y>30</y>
-     <width>54</width>
+     <width>81</width>
      <height>17</height>
     </rect>
    </property>
@@ -59,7 +59,7 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>280</x>
      <y>50</y>
      <width>111</width>
      <height>25</height>
@@ -69,14 +69,14 @@
   <widget class="QPushButton" name="update_plot_box">
    <property name="geometry">
     <rect>
-     <x>670</x>
-     <y>50</y>
-     <width>80</width>
+     <x>750</x>
+     <y>70</y>
+     <width>141</width>
      <height>25</height>
     </rect>
    </property>
    <property name="text">
-    <string>Update</string>
+    <string>Update plot</string>
    </property>
   </widget>
   <widget class="QComboBox" name="select_subset">
@@ -85,35 +85,19 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>50</y>
+     <x>550</x>
+     <y>70</y>
      <width>111</width>
      <height>25</height>
     </rect>
    </property>
   </widget>
-  <widget class="QRadioButton" name="select_show_outliers">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>50</y>
-     <width>96</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Show outliers</string>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>30</y>
-     <width>54</width>
+     <x>550</x>
+     <y>50</y>
+     <width>131</width>
      <height>17</height>
     </rect>
    </property>
@@ -127,7 +111,7 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>50</x>
+     <x>130</x>
      <y>50</y>
      <width>111</width>
      <height>25</height>
@@ -137,14 +121,85 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>50</x>
+     <x>130</x>
      <y>30</y>
-     <width>54</width>
+     <width>111</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
     <string>Obstype</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="select_modelobstype">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>110</y>
+     <width>111</width>
+     <height>25</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>90</y>
+     <width>121</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>ModelObstype</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="add_dataset_box">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>121</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Plot Dataset</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="add_modeldata_box">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>100</y>
+     <width>121</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Plot Modeldata</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="select_show_outliers">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>50</y>
+     <width>251</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Show outliers</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

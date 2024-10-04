@@ -67,30 +67,25 @@ qc_not_in_gui = ['duplicated_timestamp', 'internal_consistency'] #not present in
 #%% Helpers
 
 class CapturingPrint(list):
+    """ Capture piped stout as a list of strings. """
     def __enter__(self):
         self._stdout = sys.stdout
         sys.stdout = self._stringio = StringIO()
         return self
+    
     def __exit__(self, *args):
         self.extend(self._stringio.getvalue().splitlines())
         del self._stringio    # free up some memory
         sys.stdout = self._stdout
+        
     def __str__(self):
         returnstr = ''
         for stoutline in self:
             returnstr+=f'{stoutline}\n'
         return returnstr
-# class Capturing_logs(list):
-#     def __enter__(self):
-#         self._stderr = sys.stderr
-#         sys.stderr = self._stringio_err = StringIO()
-#         return self
-#     def __exit__(self, *args):
-#         self.extend(self._stringio_err.getvalue().splitlines())
-#         del self._stringio_err    # free up some memory
-#         sys.stderr = self._stderr
-
-
+    
+    def __repr__(self):
+        return str(self)
 
 #%%
 

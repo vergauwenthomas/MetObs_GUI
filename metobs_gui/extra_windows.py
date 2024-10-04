@@ -28,6 +28,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 
 import metobs_gui.path_handler as path_handler
 from metobs_gui.pandasmodel import DataFrameModel
+from metobs_gui.tlk_scripts import gui_wrap
 # import metobs_gui.template_func as template_func
 
 # =============================================================================
@@ -120,7 +121,9 @@ class DataDialog(QDialog):
         #update the table widget
         self.combmodel.setDataFrame(subdf.reset_index())
 
-        
+
+
+
 
 
 # =============================================================================
@@ -152,97 +155,178 @@ class timeseriesCanvas(FigureCanvasQTAgg):
     # =============================================================================
     #     fill axes methods
     # =============================================================================
-    def dataset_timeseriesplot(self, obstype='temp', colorby='name',
-                       stationnames=None, show_outliers=True):
+    def dataset_timeseriesplot(self, plotkwargs):
+        plotkwargs['_ax'] = self.axes
 
+        axes, succes, stout = gui_wrap(self.dataset.make_plot,
+                                       plotkwargs)
+        if not succes:
+            Error("Error occured when making a plot of the dataset.", stout)
+            return
+        
+        self.axes=axes
+      
+    def modeldata_timeseriesplot(self, plotkwargs):
+        plotkwargs['_ax'] = self.axes
 
-        self.axes = self.dataset.make_plot(stationnames=stationnames,
-                                           obstype=obstype,
-                                           colorby=colorby,
-                                           starttime=None,
-                                           endtime=None,
-                                           _ax=self.axes,
-                                           title=None,
-                                           legend=False,
-                                           show_outliers=show_outliers)
-    def modeldata_timeseriesplot(self, add_obs=False, obstype_model='temp',
-                                 obstype_dataset='temp', stationnames=None,
-                                 show_outliers=True):
-
-        if add_obs:
-            dataset = self.dataset
-        else:
-            dataset=None
-
-        # update this
-        self.axes = self.modeldata.make_plot(obstype_model=obstype_model,
-                                             dataset = dataset,
-                                             obstype_dataset=obstype_dataset,
-                                             stationnames=stationnames,
-                                             starttime=None,
-                                             endtime=None,
-                                             title=None,
-                                             show_outliers=show_outliers,
-                                             show_filled=True,
-                                             legend=True,
-                                             _ax=self.axes)
-
+        axes, succes, stout = gui_wrap(self.modeldata.make_plot,
+                                       plotkwargs)
+        if not succes:
+            Error("Error occured when making a plot of the dataset.", stout)
+            return
+        
+        self.axes=axes
+        
+    
 class DatasetTimeSeriesDialog(QDialog):
     """ Creates new window """
 
-    def __init__(self, dataset):
+    def __init__(self, dataset, Model=None):
         super().__init__()
         loadUi(os.path.join(path_handler.GUI_dir,'qt_windows','timeseries_plot_dialog.ui'), self)
         self.show()
+        
+        self.Dataset = dataset
+        self.Model = Model
+        
         # setup canvas
-        self.canvas=timeseriesCanvas(dataset=dataset, modeldata=None)
+        self.canvas=timeseriesCanvas(dataset=dataset, modeldata=Model)
 
         #init widgets
-        self.init_widgets(dataset)
-
+        self.init_widgets()
+        
         # triggers
         self.update_plot_box.clicked.connect(lambda: self.update_plot())
         
         # plot
         self.make_plot()
+    
+    def _modeldata_available(self):
+        if self.Model is None:
+            return False
+        if self.Model.modeldf.empty:
+            return False
+        return True
+    
+    
+    def init_widgets(self):
+        
+        if self._modeldata_available():
+            #modelobstype spinner
+            self.select_modelobstype.clear()
+            self.select_modelobstype.addItems(list(self.Model.modeldf.columns))
+            
+           
+            
+        else:
+            #no modeldata to plot
+            self.select_modelobstype.setEnabled(False)
+            self.add_modeldata_box.setEnabled(False)
+            
+            self.add_modeldata_box.setChecked(False)
+            
+            
 
 
-    def init_widgets(self, dataset):
+        if self.Dataset.df.empty:
+            self.add_dataset_box.setEnabled(False)
+            self.select_obstype.setEnabled(False)
+            self.select_colorby.setEnabled(False)
+            # self.select_subset.setEnabled(False)
+            self.select_show_outliers.setEnabled(False)
+            
+            self.add_dataset_box.setChecked(False)
+            
+           
+            
+            if not self._modeldata_available():
+                Error('No data found in the Dataset, and no Modeldata provide.')
+                self.update_plot_box.setEnabled(False)
+                return
+        
+        else:
+            #obstype spinner
+            self.select_obstype.clear()
+            obstypes=self.Dataset.df.index.get_level_values('obstype').unique().to_list()
+            self.select_obstype.addItems(obstypes)
+            
+            
+                        
+            
+           
+            
+            
+        #colorby spinner        
         self.select_colorby.clear()
         self.select_colorby.addItems(['name','label'])
-
-        stationnames = dataset.df.index.get_level_values('name').unique().to_list()
-        stationnames.insert(0, 'ALL')
+        
+        #subset spinner (represetn the join of all stationnames)
         self.select_subset.clear()
-        self.select_subset.addItems(stationnames)
-
-        self.select_obstype.clear()
-        obstypes=dataset.df.index.get_level_values('obstype').unique().to_list()
-        self.select_obstype.addItems(obstypes)
-
-
-
-    def update_plot(self):
-        obstype =self.select_obstype.currentText()
-        subset=self.select_subset.currentText()
-        colorby = self.select_colorby.currentText()
-        show_outliers = self.select_show_outliers.isChecked()
-
-        if subset=='ALL':
-            stationnames=None
+        if self.Model is None:
+            modelnames = []
         else:
-            stationnames = [subset]
+            modelnames = self.Model._get_all_stationnames()
+        datasetnames = self.Dataset._get_all_stationnames()
+        combined_names = list(set(modelnames).union(set(datasetnames)))
+        combined_names.insert(0,'ALL')
+        self.select_subset.addItems(combined_names)
+    
+    def update_plot(self):
+        
+        plotkwargs = {'legend':True,
+                      'starttime':None,
+                      'endtime':None,
+                      'title':None,
+                      'show_outliers':  self.select_show_outliers.isChecked()
+                      }
+        
+        
+        if self.select_subset.currentText() == 'ALL':
+            plotkwargs['stationnames'] = None
+        else:
+            plotkwargs['stationnames'] = [self.select_subset.currentText()]
+            
+        
+        
+        if self.add_modeldata_box.isChecked():
+            #plot from modeldata
+            plotkwargs['obstype_model'] = self.select_modelobstype.currentText()
+            
+            
+            if self.add_dataset_box.isChecked():
+                plotkwargs['Dataset'] = self.Dataset
+                plotkwargs['obstype_dataset'] = self.select_obstype.currentText()
+            
+            else:        
+                plotkwargs['Dataset'] = None
+            
 
-        self.canvas._clear_axis()
-        self.canvas.dataset_timeseriesplot(obstype=obstype,
-                                   colorby=colorby,
-                                   stationnames=stationnames,
-                                   show_outliers=show_outliers)
+            #call plot on model
+            self.canvas.modeldata_timeseriesplot(plotkwargs=plotkwargs)
+            
+            
+        else:
+            if self.add_dataset_box.isChecked():
+                #plot from dataset (no modeldata present)
+                plotkwargs['obstype'] = self.select_obstype.currentText()
+                plotkwargs['colorby'] = self.select_colorby.currentText()
+                
+                #call plot on dataset
+                self.canvas.dataset_timeseriesplot(plotkwargs=plotkwargs)
+            
+            else:
+                Error('No data provided for the plot')
+                return
+            
+            
         self.canvas.draw()
 
 
     def make_plot(self):
-        self.canvas.dataset_timeseriesplot()
+        # if self.with_model:
+        #     self.canvas.modeldata_timeseriesplot()
+        # else:
+        #     self.canvas.dataset_timeseriesplot()
         self.vert_layout.addWidget(self.canvas.create_toolbar())
         self.vert_layout.addWidget(self.canvas)
 

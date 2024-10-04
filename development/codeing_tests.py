@@ -25,45 +25,70 @@ inputtemplate='/home/thoverga/Documents/VLINDER_github/MetObs_GUI/metobs_gui/cac
 
 dataset = metobs_toolkit.Dataset()
 
-dataset.import_data_from_file(input_data_file=inputdata,
-                              input_metadata_file=inputmetadata,
-                              template_file=inputtemplate)
+# dataset.import_data_from_file(input_data_file=inputdata,
+#                               input_metadata_file=inputmetadata,
+#                               template_file=inputtemplate)
+
+
+modeldata = metobs_toolkit.import_modeldata_from_pkl(folder_path='/home/thoverga/Documents/VLINDER_github/MetObs_GUI/metobs_gui/cache/modeldata',
+                                                     filename='temp_and_pres_Siebe.pkl')
+
+dataset.gee_datasets['ERA5-land'] = modeldata
+
+
+obstype_model='temp'
+dataset=None
+obstype_dataset='temp'
+
+
+dataset.gee_datasets['ERA5-land'].make_plot(obstype_model=obstype_model,
+                                     Dataset = dataset,
+                                     obstype_dataset=obstype_dataset,
+                                     stationnames=stationnames,
+                                     starttime=None,
+                                     endtime=None,
+                                     title=None,
+                                     show_outliers=show_outliers,
+                                     show_filled=True,
+                                     legend=True,
+                                     # _ax=self.axes)
+#%%
 
 
 #%%
-ui_settings={'dupl_timestamp_keep': None,
- 'gross_value_max_value': 21.0,
- 'gross_value_min_value': -15.0,
- 'obstype': 'temp',
- 'persis_min_num_obs': 5,
- 'persis_time_win_to_check': '60min',
- 'rep_max_valid_repetitions': 5,
- 'step_max_decrease_per_sec': -0.002777777777777778,
- 'step_max_increase_per_sec': 0.0022222222222222222,
- 'win_var_max_decrease_per_sec': 0.002777777777777778,
- 'win_var_max_increase_per_sec': 0.0022222222222222222,
- 'win_var_min_num_obs': 3,
- 'win_var_time_win_to_check': '60min'}
+# ui_settings={'dupl_timestamp_keep': None,
+#  'gross_value_max_value': 21.0,
+#  'gross_value_min_value': -15.0,
+#  'obstype': 'temp',
+#  'persis_min_num_obs': 5,
+#  'persis_time_win_to_check': '60min',
+#  'rep_max_valid_repetitions': 5,
+#  'step_max_decrease_per_sec': -0.002777777777777778,
+#  'step_max_increase_per_sec': 0.0022222222222222222,
+#  'win_var_max_decrease_per_sec': 0.002777777777777778,
+#  'win_var_max_increase_per_sec': 0.0022222222222222222,
+#  'win_var_min_num_obs': 3,
+#  'win_var_time_win_to_check': '60min'}
 
 
-dataset.update_qc_settings(**ui_settings)
+# dataset.update_qc_settings(**ui_settings)
 
-def appl(func, kwargs):
-    func(**kwargs)
+# def appl(func, kwargs):
+#     func(**kwargs)
 
-appl(dataset.update_qc_settings,ui_settings)
-qc_set={'obstype': 'temp',
-        'gross_value': True,
-        'persistence': True,
-        'repetitions': True,
-        'step': True,
-        'window_variation': True}
+# appl(dataset.update_qc_settings,ui_settings)
+# qc_set={'obstype': 'temp',
+#         'gross_value': True,
+#         'persistence': True,
+#         'repetitions': True,
+#         'step': True,
+#         'window_variation': True}
 
-appl(dataset.apply_quality_control, qc_set)
+# appl(dataset.apply_quality_control, qc_set)
 
-# dataset.apply_quality_control()
+# # dataset.apply_quality_control()
 
-dataset.get_info()
+# dataset.get_info()
 
 
 #%%
