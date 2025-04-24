@@ -301,7 +301,7 @@ def _react_extract_gee_data(MW):
     MW.prompt_modeldata.appendPlainText(str(stout))
     
     #test if model has data of google drive method
-    if MW.Dataset.gee_dataset[modelname].modeldf.empty:
+    if MW.Dataset.gee_datasets[modelname].modeldf.empty:
         Notification(f'The Data amout is to big for direct transfer. It is written to your google Drive! ')
     else:
         Notification(f'Data extracted from {modelname} on GEE.')

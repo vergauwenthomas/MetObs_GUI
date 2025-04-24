@@ -77,7 +77,7 @@ class MainWindow(QMainWindow):
         modeldata_page.init_modeldata_page(self)
 
         # # P6 INIT
-        # fill_page.init_fill_page(self)
+        fill_page.init_fill_page(self)
 
         # # P7 INIT
         # analysis_page.init_analysis_page(self)
@@ -137,6 +137,7 @@ class MainWindow(QMainWindow):
         metadata_page.setup_triggers(self)
         qc_page.setup_triggers(self)
         modeldata_page.setup_triggers(self)
+        fill_page.setup_triggers(self)
        
 
        
@@ -241,7 +242,7 @@ class MainWindow(QMainWindow):
         
         #update spinners
         #TODO extend list !!!!
-        to_reset_spinners = [self.obstype_spinner]         
+        to_reset_spinners = [self.obstype_spinner, self.fill_obstype]         
         for spinner in to_reset_spinners:
             spinner.clear()
             spinner.addItems(present_obstypes)
