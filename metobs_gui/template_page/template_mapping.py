@@ -16,11 +16,14 @@ import pytz
 from PyQt5.QtWidgets import  QDialog
 from PyQt5.uic import loadUi
 
+from metobs_gui.tlk_scripts import gui_wrap
 import metobs_toolkit
 from metobs_toolkit.template import _get_empty_templ_dict
+from metobs_toolkit.template_build_prompt import test_unit
+
 import metobs_gui.path_handler as path_handler
 from metobs_gui.errors import Error
-
+import metobs_gui.common_functions as common_func
 
 
 # =============================================================================
@@ -39,22 +42,7 @@ class New_obstype_Window(QDialog):
         self.Dataset = Dataset
         self.new_obs = None
 
-        
-  
-        
-class New_unit_Window(QDialog):
-    """ Create a new obstype window"""
     
-    def __init__(self, trg_obstype):
-        super().__init__()
-        
-        loadUi(os.path.join(path_handler.GUI_dir, 'qt_windows','new_unit_dialog.ui'),
-               self)
-    
-        self.obsname.setText(trg_obstype.name)
-        self.std_unit.setText(trg_obstype.get_standard_unit())
-        
-
 
 
 # =============================================================================
@@ -71,9 +59,7 @@ class Metadata_map_Window(QDialog):
         
         
         #data attributes
-        metadf = path_handler.read_csv_datafile(metadatafile,
-                                kwargsdict={'nrows':20})
-        
+        metadf = common_func.read_csv_file(metadatafile, nrows=10)        
         self.metacolumns = list(metadf.columns)
         self.template_dict = _get_empty_templ_dict()
         
@@ -83,38 +69,32 @@ class Metadata_map_Window(QDialog):
         self.name_spinner.addItems(self.available_columns)
         self.lat_spinner.addItems(self.available_columns)
         self.lon_spinner.addItems(self.available_columns)
-        
-        #init qlistwidget
-        self.othercols.addItems(self.available_columns)
-        
+        self.alt_spinner.addItems(self.available_columns)
         
         self.setup_triggers()
+
+        #set the other columns by mimic a trigger
+        self._set_other_cols()
         
     
-    
-    def _react_columnname_spin_change(self):
-        
-        self.available_columns = copy.copy(self.metacolumns) #start with all columns available
-        
-        #drop the name column from the available columns
-        to_drop_from_listwidget = [self.name_spinner.currentText()]
-        
+    def _set_other_cols(self):
+        #get columns already in spinners
+        already_mapped = []
+        already_mapped.append(self.name_spinner.currentText())
+
         if self.latbox.isChecked():
-            #if lat AND LON (automatically) is present
-            to_drop_from_listwidget.append(self.lat_spinner.currentText())
-            to_drop_from_listwidget.append(self.lon_spinner.currentText())
-        print(f'to drop list: {set(to_drop_from_listwidget)}')
-        print(f'available: {self.available_columns}')
-        for to_drop in set(to_drop_from_listwidget):
-            self.available_columns.remove(to_drop)
-            
-        #update the listwidget items
-        self.othercols.clear()
-        self.othercols.addItems(self.available_columns)
+            already_mapped.append(self.lat_spinner.currentText())
+        if self.lonbox.isChecked():
+            already_mapped.append(self.lon_spinner.currentText())
+        if self.altbox.isChecked():
+            already_mapped.append(self.alt_spinner.currentText())
         
+        #subtract all columns from the already selected
+        others = list(set(self.metacolumns) - set(already_mapped))
+        self.othercols.clear()
+        self.othercols.addItems(others)
 
     def _react_latbox_change(self):
-        print('react lat')
         if self.latbox.isChecked():
             self.lonbox.setChecked(True)
             self.lat_spinner.setEnabled(True)
@@ -126,7 +106,6 @@ class Metadata_map_Window(QDialog):
         
 
     def _react_lonbox_change(self):
-        print('react lon')
         if self.lonbox.isChecked():
             self.latbox.setChecked(True)
             self.lat_spinner.setEnabled(True)
@@ -135,18 +114,26 @@ class Metadata_map_Window(QDialog):
             self.latbox.setChecked(False)
             self.lat_spinner.setEnabled(False)
             self.lon_spinner.setEnabled(False)
+
+    def _react_altbox_change(self):
+        if self.altbox.isChecked():
+            self.alt_spinner.setEnabled(True)
+        else:
+            self.alt_spinner.setEnabled(False)
+            
     
         
     def setup_triggers(self):
         #checkboxes
         self.latbox.stateChanged.connect(lambda: self._react_latbox_change()) 
         self.lonbox.stateChanged.connect(lambda: self._react_lonbox_change()) 
-        
+        self.altbox.stateChanged.connect(lambda: self._react_altbox_change())
+
         #spinners
-        self.name_spinner.activated.connect(lambda: self._react_columnname_spin_change())
-        self.lat_spinner.activated.connect(lambda: self._react_columnname_spin_change())
-        self.lon_spinner.activated.connect(lambda: self._react_columnname_spin_change())
-        
+        self.name_spinner.activated.connect(lambda: self._set_other_cols())
+        self.lat_spinner.activated.connect(lambda: self._set_other_cols())
+        self.lon_spinner.activated.connect(lambda: self._set_other_cols())
+        self.alt_spinner.activated.connect(lambda: self._set_other_cols())
         
     def _read_users_settings_as_template(self):
         self.template_dict['metadata_related']['name_column'] = self.name_spinner.currentText()
@@ -190,8 +177,8 @@ class Data_map_Window(QDialog):
     def _init_data_mapping_dialog(self):
         """ set default widget values and set data holders"""
         #read columnnames
-        df = path_handler.read_csv_datafile(datafile=self.datafile, 
-                                            kwargsdict={'nrows': 20})
+        
+        df = common_func.read_csv_file(self.datafile, nrows=10)        
         self.colnames = list(df.columns)
         self.avail_to_map = copy.copy(self.colnames)
         
@@ -312,22 +299,80 @@ class Data_map_Window(QDialog):
         cur_obstype = self.Dataset.obstypes[cur_obstype_name]
         
         #get available units
-        self.unit.clear()
-        self.unit.addItems(cur_obstype.get_all_units())
-        self.unit.setCurrentText(cur_obstype.get_standard_unit())
+        self.related_units.clear()
+        self.related_units.addItems(cur_obstype.get_compatible_units())
+        self.related_units.setCurrentText(cur_obstype.std_unit)
         
+        self.cur_unit.setText(cur_obstype.std_unit)
+
         #description
-        self.obs_desc.setText(cur_obstype.get_description())
+        self.obs_desc.setText(cur_obstype.description)
         
         self._print_info()
+    
+    def _map_time(self):
+        to_drop_columns = []
+
+        #collect the columns that are mapped
+        timestamp_rep = self.timestamp_repr_spinner.currentText()
+        if timestamp_rep == 'A single column with datetimes':
+            to_drop_columns.append(self.dt_col1_spinner.currentText())
+        elif timestamp_rep == 'A data column and a time column':
+            to_drop_columns.append(self.dt_col1_spinner.currentText())
+            to_drop_columns.append(self.dt_col2_spinner.currentText())
         
+        # drop from available columns
+        for todropcol in to_drop_columns:
+            self.avail_to_map.remove(todropcol)
+        self.column_spinner.clear()
+        self.column_spinner.addItems(self.avail_to_map)
+
+        #set disabled
+        self.dt_col1_spinner.setEnabled(False)
+        self.dt_col2_spinner.setEnabled(False)
+        self.timestamp_repr_spinner.setEnabled(False)
+        self.map_time_but.setEnabled(False)
+        self.date_fmt.setEnabled(False)
+        self.time_fmt.setEnabled(False)
+        self.timezone_spinner.setEnabled(False)
+
+        #update template status
+        self._print_info()
+
+    def _map_name(self):
+    
+
+        if self.name_repr.currentText() == 'A single column':
+            todropcol = self.name_col_spinner.currentText()
+            self.avail_to_map.remove(todropcol)
+
+        self.column_spinner.clear()
+        self.column_spinner.addItems(self.avail_to_map)
+
+        #set disabled
+        self.name_col_spinner.setEnabled(False)
+        self.name_repr.setEnabled(False)
+        self.map_name_but.setEnabled(False)
+
+        #update template status
+        self._print_info()
+
     def _map_an_obstype(self):
         obsname = str(self.obs_type.currentText())
         columnname = str(self.column_spinner.currentText())
+        unitname = str(self.cur_unit.text())
+
+        #test if unit is compatible with the Obstype
+        try:
+            self.Dataset.obstypes[obsname].original_unit = unitname #this checks compatibility
+        except Exception as e:
+                Error(str(e), '')
+                return
+            
         obsmapdict = {
                     "tlk_obstype": obsname,
                     "columnname": columnname,
-                    "unit": str(self.unit.currentText()),
+                    "unit": unitname,
                     "description": str(self.obs_desc.text()),
                 }
         #add it to the template dict
@@ -360,23 +405,24 @@ class Data_map_Window(QDialog):
             newobsname = new_obs_dialog.obsname.text()
             std_unit = new_obs_dialog.unit.text()
             desc = new_obs_dialog.desc.text()
-            unit_aliases={} #This is oke i guess
-            unit_conv = new_obs_dialog.unit_conv.text()
             
-            #convert data
-            unit_conv = ast.literal_eval(unit_conv)
             
-            #create obstype
-            newobstype = metobs_toolkit.Obstype(
-                obsname=newobsname,
-                std_unit=std_unit,
-                description=desc,
-                unit_aliases=unit_aliases,
-                unit_conversions=unit_conv)
-            
+            try:
+                #create obstype
+                newobstype = metobs_toolkit.Obstype(
+                    obsname=newobsname,
+                    std_unit=std_unit,
+                    description=desc,
+                )
+            except Exception as e:
+                Error(str(e), '')
+                return
             
             #add it to the Dataset
-            self.Dataset.add_new_observationtype(newobstype)
+            gui_wrap(self.Dataset.add_new_observationtype, 
+                     {'obstype': newobstype})
+            
+            
             #add it to avail obstypes
             self.avail_obstypes[newobstype.name] = newobstype
             
@@ -388,34 +434,6 @@ class Data_map_Window(QDialog):
             pass
         
         
-        
-    def _react_add_new_unit(self):
-        """ the user want to create a new unit """
-        
-        active_obstypename = self.obs_type.currentText()
-        new_unit_dialog = New_unit_Window(trg_obstype=self.Dataset.obstypes[active_obstypename])
-        new_unit_dialog.setWindowTitle("NEW UNIT")
-        # new_unit_dialog.exec_()
-        if new_unit_dialog.exec():
-            
-            #scrape the data
-            new_unit = new_unit_dialog.new_unit_box.text()
-            new_conv = new_unit_dialog.conv_box.text()
-            
-            #convert data
-            new_conv = ast.literal_eval(new_conv)
-            
-            #add it to the Dataset
-            self.Dataset.add_new_unit(obstype=active_obstypename,
-                                      new_unit=new_unit,
-                                      conversion_expression=new_conv)
-            
-            #reload the spinners
-            self._react_to_obstype_change()
-        else:
-            #dialog is closed or canceled.
-            pass
-            
         
    
     
@@ -432,11 +450,9 @@ class Data_map_Window(QDialog):
         self.obs_type.activated.connect(lambda: self._react_to_obstype_change())
         
         #button triggers
-        self.update_temp_button.clicked.connect(lambda: self._print_info())
-        
+        self.map_time_but.clicked.connect(lambda: self._map_time())
+        self.map_name_but.clicked.connect(lambda: self._map_name())
         self.add_obstype.clicked.connect(lambda: self._react_add_new_obs())
-        self.add_unit.clicked.connect(lambda: self._react_add_new_unit())
-   
         self.map_obstype_but.clicked.connect(lambda: self._map_an_obstype()) 
    
     

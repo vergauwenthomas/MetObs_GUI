@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>456</height>
+    <width>755</width>
+    <height>357</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>410</y>
+     <y>240</y>
      <width>621</width>
      <height>32</height>
     </rect>
@@ -34,8 +34,8 @@
     <rect>
      <x>30</x>
      <y>70</y>
-     <width>571</width>
-     <height>331</height>
+     <width>702</width>
+     <height>101</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -49,15 +49,15 @@
     <item row="0" column="1">
      <widget class="QLineEdit" name="obsname"/>
     </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="unit"/>
-    </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
        <string>Standard unit: </string>
       </property>
      </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="unit"/>
     </item>
     <item row="3" column="0">
      <widget class="QLabel" name="label_3">
@@ -68,45 +68,6 @@
     </item>
     <item row="3" column="1">
      <widget class="QLineEdit" name="desc"/>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_4">
-      <property name="text">
-       <string>Unit conversion dict: </string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QLineEdit" name="unit_conv">
-      <property name="text">
-       <string>{}</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1">
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1">
-     <widget class="QPlainTextEdit" name="plainTextEdit">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="plainText">
-       <string>Here is an example for the unit conversion for Temperature, 
-with Celsius as standard unit.
-
-{
-        &quot;Kelvin&quot;: [&quot;x - 273.15&quot;],  # result is in tlk_std_units
-        &quot;Fahrenheit&quot;: [&quot;x-32.0&quot;, &quot;x/1.8&quot;],
-    }  
-
-</string>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>
@@ -124,6 +85,19 @@ with Celsius as standard unit.
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>190</y>
+     <width>761</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>For an overview of all availabel units: https://github.com/hgrecco/pint/blob/master/pint/default_en.txt</string>
    </property>
   </widget>
  </widget>

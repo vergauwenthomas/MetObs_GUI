@@ -11,7 +11,6 @@ import copy
 import ast
 import os
 import pytz
-from PyQt5.QtWidgets import QFileDialog, QComboBox
 from metobs_gui.errors import Error, Notification
 
 from metobs_gui.path_handler import template_dir
@@ -20,22 +19,20 @@ from metobs_gui.data_func import isvalidfile
 import metobs_gui.path_handler as path_handler
 # from metobs_gui.template_func import get_all_templates
 # from metobs_gui.json_save_func import get_saved_vals, update_json_file
-
+import metobs_gui.common_functions as common_func
 import metobs_gui.tlk_scripts as tlk_scripts
 import metobs_gui.log_displayer as log_displayer
 
-from metobs_gui.extra_windows import MetadataDialog, DataDialog, DatasetTimeSeriesDialog
-
+from metobs_gui.extra_windows import  DatasetTimeSeriesDialog
+from metobs_gui.dataframelab import DataDialog
 import metobs_toolkit
 from metobs_toolkit import rootlog as toolkit_logger
 
 # =============================================================================
 # Initialise values
 # =============================================================================
-def init_import_page(MW):
+def init_page(MW):
 
-    # MW.session['importing'] = {}
-   
 
     # add all files in the cache to the selector spinner
     # ----- init spinners ------
@@ -47,6 +44,35 @@ def init_import_page(MW):
     # init the same data path links
     MW.data_file_T_2.setText(MW.data_file_T.text())
     MW.metadata_file_T_2.setText(MW.metadata_file_T.text())
+
+# ------------------------------------------
+#    Triggers
+# ------------------------------------------
+
+def setup_triggers(MW):
+    
+    MW.use_data_T_2.stateChanged.connect(lambda: _react_use_data(MW)) 
+    MW.use_metadata_2.stateChanged.connect(lambda: _react_use_metadata(MW)) 
+    MW.use_specific_temp.stateChanged.connect(lambda: _react_use_specific_template(MW))
+    
+    MW.use_pkl.stateChanged.connect(lambda: _react_dataset_from_pkl(MW))
+    MW.upload_ext_checkbox.stateChanged.connect(lambda: _react_dataset_from_uploaded_pkl(MW))
+    
+    MW.Browse_data_B_2.clicked.connect(lambda: browsefiles_data(MW)) #browse datafile
+    MW.Browse_metadata_B_2.clicked.connect(lambda: browsefiles_metadata(MW)) #browse metadatafile
+    MW.Browse_specific_temp.clicked.connect(lambda: browsefiles_templatefile(MW)) #browse template
+    MW.pkl_browser.clicked.connect(lambda: browsefiles_pklfile(MW)) #browse pkl file
+    MW.pkl_path_save.stateChanged.connect(lambda: save_input_pkl_path(MW))
+
+
+    MW.make_dataset.clicked.connect(lambda: make_dataset(MW))
+    
+    #buttons when dataset is loaded
+    MW.get_info_T2.clicked.connect(lambda: _react_get_info(MW))
+    MW.show_dataset_T2.clicked.connect(lambda: _react_show_datalab(MW))
+    MW.plot_dataset_T2.clicked.connect(lambda: _react_plot_dataset(MW))
+  
+    MW.save_pkl_B.clicked.connect(lambda: _react_save_dataset_as_pkl(MW))
 
 
 # =============================================================================
@@ -84,20 +110,21 @@ def _react_use_specific_template(MW):
 
 
 def browsefiles_data(MW):
-    fname=QFileDialog.getOpenFileName(MW, 'Select data file', str(Path.home()))
-    MW.data_file_T_2.setText(fname[0]) #update text
+
+    fpath=common_func.browse_for_file(MW, 'Select data file')
+    MW.data_file_T_2.setText(fpath) #update text
 
 def browsefiles_metadata(MW):
-    fname=QFileDialog.getOpenFileName(MW, 'Select metadata file', str(Path.home()))
-    MW.metadata_file_T_2.setText(fname[0]) #update text
+    fpath=common_func.browse_for_file(MW, 'Select metadata file')
+    MW.metadata_file_T_2.setText(fpath) #update text
 
 def browsefiles_templatefile(MW):
-    fname=QFileDialog.getOpenFileName(MW, 'Select template file', str(Path.home()))
-    MW.specific_temp_path.setText(fname[0]) #update text
+    fpath=common_func.browse_for_file(MW, 'Select template file')
+    MW.specific_temp_path.setText(fpath) #update text
 
 def browsefiles_pklfile(MW):
-    fname=QFileDialog.getOpenFileName(MW, 'Select template file', str(Path.home()))
-    MW.pkl_path.setText(fname[0]) #update text
+    fpath=common_func.browse_for_file(MW, 'Select pickled file')
+    MW.pkl_path.setText(fpath) #update text
 
 
 
@@ -107,6 +134,7 @@ def save_input_pkl_path(MW):
             pkl_path = MW.pkl_path.text()
             savedict = {'input_pkl_file_path' : str(pkl_path)}
             path_handler.update_json_file(savedict, filepath=path_handler.saved_paths)
+
 
 def _react_dataset_from_pkl(MW):
     
@@ -131,6 +159,7 @@ def _react_dataset_from_pkl(MW):
     
     _react_dataset_from_uploaded_pkl(MW)
 
+
 def _react_dataset_from_uploaded_pkl(MW):
     if MW.upload_ext_checkbox.isChecked():
         MW.pkl_path.setEnabled(True)
@@ -144,7 +173,9 @@ def _react_dataset_from_uploaded_pkl(MW):
         MW.pkl_path_save.setEnabled(False)        
         MW.pkl_selector.setEnabled(True)
 
+
 def _react_save_dataset_as_pkl(MW):
+    prompt = getattr(MW, "prompt")
     #construct target pkl filepath
     trg_file = MW.pkl_save_filename.text()
     if not trg_file.endswith('.pkl'):
@@ -158,10 +189,13 @@ def _react_save_dataset_as_pkl(MW):
         return
     
     #save the pickle
-    _, succes, stout = tlk_scripts.gui_wrap(MW.Dataset.save_dataset,
-                                                   {'outputfolder': path_handler.dataset_dir,
-                                                    'filename': trg_file,
-                                                    'overwrite': False})
+    _, succes, stout = tlk_scripts.gui_wrap(
+                        func = MW.Dataset.save_dataset_to_pkl,
+                        func_kwargs = {'target_folder': path_handler.dataset_dir,
+                                    'filename': trg_file,
+                                    'overwrite': False},
+                        log_level=MW.loglevel.currentText(),
+                        plaintext=prompt)
     if not succes:
         Error('An error occured when saving the dataset to a pickle.', stout)
         return
@@ -170,70 +204,18 @@ def _react_save_dataset_as_pkl(MW):
     #update the input from pickle spinner
     _setup_select_dataset_pkl_spinner(MW)
 
-# =============================================================================
-# Open extra windows
-# =============================================================================
 
 def _react_get_info(MW):
-    MW.prompt.clear()
-    MW.prompt.insertPlainText('------ Get info ---------')
-    
-    _, succes, stout = tlk_scripts.gui_wrap(MW.Dataset.get_info, {})
-    
-    # print(stout)
-    MW.prompt.insertPlainText(str(stout))
-    if not succes:
-        Error(f'.get_info() error on {MW.Dataset}. |n{stout}')
+    common_func.display_info_in_plaintext(
+        plaintext=MW.prompt,
+        metobs_obj=MW.Dataset,
+    )
 
-def _react_show_metadata(MW):
-    MW._dlg = MetadataDialog(df=MW.Dataset.metadf) #launched when created
-
-def _react_show_data(MW):
-    
-    returndf, succes, stout = tlk_scripts.gui_wrap(MW.Dataset.get_full_status_df, {})
-   
-    if succes:
-        
-        MW._dlg = DataDialog(df=returndf) #launched when created
-    else:
-        Error('Could not create a full status df.', stout)
+def _react_show_datalab(MW):
+    MW._dlg = DataDialog(dataset=MW.Dataset) #launched when created
 
 def _react_plot_dataset(MW):
-    MW._dlg = DatasetTimeSeriesDialog(dataset=MW.Dataset)
-
-# =============================================================================
-# Link widgets
-# =============================================================================
-
-
-# =============================================================================
-# Triggers
-# =============================================================================
-def _setup_triggers(MW):
-    
-    MW.use_data_T_2.stateChanged.connect(lambda: _react_use_data(MW)) 
-    MW.use_metadata_2.stateChanged.connect(lambda: _react_use_metadata(MW)) 
-    MW.use_specific_temp.stateChanged.connect(lambda: _react_use_specific_template(MW))
-    
-    MW.use_pkl.stateChanged.connect(lambda: _react_dataset_from_pkl(MW))
-    MW.upload_ext_checkbox.stateChanged.connect(lambda: _react_dataset_from_uploaded_pkl(MW))
-    
-    MW.Browse_data_B_2.clicked.connect(lambda: browsefiles_data(MW)) #browse datafile
-    MW.Browse_metadata_B_2.clicked.connect(lambda: browsefiles_metadata(MW)) #browse metadatafile
-    MW.Browse_specific_temp.clicked.connect(lambda: browsefiles_templatefile(MW)) #browse template
-    MW.pkl_browser.clicked.connect(lambda: browsefiles_pklfile(MW)) #browse pkl file
-    MW.pkl_path_save.stateChanged.connect(lambda: save_input_pkl_path(MW))
-
-
-    MW.make_dataset.clicked.connect(lambda: make_dataset(MW))
-    
-    #buttons when dataset is loaded
-    MW.get_info_T2.clicked.connect(lambda: _react_get_info(MW))
-    MW.show_metadata_T2.clicked.connect(lambda: _react_show_metadata(MW))
-    MW.show_dataset_T2.clicked.connect(lambda: _react_show_data(MW))
-    MW.plot_dataset_T2.clicked.connect(lambda: _react_plot_dataset(MW))
-  
-    MW.save_pkl_B.clicked.connect(lambda: _react_save_dataset_as_pkl(MW))
+    MW._dlg = DatasetTimeSeriesDialog(dataset=MW.Dataset)#launched when created
 
 
 
@@ -257,21 +239,23 @@ def make_dataset(MW):
     else:
         make_dataset_from_files(MW)
 
+    #Trigger when a dataset is loaded
+    if MW._Dataset_imported:
+        #set obstype spinner
+        present_obs = list(MW.Dataset.df.index.get_level_values('obstype').unique())
+        MW.obstype_spinner.clear()
+        MW.obstype_spinner.addItems(present_obs)
 
 def import_the_dataset_from_pkl(MW, pklpath):
-    #get parent directory
-    parentdir = path_handler.get_parent_dir(pklpath)
-    
-    #get name of the file
-    filename = path_handler.get_filename_from_path(pklpath)
-
+    prompt = getattr(MW, "prompt")
     #import to the dataset 
-    _return, succes, stout = tlk_scripts.gui_wrap(metobs_toolkit.import_dataset,
-                                                  func_kwargs={
-                                                      'folder_path': parentdir,
-                                                      "filename": filename})
+    _return, succes, stout = tlk_scripts.gui_wrap(
+                    func=metobs_toolkit.import_dataset_from_pkl,
+                    func_kwargs={'target_path': pklpath},
+                    log_level=MW.loglevel.currentText(),
+                    plaintext=prompt)
     if not succes:
-        Error(f'Error when importint the Dataset from pkl ({filename}) in dir: {parentdir} ')
+        Error(f'Error when importint the Dataset from pkl ({pklpath})')
         return
     
     MW.Dataset=_return
@@ -285,7 +269,7 @@ def import_the_dataset_from_pkl(MW, pklpath):
 
 
 def make_dataset_from_files(MW):
-    
+    prompt = getattr(MW, "prompt")
     #get datafile
     if MW.use_data_T_2.isChecked():
         datafile=MW.data_file_T_2.text()
@@ -339,23 +323,30 @@ def make_dataset_from_files(MW):
     
     dataset = metobs_toolkit.Dataset()
     if metadataonly_case:
-        _return, succes, stout = tlk_scripts.gui_wrap(dataset.import_only_metadata_from_file,
-                                                      {'input_metadata_file':metadatafile,
-                                                       'template_file':templatefile,
-                                                       'kwargs_metadata_read':metadata_kwargs,
-                                                       'templatefile_is_url':False})
+        _return, succes, stout = tlk_scripts.gui_wrap(
+                    func = dataset.import_only_metadata_from_file,
+                    func_kwargs={'input_metadata_file':metadatafile,
+                                'template_file':templatefile,
+                                'kwargs_metadata_read':metadata_kwargs,
+                                'templatefile_is_url':False},
+                    log_level=MW.loglevel.currentText(),
+                    plaintext=prompt)
     else:
-        _return, succes, stout = tlk_scripts.gui_wrap(dataset.import_data_from_file,
-                                                      {'input_data_file':datafile,
-                                                       'input_metadata_file':metadatafile,
-                                                       'template_file':templatefile,
-                                                       'freq_estimation_method':freq_method,
-                                                       'freq_estimation_simplify_tolerance':freq_simpl_tol,
-                                                       'origin_simplify_tolerance':origin_simpl_tol,
-                                                       'timestamp_tolerance':timestamp_tol,
-                                                       'kwargs_data_read':data_kwargs,
-                                                       'kwargs_metadata_read':metadata_kwargs,
-                                                       'templatefile_is_url':False})
+        _return, succes, stout = tlk_scripts.gui_wrap(
+                    func=dataset.import_data_from_file,
+                    func_kwargs={'input_data_file':datafile,
+                                'input_metadata_file':metadatafile,
+                                'template_file':templatefile,
+                                'freq_estimation_method':freq_method,
+                                'freq_estimation_simplify_tolerance':freq_simpl_tol,
+                                'origin_simplify_tolerance':origin_simpl_tol,
+                                'timestamp_tolerance':timestamp_tol,
+                                'kwargs_data_read':data_kwargs,
+                                'kwargs_metadata_read':metadata_kwargs,
+                                'templatefile_is_url':False},
+                    log_level=MW.loglevel.currentText(),
+                    plaintext=prompt
+                    )
     if succes:
         MW.Dataset=dataset
         MW._Dataset_imported=True
@@ -373,18 +364,10 @@ def make_dataset_from_files(MW):
 # Setups
 # =============================================================================
 def _setup_when_dataset_is_loaded(MW):
-    MW.update_all_obstype_spinners()
+    # MW.update_all_obstype_spinners()
     if MW._Dataset_imported:
-        MW.get_info_T2.setEnabled(True)
-        MW.plot_dataset_T2.setEnabled(True)
-        MW.show_dataset_T2.setEnabled(True)
-        MW.show_metadata_T2.setEnabled(True)
         MW.save_pkl_B.setEnabled(True)
     else:
-        MW.get_info_T2.setEnabled(False)
-        MW.plot_dataset_T2.setEnabled(False)
-        MW.show_dataset_T2.setEnabled(False)
-        MW.show_metadata_T2.setEnabled(False)
         MW.save_pkl_B.setEnabled(False)
         
         

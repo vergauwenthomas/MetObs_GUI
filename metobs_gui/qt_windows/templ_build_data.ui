@@ -35,7 +35,7 @@
      <x>20</x>
      <y>440</y>
      <width>441</width>
-     <height>180</height>
+     <height>228</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -62,28 +62,28 @@
     <item row="3" column="0">
      <widget class="QLabel" name="label_51">
       <property name="text">
-       <string>Observation units</string>
+       <string>Related units</string>
       </property>
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QComboBox" name="unit"/>
+     <widget class="QComboBox" name="related_units"/>
     </item>
-    <item row="4" column="0">
+    <item row="6" column="0">
      <widget class="QLabel" name="label_52">
       <property name="text">
        <string>Observation description</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="6" column="1">
      <widget class="QLineEdit" name="obs_desc">
       <property name="enabled">
        <bool>true</bool>
       </property>
      </widget>
     </item>
-    <item row="5" column="0" colspan="2">
+    <item row="7" column="0" colspan="2">
      <widget class="QPushButton" name="map_obstype_but">
       <property name="text">
        <string>Map it!</string>
@@ -103,23 +103,33 @@
       </property>
      </widget>
     </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_53">
+      <property name="text">
+       <string>Observation units</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="cur_unit"/>
+    </item>
    </layout>
   </widget>
   <widget class="QPlainTextEdit" name="mapping_info">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>630</y>
+     <y>690</y>
      <width>621</width>
-     <height>161</height>
+     <height>101</height>
     </rect>
    </property>
   </widget>
   <widget class="QWidget" name="verticalLayoutWidget_11">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>460</y>
+     <x>460</x>
+     <y>430</y>
      <width>171</width>
      <height>91</height>
     </rect>
@@ -139,13 +149,6 @@
      <widget class="QPushButton" name="add_obstype">
       <property name="text">
        <string>Create new obstype</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="add_unit">
-      <property name="text">
-       <string>Add new units</string>
       </property>
      </widget>
     </item>
@@ -218,6 +221,13 @@
      <widget class="QLineEdit" name="single_station_name">
       <property name="text">
        <string>dummy station</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="map_name_but">
+      <property name="text">
+       <string>Map it!</string>
       </property>
      </widget>
     </item>
@@ -383,6 +393,13 @@
       </item>
      </layout>
     </item>
+    <item>
+     <widget class="QPushButton" name="map_time_but">
+      <property name="text">
+       <string>Map it!</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QWidget" name="horizontalLayoutWidget">
@@ -407,17 +424,17 @@
     </item>
    </layout>
   </widget>
-  <widget class="QPushButton" name="update_temp_button">
+  <widget class="QLabel" name="label_6">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>800</y>
-     <width>171</width>
-     <height>25</height>
+     <x>470</x>
+     <y>570</y>
+     <width>151</width>
+     <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>Update template</string>
+    <string>(add prefix if needed)</string>
    </property>
   </widget>
  </widget>

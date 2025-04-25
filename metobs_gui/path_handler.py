@@ -19,14 +19,14 @@ from metobs_toolkit import demo_template
 # =============================================================================
 
 GUI_dir = str( Path(__file__).resolve().parents[0])
-
+REPO_dir = Path(GUI_dir).parent
 
 # =============================================================================
 # Derived locations
 # =============================================================================
 
-TMP_dir = os.path.join(GUI_dir, 'tmp') #to use in a single session
-CACHE_dir = os.path.join(GUI_dir, 'cache') #to use over multiple sessions
+TMP_dir = os.path.join(REPO_dir, 'tmp') #to use in a single session
+CACHE_dir = os.path.join(REPO_dir, 'cache') #to use over multiple sessions
 
 # subfolders
 template_dir = os.path.join(CACHE_dir, 'templates')
@@ -169,23 +169,4 @@ def read_json(jsonfilename):
 
 
 
-# def get_saved_vals():
-#     vals = read_json(saved_paths)
-#     vals = {key: val for key, val in vals.items() if val != ""}
-#     return vals
 
-
-# =============================================================================
-# Reading/writing csv
-# =============================================================================
-
-#make use of the toolkit reader
-def read_csv_datafile(datafile, kwargsdict={}):
-    from metobs_toolkit.data_import import _read_csv_to_df
-    
-    
-    kwargsdict['nrows'] = 20
-    df = _read_csv_to_df(filepath=datafile,
-                         kwargsdict=kwargsdict)
-    return df
-    

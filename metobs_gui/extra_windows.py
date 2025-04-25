@@ -28,7 +28,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 
 import metobs_gui.path_handler as path_handler
 from metobs_gui.pandasmodel import DataFrameModel
-from metobs_gui.tlk_scripts import gui_wrap
+from metobs_gui.tlk_scripts import gui_wrap, get_function_defaults
 # import metobs_gui.template_func as template_func
 
 # =============================================================================
@@ -46,80 +46,81 @@ from metobs_gui.tlk_scripts import gui_wrap
 # =============================================================================
 
 
-class MetadataDialog(QDialog):
-    """ Displays a dataframe"""
+# class MetadataDialog(QDialog):
+#     """ Displays a dataframe"""
 
-    def __init__(self, df):
-        super().__init__()
-        loadUi(os.path.join(path_handler.GUI_dir,'qt_windows','show_metadata_dialog.ui'), self)
-        self.open()
+#     def __init__(self, df):
+#         super().__init__()
+#         loadUi(os.path.join(path_handler.GUI_dir,'qt_windows','show_metadata_dialog.ui'), self)
+#         self.open()
         
-        # Define data attributes
-        self.df = df.reset_index()
-        # Feed it to the widget
-        self.combmodel = DataFrameModel()
-        self.combmodel.setDataFrame(self.df)
-        self.merge_table.setModel(self.combmodel)
+#         # Define data attributes
+#         self.df = df.reset_index()
+#         # Feed it to the widget
+#         self.combmodel = DataFrameModel()
+#         self.combmodel.setDataFrame(self.df)
+#         self.merge_table.setModel(self.combmodel)
 
-# =============================================================================
-# Show full status df
-# =============================================================================
-class DataDialog(QDialog):
-    """ Displays a dataframe"""
+# # =============================================================================
+# # Show full status df
+# # =============================================================================
+# class DataDialog(QDialog):
+#     """ Displays a dataframe"""
 
-    def __init__(self, df):
-        super().__init__()
-        loadUi(os.path.join(path_handler.GUI_dir,'qt_windows','show_data_dialog.ui'), self)
-        self.open()
+#     def __init__(self, df):
+#         super().__init__()
+#         loadUi(os.path.join(path_handler.GUI_dir,'qt_windows','show_data_dialog.ui'), self)
+#         self.open()
         
-        # Define data attributes
-        #Flatten multindex
+#         # Define data attributes
+#         #Flatten multindex
        
-        self.df = df
-        # Feed it to the widget
-        self.combmodel = DataFrameModel()
-        self.combmodel.setDataFrame(self.df.reset_index())
-        self.merge_table.setModel(self.combmodel)
+#         self.df = df
+#         # Feed it to the widget
+#         self.combmodel = DataFrameModel()
+#         self.combmodel.setDataFrame(self.df.reset_index())
+#         self.merge_table.setModel(self.combmodel)
         
-        self._setup_spinners()
-        self._setup_triggers()
+#         self._setup_spinners()
+#         self._setup_triggers()
         
-    def _setup_spinners(self):
+#     def _setup_spinners(self):
         
-        #get station names
-        stanames = self.df.index.get_level_values('name').unique().to_list()
-        stanames.insert(0, 'ALL')
-        self.name_spinbox.clear()
-        self.name_spinbox.addItems(stanames)
+#         #get station names
+#         stanames = self.df.index.get_level_values('name').unique().to_list()
+#         stanames.insert(0, 'ALL')
+#         self.name_spinbox.clear()
+#         self.name_spinbox.addItems(stanames)
         
-        #get opbstypes 
-        obstypes=self.df.columns.get_level_values(0).unique().to_list()
-        obstypes.insert(0, 'ALL')
-        self.obstype_spinbox.clear()
-        self.obstype_spinbox.addItems(obstypes)
+#         #get opbstypes 
+#         obstypes=self.df.index.get_level_values('obstype').unique().to_list()
+#         obstypes.insert(0, 'ALL')
+#         self.obstype_spinbox.clear()
+#         self.obstype_spinbox.addItems(obstypes)
         
         
-    def _setup_triggers(self):
-        self.apply_filter.clicked.connect(lambda: self._react_apply_filter())
+#     def _setup_triggers(self):
+#         self.apply_filter.clicked.connect(lambda: self._react_apply_filter())
         
     
-    def _react_apply_filter(self):
-        #subset to name        
-        subset_name = self.name_spinbox.currentText()
-        if subset_name == 'ALL':
-            subdf = self.df
-        else:
-            subdf =  self.df.xs(subset_name, level='name',drop_level=False)
+#     def _react_apply_filter(self):
+#         #subset to name        
+#         subset_name = self.name_spinbox.currentText()
+#         subdf = self.df
+#         if subset_name == 'ALL':
+#             pass
+#         else:
+#             subdf =  subdf.xs(subset_name, level='name',drop_level=False)
 
-        #subset to obstype     
-        subset_obstype= self.obstype_spinbox.currentText()
-        if subset_obstype == 'ALL':
-            subdf = subdf
-        else:
-            subdf = subdf[subset_obstype]
+#         #subset to obstype     
+#         subset_obstype= self.obstype_spinbox.currentText()
+#         if subset_obstype == 'ALL':
+#             pass
+#         else:
+#             subdf =  subdf.xs(subset_obstype, level='obstype',drop_level=False)
             
-        #update the table widget
-        self.combmodel.setDataFrame(subdf.reset_index())
+#         #update the table widget
+#         self.combmodel.setDataFrame(subdf.reset_index())
 
 
 
@@ -131,10 +132,10 @@ class DataDialog(QDialog):
 # =============================================================================
 class timeseriesCanvas(FigureCanvasQTAgg):
 
-    def __init__(self, dataset=None, modeldata=None, width=5, height=4, dpi=100):
+    def __init__(self, dataset=None, width=5, height=4, dpi=100):
         # Data objects
         self.dataset = dataset
-        self.modeldata = modeldata
+        
         # Figure object
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
@@ -143,8 +144,7 @@ class timeseriesCanvas(FigureCanvasQTAgg):
 
     def set_dataset(self, dataset):
         self.dataset = dataset
-    def set_modeldata(self, modeldata):
-        self.modeldata = modeldata
+
 
     def create_toolbar(self):
         # create toolbar connectd to the canvas
@@ -156,7 +156,7 @@ class timeseriesCanvas(FigureCanvasQTAgg):
     #     fill axes methods
     # =============================================================================
     def dataset_timeseriesplot(self, plotkwargs):
-        plotkwargs['_ax'] = self.axes
+        plotkwargs['ax'] = self.axes
 
         axes, succes, stout = gui_wrap(self.dataset.make_plot,
                                        plotkwargs)
@@ -165,32 +165,22 @@ class timeseriesCanvas(FigureCanvasQTAgg):
             return
         
         self.axes=axes
-      
-    def modeldata_timeseriesplot(self, plotkwargs):
-        plotkwargs['_ax'] = self.axes
 
-        axes, succes, stout = gui_wrap(self.modeldata.make_plot,
-                                       plotkwargs)
-        if not succes:
-            Error("Error occured when making a plot of the dataset.", stout)
-            return
-        
-        self.axes=axes
         
     
 class DatasetTimeSeriesDialog(QDialog):
     """ Creates new window """
 
-    def __init__(self, dataset, Model=None):
+    def __init__(self, dataset):
         super().__init__()
         loadUi(os.path.join(path_handler.GUI_dir,'qt_windows','timeseries_plot_dialog.ui'), self)
         self.show()
         
         self.Dataset = dataset
-        self.Model = Model
+        
         
         # setup canvas
-        self.canvas=timeseriesCanvas(dataset=dataset, modeldata=Model)
+        self.canvas=timeseriesCanvas(dataset=dataset)
 
         #init widgets
         self.init_widgets()
@@ -201,124 +191,39 @@ class DatasetTimeSeriesDialog(QDialog):
         # plot
         self.make_plot()
     
-    def _modeldata_available(self):
-        if self.Model is None:
-            return False
-        if self.Model.modeldf.empty:
-            return False
-        return True
     
     
     def init_widgets(self):
-        
-        if self._modeldata_available():
-            #modelobstype spinner
-            self.select_modelobstype.clear()
-            self.select_modelobstype.addItems(list(self.Model.modeldf.columns))
-            
-           
-            
-        else:
-            #no modeldata to plot
-            self.select_modelobstype.setEnabled(False)
-            self.add_modeldata_box.setEnabled(False)
-            
-            self.add_modeldata_box.setChecked(False)
-            
-            
-
-
-        if self.Dataset.df.empty:
-            self.add_dataset_box.setEnabled(False)
-            self.select_obstype.setEnabled(False)
-            self.select_colorby.setEnabled(False)
-            # self.select_subset.setEnabled(False)
-            self.select_show_outliers.setEnabled(False)
-            
-            self.add_dataset_box.setChecked(False)
-            
-           
-            
-            if not self._modeldata_available():
-                Error('No data found in the Dataset, and no Modeldata provide.')
-                self.update_plot_box.setEnabled(False)
-                return
-        
-        else:
-            #obstype spinner
-            self.select_obstype.clear()
-            obstypes=self.Dataset.df.index.get_level_values('obstype').unique().to_list()
-            self.select_obstype.addItems(obstypes)
-            
-            
-                        
-            
-           
+    
+        #obstype spinner
+        self.select_obstype.clear()
+        obstypes=self.Dataset.df.index.get_level_values('obstype').unique().to_list()
+        self.select_obstype.addItems(obstypes)
             
             
         #colorby spinner        
         self.select_colorby.clear()
-        self.select_colorby.addItems(['name','label'])
+        self.select_colorby.addItems(['station','label'])
         
-        #subset spinner (represetn the join of all stationnames)
-        self.select_subset.clear()
-        if self.Model is None:
-            modelnames = []
-        else:
-            modelnames = self.Model._get_all_stationnames()
-        datasetnames = self.Dataset._get_all_stationnames()
-        combined_names = list(set(modelnames).union(set(datasetnames)))
-        combined_names.insert(0,'ALL')
-        self.select_subset.addItems(combined_names)
+        # #subset spinner (represetn the join of all stationnames)
+        # self.select_subset.clear()
+        # stationnames = [sta.name for sta in self.Dataset.stations]
+        # stationnames.insert(0,'ALL')
+        # self.select_subset.addItems(stationnames)
     
     def update_plot(self):
-        
-        plotkwargs = {'legend':True,
-                      'starttime':None,
-                      'endtime':None,
-                      'title':None,
-                      'show_outliers':  self.select_show_outliers.isChecked()
-                      }
-        
-        
-        if self.select_subset.currentText() == 'ALL':
-            plotkwargs['stationnames'] = None
-        else:
-            plotkwargs['stationnames'] = [self.select_subset.currentText()]
-            
-        
-        
-        if self.add_modeldata_box.isChecked():
-            #plot from modeldata
-            plotkwargs['obstype_model'] = self.select_modelobstype.currentText()
-            
-            
-            if self.add_dataset_box.isChecked():
-                plotkwargs['Dataset'] = self.Dataset
-                plotkwargs['obstype_dataset'] = self.select_obstype.currentText()
-            
-            else:        
-                plotkwargs['Dataset'] = None
-            
+        plotkwargs = get_function_defaults(self.Dataset.make_plot)
 
-            #call plot on model
-            self.canvas.modeldata_timeseriesplot(plotkwargs=plotkwargs)
-            
-            
-        else:
-            if self.add_dataset_box.isChecked():
-                #plot from dataset (no modeldata present)
-                plotkwargs['obstype'] = self.select_obstype.currentText()
-                plotkwargs['colorby'] = self.select_colorby.currentText()
-                
-                #call plot on dataset
-                self.canvas.dataset_timeseriesplot(plotkwargs=plotkwargs)
-            
-            else:
-                Error('No data provided for the plot')
-                return
-            
-            
+        #scrape ui and update plot kwargs
+        plotkwargs['obstype'] = self.select_obstype.currentText()
+        plotkwargs['colorby'] = self.select_colorby.currentText()
+        
+        plotkwargs['show_outliers'] = self.select_show_outliers.isChecked()
+        plotkwargs['show_gaps'] = self.select_show_gaps.isChecked()
+        plotkwargs['show_modeldata'] = self.select_add_modeldata.isChecked()
+
+        #call plot on dataset
+        self.canvas.dataset_timeseriesplot(plotkwargs=plotkwargs)
         self.canvas.draw()
 
 

@@ -21,7 +21,7 @@ import metobs_gui.path_handler as path_handler
 
 import metobs_gui.pretty_formatter as pretty_formatter
 import metobs_gui.tlk_scripts as tlk_scripts
-from metobs_gui.extra_windows import MetadataDialog, DataDialog, DatasetTimeSeriesDialog
+from metobs_gui.extra_windows import MetadataDialog, DatasetTimeSeriesDialog
 # import metobs_gui.log_displayer as log_displayer
 
 # from metobs_toolkit import rootlog as toolkit_logger

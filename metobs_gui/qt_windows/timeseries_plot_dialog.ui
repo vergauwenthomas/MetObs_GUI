@@ -43,7 +43,7 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>280</x>
+     <x>190</x>
      <y>30</y>
      <width>81</width>
      <height>17</height>
@@ -59,7 +59,7 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>280</x>
+     <x>190</x>
      <y>50</y>
      <width>111</width>
      <height>25</height>
@@ -79,39 +79,13 @@
     <string>Update plot</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="select_subset">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>550</x>
-     <y>70</y>
-     <width>111</width>
-     <height>25</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>550</x>
-     <y>50</y>
-     <width>131</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Subset to:</string>
-   </property>
-  </widget>
   <widget class="QComboBox" name="select_obstype">
    <property name="enabled">
     <bool>true</bool>
    </property>
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>40</x>
      <y>50</y>
      <width>111</width>
      <height>25</height>
@@ -121,7 +95,7 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>40</x>
      <y>30</y>
      <width>111</width>
      <height>17</height>
@@ -131,65 +105,10 @@
     <string>Obstype</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="select_modelobstype">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>110</y>
-     <width>111</width>
-     <height>25</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_4">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>90</y>
-     <width>121</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>ModelObstype</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="add_dataset_box">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>50</y>
-     <width>121</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Plot Dataset</string>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="add_modeldata_box">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>100</y>
-     <width>121</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Plot Modeldata</string>
-   </property>
-  </widget>
   <widget class="QCheckBox" name="select_show_outliers">
    <property name="geometry">
     <rect>
-     <x>400</x>
+     <x>330</x>
      <y>50</y>
      <width>251</width>
      <height>23</height>
@@ -200,6 +119,38 @@
    </property>
    <property name="checked">
     <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="select_show_gaps">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>70</y>
+     <width>251</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Show gaps</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="select_add_modeldata">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>90</y>
+     <width>251</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Show modeldata</string>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
    </property>
   </widget>
  </widget>

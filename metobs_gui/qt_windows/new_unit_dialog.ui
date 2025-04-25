@@ -56,60 +56,66 @@
     <item row="1" column="0">
      <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>Standard unit: : </string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="std_unit">
-      <property name="enabled">
-       <bool>false</bool>
+       <string>Related units</string>
       </property>
      </widget>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_4">
       <property name="text">
-       <string>New unit name: </string>
+       <string>New unit </string>
       </property>
      </widget>
     </item>
     <item row="2" column="1">
      <widget class="QLineEdit" name="new_unit_box"/>
     </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string>Conversion</string>
-      </property>
-     </widget>
-    </item>
     <item row="3" column="1">
-     <widget class="QLineEdit" name="conv_box">
-      <property name="text">
-       <string>[]</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
      <widget class="QPlainTextEdit" name="plainTextEdit">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="plainText">
-       <string>Here is an example for the unit conversion for Temperature, 
-with Celsius as standard unit.
+       <string>The new unit must be a combination of a prefix and a related unit. 
 
-for Kelvin:
-	 [&quot;x - 273.15&quot;]
+Here are all available prefixes:
 
-for Fahrenheit:
-	[&quot;x-32.0&quot;, &quot;x/1.8&quot;],
- 
+#### PREFIXES ####
+
+# decimal prefixes
+quecto- = 1e-30 = q-
+ronto- = 1e-27 = r-
+yocto- = 1e-24 = y-
+zepto- = 1e-21 = z-
+atto- =  1e-18 = a-
+femto- = 1e-15 = f-
+pico- =  1e-12 = p-
+nano- =  1e-9  = n-
+# The micro (U+00B5) and Greek mu (U+03BC) are both valid prefixes,
+# and they often use the same glyph.
+micro- = 1e-6  = µ- = μ- = u- = mu- = mc-
+milli- = 1e-3  = m-
+centi- = 1e-2  = c-
+deci- =  1e-1  = d-
+deca- =  1e+1  = da- = deka-
+hecto- = 1e2   = h-
+kilo- =  1e3   = k-
+mega- =  1e6   = M-
+giga- =  1e9   = G-
+tera- =  1e12  = T-
+peta- =  1e15  = P-
+exa- =   1e18  = E-
+zetta- = 1e21  = Z-
+yotta- = 1e24  = Y-
+ronna- = 1e27 = R-
+quetta- = 1e30 = Q-
 
 </string>
       </property>
      </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QComboBox" name="related_units"/>
     </item>
    </layout>
   </widget>

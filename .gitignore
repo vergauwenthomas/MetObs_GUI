@@ -3,8 +3,8 @@ deploiment/*
 
 
 #tmp savings (session specific)
-metobs_gui/tmp/*
-
+tmp/*
+cache/*
 
 #temporary files and cached
 *.swp

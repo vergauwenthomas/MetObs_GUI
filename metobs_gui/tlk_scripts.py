@@ -10,6 +10,7 @@ Created on Fri Mar 31 09:40:08 2023
 import sys
 from io import StringIO
 import pprint
+import warnings
 
 from PyQt5.QtWidgets import QSpinBox, QDoubleSpinBox
 
@@ -25,6 +26,8 @@ from metobs_gui.errors import Error, Notification
 # debug_path = '/home/thoverga/Documents/VLINDER_github/MetObs_toolkit'
 # sys.path.insert(0, debug_path)
 import metobs_toolkit
+import inspect
+import logging
 
 
 
@@ -87,32 +90,151 @@ class CapturingPrint(list):
     def __repr__(self):
         return str(self)
 
-#%%
+# Custom warning handler
+class WarningCapture:
+    def __init__(self):
+        self.captured_warnings = []
 
-def gui_wrap(func, func_kwargs):
-    """ A wrapper for the gui to call a function."""
+    def __enter__(self):
+        self._original_showwarning = warnings.showwarning
+        warnings.showwarning = self._capture_warning
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        warnings.showwarning = self._original_showwarning
+
+    def _capture_warning(self, message, category, filename, lineno, file=None, line=None):
+        warning_msg = warnings.formatwarning(message, category, filename, lineno, line)
+        self.captured_warnings.append(warning_msg)
+
+    def __str__(self):
+        return "\n".join(self.captured_warnings)
+    
+
+
+def gui_wrap(func, func_kwargs, plaintext=None, log_level=logging.INFO):
+    """ A wrapper for the GUI to call a function safely with logging. """
+    # Attach to the root logger to catch all logs
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.DEBUG)
+    log_handler = StringIO()
+    stream_handler = logging.StreamHandler(log_handler)
+    stream_handler.setLevel(log_level)
+    formatter = logging.Formatter('%(levelname)s - %(asctime)s - %(message)s')
+    stream_handler.setFormatter(formatter)
+    root_logger.addHandler(stream_handler)
+
     print(f'Executing Metobs command: \n* {func}')
-    pprint.pp(func_kwargs)
+    print(pprint.pformat(func_kwargs))
+
+    if plaintext is not None:
+        plaintext.appendPlainText(f'Executing Metobs command: \n* {func} with:')
+        plaintext.appendPlainText(pprint.pformat(func_kwargs))
+    
     try:
-        with CapturingPrint() as printed_output:
+        with CapturingPrint() as printed_output, WarningCapture() as captured_warnings:
             ret = func(**func_kwargs)
-        print('succesfull')
-        succes=True
-        msg='no error'
+        
+        # Log success
+        print(f'Successful execution! \nstdout: \n{printed_output}')
+        if captured_warnings.captured_warnings:
+            print(f'Warnings: \n{captured_warnings}')
+        
+        if plaintext is not None:
+            plaintext.appendPlainText(f'Successful execution! \nstdout: \n{printed_output}')
+            if captured_warnings.captured_warnings:
+                plaintext.appendPlainText(f'Warnings: \n{captured_warnings}')
+        
+        # Add logs to plaintext
+        if plaintext is not None:
+            stream_handler.flush()
+            log_handler.seek(0)
+            plaintext.appendPlainText(f'Logs:\n{log_handler.getvalue()}')
+        
+        #scroll to the end of plaintext
+        if plaintext is not None:
+            plaintext.moveCursor(plaintext.textCursor().End)
+
         return ret, True, printed_output
     
-    #something unforseen went wrong
     except Exception as e:
-        msg=str(e)
-        print(f'Exception occured: {msg}')
-        return None, False, msg 
-    
-    #something forseen went wrong (sys exit catchment)
-    except SystemExit:
-        _type, msg, _traceback = sys.exc_info()
-        print(f'Sysexit occured: {msg}')
+        # Log unexpected exceptions
+        msg = str(e)
+        print(f'EXCEPTION occurred: {msg}')
+        if plaintext is not None:
+            plaintext.appendPlainText(f'EXCEPTION occurred:\n {msg}')
+            stream_handler.flush()
+            log_handler.seek(0)
+            plaintext.appendPlainText(f'Logs:\n{log_handler.getvalue()}')
+            plaintext.moveCursor(plaintext.textCursor().End)
         return None, False, msg
-            
+    
+    except SystemExit:
+        # Log system exit exceptions
+        _type, msg, _traceback = sys.exc_info()
+        print(f'SystemExit occurred: {msg}')
+        if plaintext is not None:
+            plaintext.appendPlainText(f'SystemExit occurred:\n {msg}')
+            stream_handler.flush()
+            log_handler.seek(0)
+            plaintext.appendPlainText(f'Logs:\n{log_handler.getvalue()}')
+            plaintext.moveCursor(plaintext.textCursor().End)
+        return None, False, msg
+    finally:
+        root_logger.removeHandler(stream_handler)
+    
+# def gui_wrap(func, func_kwargs, plaintext=None):
+#     """ A wrapper for the gui to call a function."""
+    
+#     print(f'Executing Metobs command: \n* {func}')
+#     pprint.pp(func_kwargs)
+
+#     if plaintext is not None:
+#         plaintext.appendPlainText(f'Executing Metobs command: \n* {func} with:')
+#         plaintext.appendPlainText(pprint.pformat(func_kwargs))
+    
+#     try:
+#         with CapturingPrint() as printed_output:
+#             ret = func(**func_kwargs)
+#         msg='no error'
+#         if plaintext is not None:
+#             plaintext.appendPlainText(f'Succesfull execution! \nstdout: \n {printed_output}')
+       
+#         return ret, True, printed_output
+    
+#     #something unforseen went wrong
+#     except Exception as e:
+#         msg=str(e)
+#         print(f'Exception occured: {msg}')
+#         if plaintext is not None:
+#             plaintext.appendPlainText(f'Exception occured: {msg}')
+#         return None, False, msg 
+    
+#     #something forseen went wrong (sys exit catchment)
+#     except SystemExit:
+#         _type, msg, _traceback = sys.exc_info()
+#         print(f'Sysexit occured: {msg}')
+#         if plaintext is not None:
+#             plaintext.appendPlainText(f'Sysexit occured: {msg}')
+        
+#         return None, False, msg
+
+def get_function_defaults(func):
+    """
+    Returns a dictionary of parameter names and their default values for the given function.
+    
+    Parameters:
+        func (function): The function to inspect.
+    
+    Returns:
+        dict: A dictionary with parameter names as keys and their default values as values.
+    """
+    signature = inspect.signature(func)
+    return {
+        param.name: param.default
+        for param in signature.parameters.values()
+        if param.default is not inspect.Parameter.empty
+    }
 
 # =============================================================================
 # Dataset methods
@@ -838,3 +960,5 @@ def gui_wrap(func, func_kwargs):
 
 
 
+
+# %%

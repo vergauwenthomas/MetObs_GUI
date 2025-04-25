@@ -7,19 +7,17 @@ Created on Fri Jul 28 13:30:48 2023
 """
 from pathlib import Path
 import os
-import pprint
+
 import json
-import copy
-import pytz
+
 from PyQt5.QtWidgets import QFileDialog, QComboBox, QDialog
 from PyQt5.uic import loadUi
 
-
 from metobs_toolkit.template import _get_empty_templ_dict
-from metobs_gui.tlk_scripts import gui_wrap
+from metobs_gui.tlk_scripts import gui_wrap, get_function_defaults
 
-
-import metobs_gui.template_mapping as template_mapping
+import metobs_gui.common_functions as common_func
+import metobs_gui.template_page.template_mapping as template_mapping
 
 # import metobs_gui.template_func as template_func
 import metobs_gui.path_handler as path_handler
@@ -30,42 +28,39 @@ from metobs_gui.errors import Error, Notification
 # =============================================================================
 # Initialise values
 # =============================================================================
-def init_template_page(MW):
-
-    #Extra data attributes used on this page    
-    MW._templ_dict= _get_empty_templ_dict() 
-    MW._template_json_file=os.path.join(path_handler.TMP_dir, 'template.json')
-   
-    
+def init_page(MW):
 
     # set data paths to saved files
     set_datapaths_init(MW)
+
+    # init a template json file
+    _init_an_empty_template(MW)
    
+   
+
+def _init_an_empty_template(MW):
+    #Add a the template to the MW as dict    
+    MW._templ_dict= _get_empty_templ_dict() 
+    MW._template_json_file=os.path.join(path_handler.TMP_dir, 'template.json')
+
     #create an empty templatejson file
     with open(MW._template_json_file, 'w') as f:
         json.dump(MW._templ_dict, f, indent=4)
    
     #Display the template dict
-    _display_templ_dict(MW)
-
+    common_func.display_jsonfile_in_plaintext(
+        plaintext=MW.template_info,
+        jsonfile=MW._template_json_file)
+    # _display_templ_dict(MW)
 
 
 
 def _update_templdict_to_json(MW):
     """Write the current template to a json file"""
-   
 
     path_handler.update_json_file(update_dict=MW._templ_dict,
                                   filepath=MW._template_json_file)
 
-def _display_templ_dict(MW):
-    """Display the template json file on the page. """
-    #read template json
-    templatejson = path_handler.read_json(MW._template_json_file)
-    
-    #write to the text displayer
-    MW.template_info.clear()
-    MW.template_info.setPlainText(json.dumps(templatejson, indent=2))
 
 
 
@@ -106,14 +101,13 @@ def _react_to_save_template(MW):
     
     
     
-    
 
 
 # =============================================================================
 # Triggers
 # =============================================================================
 
-def _setup_triggers(MW):
+def setup_triggers(MW):
     MW.Browse_data_B.clicked.connect(lambda: browsefiles_data(MW)) #browse datafile
     MW.Browse_metadata_B.clicked.connect(lambda: browsefiles_metadata(MW)) #browse metadatafile
     # save paths when selected
@@ -148,7 +142,7 @@ def _setup_triggers(MW):
     # # display df's
     MW.preview_data.clicked.connect(lambda: show_data_head(MW))
     MW.preview_metadata.clicked.connect(lambda: show_metadata_head(MW))
-    # MW.view_template.clicked.connect(lambda: show_template(MW))
+   
 
 
 
@@ -182,7 +176,7 @@ def launch_data_mapping(MW):
     
         #scrape the info of the closing window
         dlg._read_users_settings_as_template() #get the latest data from dialog
-        #capture singlas
+        #capture signals
         templatedict = dlg.template_dict
         
         #subset only to data part (needed when updating)
@@ -199,7 +193,9 @@ def launch_data_mapping(MW):
         print ('Dialog closed, no mapping is saved.')
     
     #print current templatedict status
-    _display_templ_dict(MW)
+    common_func.display_jsonfile_in_plaintext(
+                    plaintext=MW.template_info,
+                    jsonfile=MW._template_json_file)
         
         
 def launch_metadata_mapping(MW):
@@ -227,7 +223,9 @@ def launch_metadata_mapping(MW):
         print ('Dialog closed, no mapping is saved.')
     
     #print current templatedict status
-    _display_templ_dict(MW)
+    common_func.display_jsonfile_in_plaintext(
+                    plaintext=MW.template_info,
+                    jsonfile=MW._template_json_file)
                 
 
 
@@ -249,18 +247,18 @@ def build_template(MW):
     if (metadatafile == '') | (not MW.use_metadata_box.isChecked()):
         metadatafile=None
     
-    import_kwargs = {'input_data_file':datafile,
+    #get default args
+    import_kwargs = get_function_defaults(MW.Dataset.import_data_from_file)
+    #update the paths
+    import_kwargs.update({'input_data_file':datafile,
                      'input_metadata_file':metadatafile,
-                     'template_file':templatefile,
-                     'freq_estimation_method':'highest',
-                     'freq_estimation_simplify_tolerance':'2min',
-                     'origin_simplify_tolerance':'5min',
-                     'timestamp_tolerance':'4min',
-                     'kwargs_data_read':{},
-                     'kwargs_metadata_read':{},
-                     'templatefile_is_url':False}
+                     'template_file':templatefile})
     
-    _ret, succes, msg = gui_wrap(MW.Dataset.import_data_from_file, import_kwargs)
+    
+    _ret, succes, msg = gui_wrap(
+        func=MW.Dataset.import_data_from_file,
+        func_kwargs= import_kwargs,
+        )
     if not succes:
         Error('Could not import a Dataset', str(msg))
         
@@ -306,8 +304,10 @@ def save_path(MW, savebool, savekey, saveval):
 def show_data_head(MW):
     # 1. THe data file
     try:
-        df_head = path_handler.read_csv_datafile(datafile=MW.data_file_T.text(),
-                                       kwargsdict={"nrows": 20})
+        df_head = common_func.read_csv_file(
+            filepath=MW.data_file_T.text(),
+            nrows=20,
+        )
     except Exception as e:
         Error(str(e))
     
@@ -316,8 +316,11 @@ def show_data_head(MW):
 
 def show_metadata_head(MW):
     try:
-        metadf_head = path_handler.read_csv_datafile(datafile=MW.metadata_file_T.text(),
-                                       kwargsdict={"nrows": 20})
+        metadf_head = common_func.read_csv_file(
+            filepath=MW.metadata_file_T.text(),
+            nrows=20,
+        )
+       
     except Exception as e:
         Error(str(e))
  
