@@ -4,7 +4,7 @@ from pathlib import Path
 import metobs_toolkit
 
 
-from metobs_gui.tlk_scripts import gui_wrap, gui_wrap, get_function_defaults
+from metobs_gui.tlk_scripts import gui_wrap, get_function_defaults
 import metobs_gui.path_handler as path_handler
 from metobs_gui.extra_windows import HtmlDialog
 from metobs_gui.errors import Error, Notification

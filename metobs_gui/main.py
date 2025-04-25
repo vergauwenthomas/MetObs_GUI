@@ -31,8 +31,7 @@ import metobs_gui.log_displayer as log_displayer
 import metobs_gui.template_page.template_page as template_page
 import metobs_gui.import_data_page.import_data_page as import_page
 import metobs_gui.gee_page.gee_page as gee_page
-# import metobs_gui.qc_page as qc_page
-# import metobs_gui.modeldata_page as modeldata_page
+import metobs_gui.qc_page.qc_page as qc_page
 # import metobs_gui.fill_page as fill_page
 # import metobs_gui.analysis_page as analysis_page
 import metobs_gui.gui_settings_page as gui_settings_page
@@ -71,7 +70,7 @@ class MainWindow(QMainWindow):
         gee_page.init_page(self)
 
         # # P4 INIT
-        # qc_page.init_qc_page(self)
+        qc_page.init_qc_page(self)
 
         # # P5 INIT
         # modeldata_page.init_modeldata_page(self)
@@ -131,7 +130,7 @@ class MainWindow(QMainWindow):
         import_page.setup_triggers(self)
         gee_page.setup_triggers(self)
         # metadata_page.setup_triggers(self)
-        # qc_page.setup_triggers(self)
+        qc_page.setup_triggers(self)
         # modeldata_page.setup_triggers(self)
         # fill_page.setup_triggers(self)
        

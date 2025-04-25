@@ -42,7 +42,7 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
+         <y>-54</y>
          <width>1403</width>
          <height>1200</height>
         </rect>
@@ -83,7 +83,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>7</number>
+             <number>3</number>
             </property>
             <widget class="QWidget" name="tab">
              <attribute name="title">
@@ -1220,7 +1220,7 @@
                <rect>
                 <x>0</x>
                 <y>60</y>
-                <width>631</width>
+                <width>571</width>
                 <height>371</height>
                </rect>
               </property>
@@ -1264,26 +1264,6 @@
                  </item>
                 </layout>
                </item>
-               <item row="2" column="0">
-                <widget class="QCheckBox" name="pers_check">
-                 <property name="text">
-                  <string>Persistance check</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QCheckBox" name="gros_check">
-                 <property name="text">
-                  <string>Gross value check</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
                <item row="0" column="2">
                 <widget class="QSpinBox" name="rep_max_rep">
                  <property name="minimum">
@@ -1297,26 +1277,6 @@
                  </property>
                  <property name="value">
                   <number>5</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QCheckBox" name="rep_check">
-                 <property name="text">
-                  <string>Repetitions check</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QCheckBox" name="step_check">
-                 <property name="text">
-                  <string>Step check</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -1456,6 +1416,34 @@
                  </item>
                 </layout>
                </item>
+               <item row="0" column="0">
+                <widget class="QPushButton" name="apply_rep_check">
+                 <property name="text">
+                  <string>Apply repetitions check</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="apply_gross_val_check">
+                 <property name="text">
+                  <string>Apply gross value check</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QPushButton" name="apply_persis_check">
+                 <property name="text">
+                  <string>Apply persistence check</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QPushButton" name="apply_step_check">
+                 <property name="text">
+                  <string>Apply step check</string>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
              <widget class="QWidget" name="horizontalLayoutWidget_21">
@@ -1522,30 +1510,11 @@
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="horizontalLayoutWidget_22">
-              <property name="geometry">
-               <rect>
-                <x>10</x>
-                <y>460</y>
-                <width>1041</width>
-                <height>51</height>
-               </rect>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_33">
-               <item>
-                <widget class="QPushButton" name="apply_qc">
-                 <property name="text">
-                  <string>Apply Quality control</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
              <widget class="QWidget" name="horizontalLayoutWidget_30">
               <property name="geometry">
                <rect>
                 <x>10</x>
-                <y>530</y>
+                <y>640</y>
                 <width>681</width>
                 <height>281</height>
                </rect>
@@ -1556,78 +1525,13 @@
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="gridLayoutWidget_7">
-              <property name="geometry">
-               <rect>
-                <x>710</x>
-                <y>530</y>
-                <width>321</width>
-                <height>281</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_8">
-               <item row="2" column="0">
-                <widget class="QPushButton" name="show_dataset_2">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="text">
-                  <string>Show dataset</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QPushButton" name="show_metadata_2">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="text">
-                  <string>Show metadata</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QPushButton" name="get_info_2">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="text">
-                  <string>Get info</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QPushButton" name="plot_dataset_2">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="text">
-                  <string>Plot dataset</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QPushButton" name="plot_dataset_3">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="text">
-                  <string>Plot QC statistics</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
              <widget class="QWidget" name="gridLayoutWidget_12">
               <property name="geometry">
                <rect>
-                <x>650</x>
+                <x>590</x>
                 <y>60</y>
                 <width>785</width>
-                <height>381</height>
+                <height>384</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_14">
@@ -1663,13 +1567,6 @@
                  </item>
                 </layout>
                </item>
-               <item row="1" column="0">
-                <widget class="QCheckBox" name="budd_check">
-                 <property name="text">
-                  <string>buddy check</string>
-                 </property>
-                </widget>
-               </item>
                <item row="1" column="2">
                 <layout class="QVBoxLayout" name="verticalLayout_17">
                  <item>
@@ -1687,17 +1584,7 @@
                     <double>1000.000000000000000</double>
                    </property>
                    <property name="value">
-                    <double>5000.000000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QSpinBox" name="buddy_min_n">
-                   <property name="minimum">
-                    <number>2</number>
-                   </property>
-                   <property name="maximum">
-                    <number>200</number>
+                    <double>10000.000000000000000</double>
                    </property>
                   </widget>
                  </item>
@@ -1713,7 +1600,30 @@
                     <double>0.500000000000000</double>
                    </property>
                    <property name="value">
-                    <double>1.500000000000000</double>
+                    <double>3.100000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="buddy_iter">
+                   <property name="minimum">
+                    <number>2</number>
+                   </property>
+                   <property name="maximum">
+                    <number>200</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="buddy_min_n">
+                   <property name="minimum">
+                    <number>2</number>
+                   </property>
+                   <property name="maximum">
+                    <number>200</number>
+                   </property>
+                   <property name="value">
+                    <number>4</number>
                    </property>
                   </widget>
                  </item>
@@ -1730,6 +1640,28 @@
                    </property>
                    <property name="value">
                     <double>1.000000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="buddy_int_tol">
+                   <property name="suffix">
+                    <string> minutes</string>
+                   </property>
+                   <property name="prefix">
+                    <string/>
+                   </property>
+                   <property name="minimum">
+                    <number>0</number>
+                   </property>
+                   <property name="maximum">
+                    <number>500</number>
+                   </property>
+                   <property name="singleStep">
+                    <number>5</number>
+                   </property>
+                   <property name="value">
+                    <number>4</number>
                    </property>
                   </widget>
                  </item>
@@ -1753,7 +1685,10 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QDoubleSpinBox" name="buddy_lapsrate">
+                  <widget class="QDoubleSpinBox" name="buddy_lapserate">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
                    <property name="decimals">
                     <number>4</number>
                    </property>
@@ -1768,6 +1703,83 @@
                    </property>
                    <property name="value">
                     <double>-0.006500000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="0" column="0">
+                <widget class="QPushButton" name="apply_wind_var_check">
+                 <property name="text">
+                  <string>Apply window variation check</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="apply_buddy_check">
+                 <property name="text">
+                  <string>Apply buddy check</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <layout class="QVBoxLayout" name="verticalLayout_16">
+                 <item>
+                  <widget class="QLabel" name="label_78">
+                   <property name="text">
+                    <string>Buddy radius (in meter):</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_80">
+                   <property name="text">
+                    <string>Variance threshold (in std)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_7">
+                   <property name="text">
+                    <string>Number of iterations</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_79">
+                   <property name="text">
+                    <string>Minimum number of buddies</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_84">
+                   <property name="text">
+                    <string>Minimum std of neighborhood</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_9">
+                   <property name="text">
+                    <string>Instantanious tollerance</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="buddy_with_altdif">
+                   <property name="text">
+                    <string>Maximum buddy altitude difference (in meter)</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="buddy_with_lapserate">
+                   <property name="text">
+                    <string>Lapse rate (obs_units/ meter)</string>
                    </property>
                   </widget>
                  </item>
@@ -1828,76 +1840,58 @@
                    <property name="decimals">
                     <number>1</number>
                    </property>
+                   <property name="minimum">
+                    <double>-100000.000000000000000</double>
+                   </property>
                    <property name="maximum">
-                    <double>100000.000000000000000</double>
+                    <double>0.000000000000000</double>
                    </property>
                    <property name="value">
-                    <double>10.000000000000000</double>
+                    <double>-10.000000000000000</double>
                    </property>
                   </widget>
                  </item>
                 </layout>
                </item>
-               <item row="1" column="1">
-                <layout class="QVBoxLayout" name="verticalLayout_16">
-                 <item>
-                  <widget class="QLabel" name="label_78">
-                   <property name="text">
-                    <string>Buddy radius (in meter):</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_79">
-                   <property name="text">
-                    <string>Minimum number of buddies</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_80">
-                   <property name="text">
-                    <string>Variance threshold (in std)</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_84">
-                   <property name="text">
-                    <string>Minimum std of neighborhood</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_82">
-                   <property name="text">
-                    <string>Maximum elevation difference (in meter)</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_83">
-                   <property name="text">
-                    <string>Linear elevation gradient with height (obs_units/ meter)</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="0" column="0">
-                <widget class="QCheckBox" name="var_check">
-                 <property name="text">
-                  <string>Window variation check</string>
-                 </property>
-                 <property name="checked">
+              </layout>
+             </widget>
+             <widget class="QWidget" name="verticalLayoutWidget_10">
+              <property name="geometry">
+               <rect>
+                <x>710</x>
+                <y>660</y>
+                <width>171</width>
+                <height>251</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_22">
+               <item>
+                <widget class="QPushButton" name="get_info_qc">
+                 <property name="enabled">
                   <bool>true</bool>
+                 </property>
+                 <property name="text">
+                  <string>Get info</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
-                <widget class="QCheckBox" name="const_alt_approx">
+               <item>
+                <widget class="QPushButton" name="show_dataset_qc">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
                  <property name="text">
-                  <string>Assume constant altitude</string>
+                  <string>Show data lab</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="plot_dataset_qc">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="text">
+                  <string>Plot dataset</string>
                  </property>
                 </widget>
                </item>
