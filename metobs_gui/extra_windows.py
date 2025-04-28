@@ -152,19 +152,48 @@ class timeseriesCanvas(FigureCanvasQTAgg):
     def _clear_axis(self):
         print('clear axes')
         self.axes.cla()
+
+    def subset_stations(self, trg_stations=['ALL STATIONS']):
+
+        metobs_obj = self.dataset
+
+        #case 1 : If ALL is selected -> plot all
+        if 'ALL STATIONS' in trg_stations:
+            return metobs_obj
+        elif len(trg_stations) == 1:
+            #single station
+            return metobs_obj.get_station(trg_stations[0])
+        else:
+            return metobs_obj.subset_by_stations(stationnames=trg_stations)
     # =============================================================================
     #     fill axes methods
     # =============================================================================
-    def dataset_timeseriesplot(self, plotkwargs):
+    def dataset_timeseriesplot(self, plotkwargs, trg_stations=['ALL STATIONS'] ):
+        self._clear_axis()  # Clear the axes before updating
+
         plotkwargs['ax'] = self.axes
 
-        axes, succes, stout = gui_wrap(self.dataset.make_plot,
-                                       plotkwargs)
+        trg_plot_obj = self.subset_stations(trg_stations=trg_stations)
+        axes, succes, stout = gui_wrap(trg_plot_obj.make_plot,
+                           plotkwargs)
         if not succes:
-            Error("Error occured when making a plot of the dataset.", stout)
+            Error("Error occurred when making a plot of the dataset.", stout)
             return
         
-        self.axes=axes
+        self.axes = axes
+
+    # def dataset_timeseriesplot(self, plotkwargs, trg_stations=['ALL STATIONS'] ):
+    #     plotkwargs['ax'] = self.axes
+
+    #     trg_plot_obj=self.subset_stations(trg_stations=trg_stations)
+    #     axes, succes, stout = gui_wrap(trg_plot_obj.make_plot,
+    #                                    plotkwargs)
+    #     if not succes:
+    #         Error("Error occured when making a plot of the dataset.", stout)
+    #         return
+        
+    #     self.axes=axes
+
 
         
     
@@ -204,12 +233,15 @@ class DatasetTimeSeriesDialog(QDialog):
         #colorby spinner        
         self.select_colorby.clear()
         self.select_colorby.addItems(['station','label'])
+
+        #Set stationname selector
+        all_stationnames = [sta.name for sta in self.Dataset.stations]
+        all_stationnames.insert(0, 'ALL STATIONS')
+        self.target_stations.clear()
+        self.target_stations.addItems(all_stationnames)
+        self.target_stations.setCurrentRow(0)  # Select 'ALL stations' by default
         
-        # #subset spinner (represetn the join of all stationnames)
-        # self.select_subset.clear()
-        # stationnames = [sta.name for sta in self.Dataset.stations]
-        # stationnames.insert(0,'ALL')
-        # self.select_subset.addItems(stationnames)
+      
     
     def update_plot(self):
         plotkwargs = get_function_defaults(self.Dataset.make_plot)
@@ -222,8 +254,11 @@ class DatasetTimeSeriesDialog(QDialog):
         plotkwargs['show_gaps'] = self.select_show_gaps.isChecked()
         plotkwargs['show_modeldata'] = self.select_add_modeldata.isChecked()
 
+        trgstations = [select.text() for select in self.target_stations.selectedItems()]
+
         #call plot on dataset
-        self.canvas.dataset_timeseriesplot(plotkwargs=plotkwargs)
+        self.canvas.dataset_timeseriesplot(plotkwargs=plotkwargs,
+                                           trg_stations=trgstations)
         self.canvas.draw()
 
 

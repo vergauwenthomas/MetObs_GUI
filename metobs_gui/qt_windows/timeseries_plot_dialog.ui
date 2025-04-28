@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>960</width>
-    <height>638</height>
+    <width>1341</width>
+    <height>872</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>600</y>
+     <x>670</x>
+     <y>820</y>
      <width>621</width>
      <height>32</height>
     </rect>
@@ -28,17 +28,6 @@
    <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
-  </widget>
-  <widget class="QWidget" name="verticalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>150</y>
-     <width>861</width>
-     <height>421</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="vert_layout"/>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
@@ -69,10 +58,10 @@
   <widget class="QPushButton" name="update_plot_box">
    <property name="geometry">
     <rect>
-     <x>750</x>
-     <y>70</y>
+     <x>770</x>
+     <y>50</y>
      <width>141</width>
-     <height>25</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="text">
@@ -152,6 +141,60 @@
    <property name="checked">
     <bool>false</bool>
    </property>
+  </widget>
+  <widget class="QListWidget" name="target_stations">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>50</y>
+     <width>231</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::MultiSelection</enum>
+   </property>
+   <item>
+    <property name="text">
+     <string>ALL</string>
+    </property>
+    <property name="background">
+     <brush brushstyle="NoBrush">
+      <color alpha="255">
+       <red>52</red>
+       <green>101</green>
+       <blue>164</blue>
+      </color>
+     </brush>
+    </property>
+    <property name="checkState">
+     <enum>Checked</enum>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>20</y>
+     <width>201</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select Stations</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>190</y>
+     <width>1261</width>
+     <height>601</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="vert_layout"/>
   </widget>
  </widget>
  <resources/>

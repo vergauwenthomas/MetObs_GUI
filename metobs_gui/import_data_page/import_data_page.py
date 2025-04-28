@@ -241,10 +241,9 @@ def make_dataset(MW):
 
     #Trigger when a dataset is loaded
     if MW._Dataset_imported:
-        #set obstype spinner
-        present_obs = list(MW.Dataset.df.index.get_level_values('obstype').unique())
-        MW.obstype_spinner.clear()
-        MW.obstype_spinner.addItems(present_obs)
+        MW.react_dataset_loaded()
+        
+        
 
 def import_the_dataset_from_pkl(MW, pklpath):
     prompt = getattr(MW, "prompt")

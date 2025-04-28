@@ -27,6 +27,20 @@ def get_current_datetime_from_widget(datetimeedit, fmt="%d/%m/%Y %H:%M"):
 #    Displaying
 # ------------------------------------------
 
+
+def display_dict_in_plaintext(plaintext, displaydict, indent=2, cleanup=True):
+    """print out a dict in plaintext """
+
+    #write to the text displayer
+    if cleanup:
+        plaintext.clear()
+        plaintext.setPlainText(json.dumps(displaydict, indent=indent))
+    else:
+        plaintext.appendPlainText(json.dumps(displaydict, indent=indent))
+
+    plaintext.moveCursor(plaintext.textCursor().End)
+
+
 def display_jsonfile_in_plaintext(plaintext, jsonfile, indent=2, cleanup=True):
     """Display the template json file on the page. """
     #read template json
@@ -35,15 +49,10 @@ def display_jsonfile_in_plaintext(plaintext, jsonfile, indent=2, cleanup=True):
         raise FileNotFoundError(f'{jsonfile} is not found.')
     
     dict = path_handler.read_json(jsonfile)
-    
-    #write to the text displayer
-    if cleanup:
-        plaintext.clear()
-        plaintext.setPlainText(json.dumps(dict, indent=indent))
-    else:
-        plaintext.appendPlainText(json.dumps(dict, indent=indent))
-
-    plaintext.moveCursor(plaintext.textCursor().End)
+    display_dict_in_plaintext(plaintext=plaintext,
+                              displaydict=dict,
+                              indent=indent,
+                              cleanup=cleanup)
 
 def display_info_in_plaintext(plaintext, metobs_obj, cleanup=False):
 

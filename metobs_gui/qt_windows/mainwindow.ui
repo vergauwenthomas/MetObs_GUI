@@ -42,7 +42,7 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>-54</y>
+         <y>0</y>
          <width>1403</width>
          <height>1200</height>
         </rect>
@@ -83,7 +83,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>3</number>
+             <number>4</number>
             </property>
             <widget class="QWidget" name="tab">
              <attribute name="title">
@@ -1219,12 +1219,30 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>60</y>
-                <width>571</width>
-                <height>371</height>
+                <y>20</y>
+                <width>781</width>
+                <height>614</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_7">
+               <item row="1" column="1">
+                <layout class="QVBoxLayout" name="verticalLayout_4">
+                 <item>
+                  <widget class="QLabel" name="label_69">
+                   <property name="text">
+                    <string>Minimum value:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_68">
+                   <property name="text">
+                    <string>Maximum value:</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
                <item row="2" column="2">
                 <layout class="QVBoxLayout" name="verticalLayout_7">
                  <item>
@@ -1264,6 +1282,67 @@
                  </item>
                 </layout>
                </item>
+               <item row="2" column="1">
+                <layout class="QVBoxLayout" name="verticalLayout_6">
+                 <item>
+                  <widget class="QLabel" name="label_70">
+                   <property name="text">
+                    <string>Time window to check :</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_71">
+                   <property name="text">
+                    <string>Minimum number of observations in window</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="3" column="0">
+                <widget class="QPushButton" name="apply_step_check">
+                 <property name="text">
+                  <string>Apply step check</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <layout class="QVBoxLayout" name="verticalLayout_5">
+                 <item>
+                  <widget class="QDoubleSpinBox" name="gross_max">
+                   <property name="decimals">
+                    <number>1</number>
+                   </property>
+                   <property name="minimum">
+                    <double>-100000.000000000000000</double>
+                   </property>
+                   <property name="maximum">
+                    <double>100000.000000000000000</double>
+                   </property>
+                   <property name="value">
+                    <double>39.000000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QDoubleSpinBox" name="gross_min">
+                   <property name="decimals">
+                    <number>1</number>
+                   </property>
+                   <property name="minimum">
+                    <double>-100000.000000000000000</double>
+                   </property>
+                   <property name="maximum">
+                    <double>100000.000000000000000</double>
+                   </property>
+                   <property name="value">
+                    <double>-15.000000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
                <item row="0" column="2">
                 <widget class="QSpinBox" name="rep_max_rep">
                  <property name="minimum">
@@ -1293,6 +1372,141 @@
                   <widget class="QLabel" name="label_73">
                    <property name="text">
                     <string>Max decrease per hour</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="2" column="0">
+                <widget class="QPushButton" name="apply_persis_check">
+                 <property name="text">
+                  <string>Apply persistence check</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QPushButton" name="apply_wind_var_check">
+                 <property name="text">
+                  <string>Apply window variation check</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLabel" name="label_67">
+                 <property name="text">
+                  <string>Maximum valid repetitions:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <layout class="QVBoxLayout" name="verticalLayout_14">
+                 <item>
+                  <widget class="QLabel" name="label_74">
+                   <property name="text">
+                    <string>TIme window to check : </string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_75">
+                   <property name="text">
+                    <string>Minimum number of observations in window</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_76">
+                   <property name="text">
+                    <string>Max increase per hour</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_77">
+                   <property name="text">
+                    <string>Max decrease per hour</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="apply_gross_val_check">
+                 <property name="text">
+                  <string>Apply gross value check</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QPushButton" name="apply_rep_check">
+                 <property name="text">
+                  <string>Apply repetitions check</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="2">
+                <layout class="QVBoxLayout" name="verticalLayout_15">
+                 <item>
+                  <widget class="QSpinBox" name="var_window">
+                   <property name="suffix">
+                    <string> minutes</string>
+                   </property>
+                   <property name="prefix">
+                    <string/>
+                   </property>
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>500</number>
+                   </property>
+                   <property name="value">
+                    <number>60</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="var_min_n">
+                   <property name="minimum">
+                    <number>2</number>
+                   </property>
+                   <property name="maximum">
+                    <number>200</number>
+                   </property>
+                   <property name="value">
+                    <number>3</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QDoubleSpinBox" name="var_max_inc_hour">
+                   <property name="decimals">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <double>100000.000000000000000</double>
+                   </property>
+                   <property name="value">
+                    <double>8.000000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QDoubleSpinBox" name="var_max_dec_hour">
+                   <property name="prefix">
+                    <string/>
+                   </property>
+                   <property name="decimals">
+                    <number>1</number>
+                   </property>
+                   <property name="minimum">
+                    <double>-100000.000000000000000</double>
+                   </property>
+                   <property name="maximum">
+                    <double>0.000000000000000</double>
+                   </property>
+                   <property name="value">
+                    <double>-10.000000000000000</double>
                    </property>
                   </widget>
                  </item>
@@ -1337,237 +1551,77 @@
                  </item>
                 </layout>
                </item>
-               <item row="2" column="1">
-                <layout class="QVBoxLayout" name="verticalLayout_6">
+               <item row="5" column="0">
+                <widget class="QPushButton" name="apply_buddy_check">
+                 <property name="text">
+                  <string>Apply buddy check</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <layout class="QVBoxLayout" name="verticalLayout_16">
                  <item>
-                  <widget class="QLabel" name="label_70">
+                  <widget class="QLabel" name="label_78">
                    <property name="text">
-                    <string>Time window to check :</string>
+                    <string>Buddy radius (in meter):</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_71">
+                  <widget class="QLabel" name="label_80">
                    <property name="text">
-                    <string>Minimum number of observations in window</string>
+                    <string>Variance threshold (in std)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_7">
+                   <property name="text">
+                    <string>Number of iterations</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_79">
+                   <property name="text">
+                    <string>Minimum number of buddies</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_84">
+                   <property name="text">
+                    <string>Minimum std of neighborhood</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_9">
+                   <property name="text">
+                    <string>Instantanious tollerance</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="buddy_with_altdif">
+                   <property name="text">
+                    <string>Maximum buddy altitude difference (in meter)</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="buddy_with_lapserate">
+                   <property name="text">
+                    <string>Lapse rate (obs_units/ meter)</string>
                    </property>
                   </widget>
                  </item>
                 </layout>
                </item>
-               <item row="1" column="2">
-                <layout class="QVBoxLayout" name="verticalLayout_5">
-                 <item>
-                  <widget class="QDoubleSpinBox" name="gross_max">
-                   <property name="decimals">
-                    <number>1</number>
-                   </property>
-                   <property name="minimum">
-                    <double>-100000.000000000000000</double>
-                   </property>
-                   <property name="maximum">
-                    <double>100000.000000000000000</double>
-                   </property>
-                   <property name="value">
-                    <double>39.000000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QDoubleSpinBox" name="gross_min">
-                   <property name="decimals">
-                    <number>1</number>
-                   </property>
-                   <property name="minimum">
-                    <double>-100000.000000000000000</double>
-                   </property>
-                   <property name="maximum">
-                    <double>100000.000000000000000</double>
-                   </property>
-                   <property name="value">
-                    <double>-15.000000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="0" column="1">
-                <widget class="QLabel" name="label_67">
-                 <property name="text">
-                  <string>Maximum valid repetitions:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <layout class="QVBoxLayout" name="verticalLayout_4">
-                 <item>
-                  <widget class="QLabel" name="label_68">
-                   <property name="text">
-                    <string>Maximum value:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_69">
-                   <property name="text">
-                    <string>Minimum value:</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="0" column="0">
-                <widget class="QPushButton" name="apply_rep_check">
-                 <property name="text">
-                  <string>Apply repetitions check</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QPushButton" name="apply_gross_val_check">
-                 <property name="text">
-                  <string>Apply gross value check</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QPushButton" name="apply_persis_check">
-                 <property name="text">
-                  <string>Apply persistence check</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QPushButton" name="apply_step_check">
-                 <property name="text">
-                  <string>Apply step check</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="horizontalLayoutWidget_21">
-              <property name="geometry">
-               <rect>
-                <x>-1</x>
-                <y>10</y>
-                <width>381</width>
-                <height>41</height>
-               </rect>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_31">
-               <item>
-                <widget class="QLabel" name="label_66">
-                 <property name="text">
-                  <string>Update QC setting for :</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="obstype_spinner">
-                 <item>
-                  <property name="text">
-                   <string>No dataset loaded</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="horizontalLayoutWidget_29">
-              <property name="geometry">
-               <rect>
-                <x>8</x>
-                <y>1466</y>
-                <width>801</width>
-                <height>72</height>
-               </rect>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_32">
-               <item>
-                <widget class="QLabel" name="label_86">
-                 <property name="text">
-                  <string>Save Dataset as (pkl): </string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="pkl_save_filename_2">
-                 <property name="text">
-                  <string>your_dataset.pkl</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="save_pkl_B_2">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="text">
-                  <string>save</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="horizontalLayoutWidget_30">
-              <property name="geometry">
-               <rect>
-                <x>10</x>
-                <y>640</y>
-                <width>681</width>
-                <height>281</height>
-               </rect>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_34">
-               <item>
-                <widget class="QPlainTextEdit" name="prompt_qc"/>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="gridLayoutWidget_12">
-              <property name="geometry">
-               <rect>
-                <x>590</x>
-                <y>60</y>
-                <width>785</width>
-                <height>384</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_14">
-               <item row="0" column="1">
-                <layout class="QVBoxLayout" name="verticalLayout_14">
-                 <item>
-                  <widget class="QLabel" name="label_74">
-                   <property name="text">
-                    <string>TIme window to check : </string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_75">
-                   <property name="text">
-                    <string>Minimum number of observations in window</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_76">
-                   <property name="text">
-                    <string>Max increase per hour</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_77">
-                   <property name="text">
-                    <string>Max decrease per hour</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="1" column="2">
+               <item row="5" column="2">
                 <layout class="QVBoxLayout" name="verticalLayout_17">
                  <item>
                   <widget class="QDoubleSpinBox" name="buddy_rad">
@@ -1708,158 +1762,92 @@
                  </item>
                 </layout>
                </item>
-               <item row="0" column="0">
-                <widget class="QPushButton" name="apply_wind_var_check">
+              </layout>
+             </widget>
+             <widget class="QWidget" name="horizontalLayoutWidget_21">
+              <property name="geometry">
+               <rect>
+                <x>860</x>
+                <y>40</y>
+                <width>381</width>
+                <height>41</height>
+               </rect>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_31">
+               <item>
+                <widget class="QLabel" name="label_66">
                  <property name="text">
-                  <string>Apply window variation check</string>
+                  <string>Update QC setting for :</string>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QPushButton" name="apply_buddy_check">
+               <item>
+                <widget class="QComboBox" name="obstype_spinner">
+                 <item>
+                  <property name="text">
+                   <string>No dataset loaded</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="horizontalLayoutWidget_29">
+              <property name="geometry">
+               <rect>
+                <x>8</x>
+                <y>1466</y>
+                <width>801</width>
+                <height>72</height>
+               </rect>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_32">
+               <item>
+                <widget class="QLabel" name="label_86">
                  <property name="text">
-                  <string>Apply buddy check</string>
+                  <string>Save Dataset as (pkl): </string>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="1">
-                <layout class="QVBoxLayout" name="verticalLayout_16">
-                 <item>
-                  <widget class="QLabel" name="label_78">
-                   <property name="text">
-                    <string>Buddy radius (in meter):</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_80">
-                   <property name="text">
-                    <string>Variance threshold (in std)</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_7">
-                   <property name="text">
-                    <string>Number of iterations</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_79">
-                   <property name="text">
-                    <string>Minimum number of buddies</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_84">
-                   <property name="text">
-                    <string>Minimum std of neighborhood</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_9">
-                   <property name="text">
-                    <string>Instantanious tollerance</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="buddy_with_altdif">
-                   <property name="text">
-                    <string>Maximum buddy altitude difference (in meter)</string>
-                   </property>
-                   <property name="checked">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="buddy_with_lapserate">
-                   <property name="text">
-                    <string>Lapse rate (obs_units/ meter)</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
+               <item>
+                <widget class="QLineEdit" name="pkl_save_filename_2">
+                 <property name="text">
+                  <string>your_dataset.pkl</string>
+                 </property>
+                </widget>
                </item>
-               <item row="0" column="2">
-                <layout class="QVBoxLayout" name="verticalLayout_15">
-                 <item>
-                  <widget class="QSpinBox" name="var_window">
-                   <property name="suffix">
-                    <string> minutes</string>
-                   </property>
-                   <property name="prefix">
-                    <string/>
-                   </property>
-                   <property name="minimum">
-                    <number>1</number>
-                   </property>
-                   <property name="maximum">
-                    <number>500</number>
-                   </property>
-                   <property name="value">
-                    <number>60</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QSpinBox" name="var_min_n">
-                   <property name="minimum">
-                    <number>2</number>
-                   </property>
-                   <property name="maximum">
-                    <number>200</number>
-                   </property>
-                   <property name="value">
-                    <number>3</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QDoubleSpinBox" name="var_max_inc_hour">
-                   <property name="decimals">
-                    <number>1</number>
-                   </property>
-                   <property name="maximum">
-                    <double>100000.000000000000000</double>
-                   </property>
-                   <property name="value">
-                    <double>8.000000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QDoubleSpinBox" name="var_max_dec_hour">
-                   <property name="prefix">
-                    <string/>
-                   </property>
-                   <property name="decimals">
-                    <number>1</number>
-                   </property>
-                   <property name="minimum">
-                    <double>-100000.000000000000000</double>
-                   </property>
-                   <property name="maximum">
-                    <double>0.000000000000000</double>
-                   </property>
-                   <property name="value">
-                    <double>-10.000000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
+               <item>
+                <widget class="QPushButton" name="save_pkl_B_2">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>save</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="horizontalLayoutWidget_30">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>680</y>
+                <width>681</width>
+                <height>281</height>
+               </rect>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_34">
+               <item>
+                <widget class="QPlainTextEdit" name="prompt_qc"/>
                </item>
               </layout>
              </widget>
              <widget class="QWidget" name="verticalLayoutWidget_10">
               <property name="geometry">
                <rect>
-                <x>710</x>
-                <y>660</y>
+                <x>700</x>
+                <y>700</y>
                 <width>171</width>
                 <height>251</height>
                </rect>
@@ -1897,14 +1885,6 @@
                </item>
               </layout>
              </widget>
-            </widget>
-            <widget class="QWidget" name="tab_6">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <attribute name="title">
-              <string>Get Modeldata</string>
-             </attribute>
             </widget>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -1944,33 +1924,7 @@
                 </widget>
                </item>
                <item row="1" column="1">
-                <widget class="QComboBox" name="method_spinner">
-                 <item>
-                  <property name="text">
-                   <string>Interpolation</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Raw modeldata gapfill</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Debiased modeldata gapfill</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Diurnal debiased modeldata gapfill</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Weighted diurnal dibiased modeldata gapfill</string>
-                  </property>
-                 </item>
-                </widget>
+                <widget class="QComboBox" name="method_spinner"/>
                </item>
               </layout>
              </widget>
@@ -2049,89 +2003,6 @@
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="gridLayoutWidget_14">
-              <property name="geometry">
-               <rect>
-                <x>698</x>
-                <y>370</y>
-                <width>341</width>
-                <height>171</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_16">
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_107">
-                 <property name="text">
-                  <string>Gaps</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QPushButton" name="show_filled_gaps">
-                 <property name="text">
-                  <string>Show filled</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QPushButton" name="show_gaps">
-                 <property name="text">
-                  <string>Show gaps</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QPushButton" name="show_dataset_4">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="text">
-                  <string>Show dataset</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QLabel" name="label_112">
-                 <property name="text">
-                  <string>Dataset</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QPushButton" name="print_dataset_info">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="text">
-                  <string>Print info</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="QPushButton" name="plot_dataset_6">
-                 <property name="text">
-                  <string>Plot</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QPushButton" name="print_gap_info">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="text">
-                  <string>Print info</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
              <widget class="QLabel" name="label_92">
               <property name="geometry">
                <rect>
@@ -2156,24 +2027,24 @@
              <widget class="QPushButton" name="convert_outliers">
               <property name="geometry">
                <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>501</width>
+                <x>20</x>
+                <y>20</y>
+                <width>271</width>
                 <height>25</height>
                </rect>
               </property>
               <property name="text">
-               <string>Convert all outliers to gaps</string>
+               <string>Convert outliers to gaps</string>
               </property>
              </widget>
-             <widget class="QPushButton" name="fill_gaps_2">
+             <widget class="QPushButton" name="fill_gaps_button">
               <property name="enabled">
                <bool>false</bool>
               </property>
               <property name="geometry">
                <rect>
-                <x>0</x>
-                <y>200</y>
+                <x>10</x>
+                <y>270</y>
                 <width>511</width>
                 <height>25</height>
                </rect>
@@ -2183,6 +2054,9 @@
               </property>
              </widget>
              <widget class="QPushButton" name="update_method_settings">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="geometry">
                <rect>
                 <x>530</x>
@@ -2194,6 +2068,63 @@
               <property name="text">
                <string>Update settings</string>
               </property>
+             </widget>
+             <widget class="QComboBox" name="convert_outliers_trgs">
+              <property name="geometry">
+               <rect>
+                <x>320</x>
+                <y>20</y>
+                <width>181</width>
+                <height>25</height>
+               </rect>
+              </property>
+              <item>
+               <property name="text">
+                <string>No Dataset loaded</string>
+               </property>
+              </item>
+             </widget>
+             <widget class="QWidget" name="verticalLayoutWidget_11">
+              <property name="geometry">
+               <rect>
+                <x>710</x>
+                <y>310</y>
+                <width>171</width>
+                <height>251</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_23">
+               <item>
+                <widget class="QPushButton" name="get_info_gf">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="text">
+                  <string>Get info</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="show_dataset_gf">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="text">
+                  <string>Show data lab</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="plot_dataset_gf">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="text">
+                  <string>Plot dataset</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </widget>
             <widget class="QWidget" name="tab_7">

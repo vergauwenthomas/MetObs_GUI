@@ -32,7 +32,7 @@ import metobs_gui.template_page.template_page as template_page
 import metobs_gui.import_data_page.import_data_page as import_page
 import metobs_gui.gee_page.gee_page as gee_page
 import metobs_gui.qc_page.qc_page as qc_page
-# import metobs_gui.fill_page as fill_page
+import metobs_gui.gf_page.gf_page as gf_page
 # import metobs_gui.analysis_page as analysis_page
 import metobs_gui.gui_settings_page as gui_settings_page
 
@@ -76,7 +76,7 @@ class MainWindow(QMainWindow):
         # modeldata_page.init_modeldata_page(self)
 
         # # P6 INIT
-        # fill_page.init_fill_page(self)
+        gf_page.init_fill_page(self)
 
         # # P7 INIT
         # analysis_page.init_analysis_page(self)
@@ -104,7 +104,7 @@ class MainWindow(QMainWindow):
         self.table.setModel(self.templmodel)
 
 
-        # ------- Callbacks (triggers) ------------
+    
 
 
         # =============================================================================
@@ -117,8 +117,6 @@ class MainWindow(QMainWindow):
         self.use_data_box.clicked.connect(self.use_data_T_2.setCheckState) #link them
         self.use_metadata_box.clicked.connect(self.use_metadata_2.setCheckState) #link them
         
-        # self.use_startdt.clicked.connect(self.use_enddt.setCheckState) #link them
-        # self.use_enddt.clicked.connect(self.use_startdt.setCheckState) #link them
 
 
         # =============================================================================
@@ -129,23 +127,38 @@ class MainWindow(QMainWindow):
         template_page.setup_triggers(self)
         import_page.setup_triggers(self)
         gee_page.setup_triggers(self)
-        # metadata_page.setup_triggers(self)
         qc_page.setup_triggers(self)
-        # modeldata_page.setup_triggers(self)
-        # fill_page.setup_triggers(self)
-       
-
-       
-
-
-        
-        # # =============================================================================
-        # # GUI settings
-        # # =============================================================================
+        gf_page.setup_triggers(self)
         gui_settings_page._setup_triggers(self)
 
+       
 
 
+       
+    # ------- cross-tabs-reactions (triggers) ------------
+    
+    def react_dataset_loaded(self):
+        """ Reaction when a dataset is loaded"""
+
+        #Setup of present obstype spinners
+        present_obs = list(self.Dataset.df.index.get_level_values('obstype').unique())
+        obstype_spin_list = [self.obstype_spinner,
+                            self.fill_obstype,
+                            self.convert_outliers_trgs,
+                            ]
+        
+        for spin in obstype_spin_list:
+            spin.clear()
+            spin.addItems(present_obs)
+
+        #Enable widgets
+        enable_list = [self.update_method_settings,
+                       self.convert_outliers]
+        for widg in enable_list:
+            widg.setEnabled(True)
+
+        #Special reactions
+        gf_page._react_dataset_loaded(self)
 
 
 

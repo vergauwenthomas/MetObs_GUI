@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>652</width>
+    <height>586</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>440</y>
+     <x>20</x>
+     <y>540</y>
      <width>621</width>
      <height>32</height>
     </rect>
@@ -34,21 +34,21 @@
     <rect>
      <x>10</x>
      <y>20</y>
-     <width>481</width>
+     <width>371</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>Interpolate gaps settings</string>
+    <string>Fill gaps with weighted diurnal debiased modeldata</string>
    </property>
   </widget>
   <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>60</y>
-     <width>591</width>
-     <height>291</height>
+     <y>80</y>
+     <width>561</width>
+     <height>201</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -74,90 +74,102 @@
      </widget>
     </item>
     <item row="2" column="0">
-     <widget class="QLabel" name="label_4">
+     <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>Method</string>
+       <string>Leading period duration</string>
       </property>
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QComboBox" name="method_spinner"/>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string>Maximum consecutive fill's</string>
+     <widget class="QSpinBox" name="lead_duration">
+      <property name="suffix">
+       <string>hours</string>
       </property>
-     </widget>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_6">
-      <property name="text">
-       <string>N leading anchors</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QSpinBox" name="max_consec_spinner">
       <property name="minimum">
-       <number>2</number>
+       <number>1</number>
       </property>
       <property name="maximum">
        <number>10000</number>
       </property>
       <property name="value">
-       <number>10</number>
+       <number>48</number>
       </property>
      </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QSpinBox" name="n_lead_spinner"/>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="label_7">
-      <property name="text">
-       <string>N trailing anchors</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1">
-     <widget class="QSpinBox" name="n_trail_spinner"/>
-    </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="label_8">
-      <property name="text">
-       <string>Max leading anchor to gap distance</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="0">
-     <widget class="QLabel" name="label_9">
-      <property name="text">
-       <string>Max trailing anchor to gap distance</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1">
-     <widget class="QSpinBox" name="max_leading_distance"/>
-    </item>
-    <item row="8" column="1">
-     <widget class="QSpinBox" name="max_trailing_distance"/>
     </item>
     <item row="3" column="0">
-     <widget class="QLabel" name="label_10">
+     <widget class="QLabel" name="label_6">
       <property name="text">
-       <string>Method-Kwargs</string>
+       <string>Trailing period duration</string>
       </property>
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QLineEdit" name="methodkwargs_edit">
+     <widget class="QSpinBox" name="trail_duration">
+      <property name="suffix">
+       <string>hours</string>
+      </property>
+      <property name="minimum">
+       <number>0</number>
+      </property>
+      <property name="maximum">
+       <number>10000</number>
+      </property>
+      <property name="value">
+       <number>48</number>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_5">
       <property name="text">
-       <string>{}</string>
+       <string>MInimum leading-sample size</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QSpinBox" name="n_lead_sample">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>10000</number>
+      </property>
+      <property name="value">
+       <number>2</number>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>MInimum trailing-sample size</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QSpinBox" name="n_trail_sample">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>10000</number>
+      </property>
+      <property name="value">
+       <number>2</number>
       </property>
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QTextBrowser" name="doc">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>280</y>
+     <width>561</width>
+     <height>251</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <resources/>
