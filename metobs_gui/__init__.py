@@ -40,16 +40,17 @@ sys.path.append(BASE_PATH)
 
 # import GUI
 
-
-def launch_gui():
-    from metobs_gui.main import main
-    main()
+# DO not change this manually!
+print('HOI SARA')
+__version__ = "0.4.0a0"
+# def launch_gui():
+from metobs_gui.main import main
+main()
 
 
 # =============================================================================
 # Version
 # =============================================================================
 
-# DO not change this manually!
-__version__ = "0.4.0a0"
+
 
