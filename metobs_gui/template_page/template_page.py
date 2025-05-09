@@ -21,7 +21,7 @@ import metobs_gui.template_page.template_mapping as template_mapping
 
 # import metobs_gui.template_func as template_func
 import metobs_gui.path_handler as path_handler
-
+from metobs_gui.import_data_page.import_data_page import _setup_select_template_spinner
 from metobs_gui.errors import Error, Notification
 
 
@@ -97,6 +97,10 @@ def _react_to_save_template(MW):
     path_handler.copy_file(MW._template_json_file,
                            trg_path)
     
+    #TODO: update the spinner on p
+    _setup_select_template_spinner(MW)
+
+
     Notification(f'The template is saved as {filename}')
     
     

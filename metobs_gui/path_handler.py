@@ -18,7 +18,7 @@ from metobs_toolkit import demo_template
 # Main folders
 # =============================================================================
 
-GUI_dir = str( Path(__file__).resolve().parents[0])
+GUI_dir = r'{}'.format(str( Path(__file__).resolve().parents[0]))
 REPO_dir = Path(GUI_dir).parent
 
 # =============================================================================

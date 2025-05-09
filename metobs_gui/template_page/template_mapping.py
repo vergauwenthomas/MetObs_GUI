@@ -189,7 +189,7 @@ class Data_map_Window(QDialog):
         self.column_spinner.addItems(self.avail_to_map)
         
         self.browse_format.clear()
-        self.browse_format.addItems(['Long data', 'Wide data'])
+        self.browse_format.addItems(['Long data', 'Wide data', 'Single-station'])
         
         self.name_repr.clear()
         self.name_repr.addItems(['A single column',
@@ -231,6 +231,11 @@ class Data_map_Window(QDialog):
             self.column_spinner.setEnabled(True)
             name_repr_options.remove('All columns represent stations')
             self.name_repr.addItems(name_repr_options)
+
+        elif datafmt == 'Single-station':
+            self.column_spinner.setEnabled(True)
+            self.name_repr.addItems([name_repr_options[0], 
+                                     name_repr_options[2]])
            
         else:
             print(f'{datafmt} is not a valid format.')
@@ -353,6 +358,7 @@ class Data_map_Window(QDialog):
         self.name_col_spinner.setEnabled(False)
         self.name_repr.setEnabled(False)
         self.map_name_but.setEnabled(False)
+        self.single_station_name.setEnabled(False)
 
         #update template status
         self._print_info()
@@ -475,6 +481,9 @@ class Data_map_Window(QDialog):
             self.template_dict['data_related']['structure'] = 'wide'
         elif datafmt == 'Long data':
             self.template_dict['data_related']['structure'] = 'long'
+        
+        elif datafmt == 'Single-station':
+            self.template_dict['data_related']['structure'] = 'single_station'
         else:
             pass
         
