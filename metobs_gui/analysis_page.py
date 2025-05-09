@@ -11,7 +11,7 @@ from datetime import datetime
 from metobs_gui.errors import Error, Notification
 import metobs_gui.tlk_scripts as tlk_scripts
 
-from metobs_gui.extra_windows import make_a_cycle_plot, show_cycle_stats_df, make_a_heatmap_plot, show_cor_matix_df
+# from metobs_gui.extra_windows import make_a_cycle_plot, show_cycle_stats_df, make_a_heatmap_plot, show_cor_matix_df
 
 
 # =============================================================================

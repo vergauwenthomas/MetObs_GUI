@@ -22,15 +22,15 @@ loggers.setLevel(logging.DEBUG)
 log_path = os.path.join(str(Path(__file__).parent.parent.parent), "logfile.log")
 
 # # Create the Handler for logging data to a file - will be hereted for children
-logger_handler = logging.FileHandler(filename=log_path)
-logger_handler.setLevel(logging.DEBUG)
+# logger_handler = logging.FileHandler(filename=log_path)
+# logger_handler.setLevel(logging.DEBUG)
 
 # # Create a Formatter for formatting the log messages
-logger_formatter = logging.Formatter("%(name)s - %(levelname)s - %(message)s")
-logger_handler.setFormatter(logger_formatter)
+# logger_formatter = logging.Formatter("%(name)s - %(levelname)s - %(message)s")
+# logger_handler.setFormatter(logger_formatter)
 
 # Add the Handler to the Logger
-loggers.addHandler(logger_handler)
+# loggers.addHandler(logger_handler)
 loggers.info("Logger initiated")
 
 
@@ -51,5 +51,5 @@ def launch_gui():
 # =============================================================================
 
 # DO not change this manually!
-__version__ = "0.0.1a0"
+__version__ = "0.4.0a0"
 

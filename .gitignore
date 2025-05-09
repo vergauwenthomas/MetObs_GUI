@@ -1,5 +1,15 @@
 deploiment/*
 
+
+
+#tmp savings (session specific)
+tmp/*
+cache/*
+
+#temporary files and cached
 *.swp
 .spyproject
+.spyproject/*
+*__pycache__*
+*/cache/*
 

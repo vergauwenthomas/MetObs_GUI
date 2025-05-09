@@ -1,6 +1,19 @@
 [tool.poetry]
 name = "MetObs-GUI"
-version = "0.0.1a0"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Atmospheric Science"
+]
+version = "0.4.0a0"
 description = "A GUI for the MetObs-toolkit"
 authors = ["Thomas Vergauwen <thomas.vergauwen@meteo.be>"]
 maintainers = ["Thomas Vergauwen <thomas.vergauwen@meteo.be>"]
@@ -13,20 +26,19 @@ keywords = ["meteorology", "observations", "urban climate", "GUI"]
 
 
 [tool.poetry.dependencies]
-# Get the latest revision on the branch named "next"
-#requests = { git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", branch = "master"}
-python = "^3.9"
+python = "^3.9" #sync with toolkit
 PyQt5 = "=5.12.3" #Technical: this version is the latest to build from source
 PyQtWebEngine = "~5.12.1"
-metobs_toolkit = "0.1.2"
+metobs_toolkit = {git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", tag = "v0.4.0"}
 
-#metobs-toolkit = {git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", rev = "master"}
 
 
 
 
 [tool.poetry.group.dev.dependencies]
-poetry = "^1.3.2"
+poetry = "^1.8.3"
+pre-commit = "^3.8.0"
+poetry-plugin-export = "^1.8.0"
 
 [build-system]
 requires = ["poetry-core"]
