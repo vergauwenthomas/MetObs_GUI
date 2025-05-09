@@ -27,9 +27,10 @@ keywords = ["meteorology", "observations", "urban climate", "GUI"]
 
 [tool.poetry.dependencies]
 python = "^3.9" #sync with toolkit
-PyQt5 = "=5.12.3" #Technical: this version is the latest to build from source
-PyQtWebEngine = "~5.12.1"
-metobs_toolkit = {git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", tag = "v0.4.0"}
+PyQt5 = "^5.12"
+# PyQt5 = "=5.12.3" #Technical: this version is the latest to build from source
+# PyQtWebEngine = "~5.12.1"
+metobs_toolkit = {git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", branch = "refactor_classes"}
 
 
 

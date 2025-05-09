@@ -15,7 +15,7 @@ Created on Thu Apr 27 16:17:53 2023
 import sys, os
 import pandas as pd
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QDialog, QDialogButtonBox
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+
 from PyQt5 import QtCore
 from metobs_gui.errors import Error, Notification
 from PyQt5.uic import loadUi
