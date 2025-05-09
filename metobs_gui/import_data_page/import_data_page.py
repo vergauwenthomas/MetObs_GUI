@@ -292,9 +292,9 @@ def make_dataset_from_files(MW):
         templatefile = tempfile_dict[temp_name]
     
     #check paths
-    for path in [datafile, metadatafile, templatefile]:
-        if not path_handler.file_exist(path):
-            Error(f'{path} is not a file!')
+    # for path in [datafile, metadatafile, templatefile]:
+    #     if not path_handler.file_exist(path):
+    #         Error(f'{path} is not a file!')
     
     #get arguments
     freq_method = MW.freq_method_spinner.currentText()
