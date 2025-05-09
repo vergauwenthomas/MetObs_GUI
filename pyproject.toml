@@ -13,7 +13,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Topic :: Scientific/Engineering :: Atmospheric Science"
 ]
-version = "0.3.0a0"
+version = "0.4.0a0"
 description = "A GUI for the MetObs-toolkit"
 authors = ["Thomas Vergauwen <thomas.vergauwen@meteo.be>"]
 maintainers = ["Thomas Vergauwen <thomas.vergauwen@meteo.be>"]
@@ -29,7 +29,7 @@ keywords = ["meteorology", "observations", "urban climate", "GUI"]
 python = "^3.9" #sync with toolkit
 PyQt5 = "=5.12.3" #Technical: this version is the latest to build from source
 PyQtWebEngine = "~5.12.1"
-metobs_toolkit = {git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", rev = "master"}
+metobs_toolkit = {git = "https://github.com/vergauwenthomas/MetObs_toolkit.git", tag = "v0.4.0"}
 
 
 

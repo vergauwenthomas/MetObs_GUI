@@ -182,18 +182,6 @@ class timeseriesCanvas(FigureCanvasQTAgg):
         
         self.axes = axes
 
-    # def dataset_timeseriesplot(self, plotkwargs, trg_stations=['ALL STATIONS'] ):
-    #     plotkwargs['ax'] = self.axes
-
-    #     trg_plot_obj=self.subset_stations(trg_stations=trg_stations)
-    #     axes, succes, stout = gui_wrap(trg_plot_obj.make_plot,
-    #                                    plotkwargs)
-    #     if not succes:
-    #         Error("Error occured when making a plot of the dataset.", stout)
-    #         return
-        
-    #     self.axes=axes
-
 
         
     
