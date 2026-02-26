@@ -1,22 +1,21 @@
 [tool.poetry]
 name = "MetObs-GUI"
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 2 - Pre-Alpha",
   "Intended Audience :: Science/Research",
   "License :: OSI Approved :: MIT License",
   "Natural Language :: English",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Scientific/Engineering :: Atmospheric Science"
 ]
-version = "0.4.0a0"
+version = "1.0.0a1"
 description = "A GUI for the MetObs-toolkit"
-authors = ["Thomas Vergauwen <thomas.vergauwen@meteo.be>"]
-maintainers = ["Thomas Vergauwen <thomas.vergauwen@meteo.be>"]
+authors = ["Thomas Vergauwen <thomas.vergauwen@ugent.be>"]
+maintainers = ["Thomas Vergauwen <thomas.vergauwen@ugent.be>"]
 license = "LICENSE"
 readme = "README.md"
 documentation = "https://python-poetry.org/docs/"

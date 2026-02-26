@@ -22,7 +22,7 @@ sys.path.append(BASE_PATH)
 
 
 # DO not change this manually!
-__version__ = "0.5.0a0"
+__version__ = "1.0.0a1"
 
 from metobs_gui.main import main
 main()
