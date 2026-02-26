@@ -18,8 +18,6 @@ from PyQt5.uic import loadUi
 
 from metobs_gui.tlk_scripts import gui_wrap
 import metobs_toolkit
-from metobs_toolkit.template import _get_empty_templ_dict
-from metobs_toolkit.template_build_prompt import test_unit
 
 import metobs_gui.path_handler as path_handler
 from metobs_gui.errors import Error
@@ -61,7 +59,7 @@ class Metadata_map_Window(QDialog):
         #data attributes
         metadf = common_func.read_csv_file(metadatafile, nrows=10)        
         self.metacolumns = list(metadf.columns)
-        self.template_dict = _get_empty_templ_dict()
+        self.template_dict = common_func._get_empty_templ_dict()
         
         self.available_columns = copy.deepcopy(self.metacolumns)
         
@@ -162,7 +160,7 @@ class Data_map_Window(QDialog):
         self.avail_to_map = [] #columns that are not mapped yet
         self.avail_obstypes = copy.deepcopy(Dataset.obstypes)
         
-        self.template_dict = _get_empty_templ_dict()
+        self.template_dict = common_func._get_empty_templ_dict()
         
         #initialize values
         self._init_data_mapping_dialog()

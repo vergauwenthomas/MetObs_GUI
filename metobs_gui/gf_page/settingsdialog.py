@@ -46,11 +46,11 @@ class InterpolationSettingsDialog(SettingsDialog):
 
 
         settings = {
-            'target_obstype': get_val(self.obstype_spin),
+            'obstype': get_val(self.obstype_spin),
             'overwrite_fill': get_val(self.overwrite_box),
             'method': get_val(self.method_spinner),
             'method_kwargs': get_val(self.methodkwargs_edit, True),
-            'max_consec_fill':get_val(self.max_consec_spinner),
+            'max_gap_duration_to_fill':get_val(self.max_gap_duration),
             'n_leading_anchors':get_val(self.n_lead_spinner),
             'n_trailing_anchors': get_val(self.n_trail_spinner),
             'max_lead_to_gap_distance':max_lead_dist,
@@ -60,16 +60,36 @@ class InterpolationSettingsDialog(SettingsDialog):
         return settings
     
 class RawModeldataGFSettingsDialog(SettingsDialog):
-    def __init__(self, trgobstype,func):
+    def __init__(self, trgobstype,func, modeldetails: dict = {}):
         super().__init__(uifilepath=Path(GUI_dir).joinpath('gf_page').joinpath('raw_modeldata_settings_dialog.ui'),
                           trgobstype=trgobstype,
                           func=func)
+        self.modeldetails = modeldetails
         self.doc.setHtml(format_rawtring_to_htmltext(self.docstr))
+        
+        #Triggers
+        self.modelnamespinner.currentTextChanged.connect(self.set_modelvariable)
+
+        self.setup()
+    
+    def setup(self):
+        self.modelnamespinner.clear()
+        self.modelnamespinner.addItems(list(self.modeldetails.keys()))
+        
+    def set_modelvariable(self):
+        modelname = self.modelnamespinner.currentText()
+        variables = self.modeldetails[modelname]
+        self.modelvariablespinner.clear()
+        self.modelvariablespinner.addItems(variables)
+        
     def get_settings(self):
         #Read the settings and set as as dict
 
         settings = {
-            'target_obstype': get_val(self.obstype_spin),
+            'obstype': get_val(self.obstype_spin),
+            'modelname': get_val(self.modelnamespinner),
+            'modelvariable': get_val(self.modelvariablespinner),
+            'max_gap_duration_to_fill':get_val(self.max_gap_duration),
             'overwrite_fill': get_val(self.overwrite_box)
             }
         #Set function name
@@ -77,16 +97,35 @@ class RawModeldataGFSettingsDialog(SettingsDialog):
         return settings
 
 class DebiasModeldataGFSettingsDialog(SettingsDialog):
-    def __init__(self, trgobstype, func):
+    def __init__(self, trgobstype, func, modeldetails: dict = {}):
         super().__init__(uifilepath=Path(GUI_dir).joinpath('gf_page').joinpath('debias_modeldata_settings_dialog.ui'),
                           trgobstype=trgobstype,
                           func=func)
+        self.modeldetails = modeldetails
         self.doc.setHtml(format_rawtring_to_htmltext(self.docstr))
+
+        self.modelnamespinner.currentTextChanged.connect(self.set_modelvariable)
+
+        self.setup()
+
+    def setup(self):
+        self.modelnamespinner.clear()
+        self.modelnamespinner.addItems(list(self.modeldetails.keys()))
+
+    def set_modelvariable(self):
+        modelname = self.modelnamespinner.currentText()
+        variables = self.modeldetails.get(modelname, [])
+        self.modelvariablespinner.clear()
+        self.modelvariablespinner.addItems(variables)
+
     def get_settings(self):
         #Read the settings and set as as dict
 
         settings = {
-            'target_obstype': get_val(self.obstype_spin),
+            'obstype': get_val(self.obstype_spin),
+            'modelname': get_val(self.modelnamespinner),
+            'modelvariable': get_val(self.modelvariablespinner),
+            'max_gap_duration_to_fill':get_val(self.max_gap_duration),
             'overwrite_fill': get_val(self.overwrite_box),
             'leading_period_duration': f'{get_val(self.lead_duration)}h',
             'min_leading_records_total': get_val(self.n_lead),
@@ -98,16 +137,35 @@ class DebiasModeldataGFSettingsDialog(SettingsDialog):
         return settings
     
 class DiurnalDebiasModeldataGFSettingsDialog(SettingsDialog):
-    def __init__(self, trgobstype, func):
+    def __init__(self, trgobstype, func, modeldetails: dict = {}):
         super().__init__(uifilepath=Path(GUI_dir).joinpath('gf_page').joinpath('diurnal_debias_modeldata_settings_dialog.ui'),
                           trgobstype=trgobstype,
                           func=func)
+        self.modeldetails = modeldetails
         self.doc.setHtml(format_rawtring_to_htmltext(self.docstr))
+
+        self.modelnamespinner.currentTextChanged.connect(self.set_modelvariable)
+
+        self.setup()
+
+    def setup(self):
+        self.modelnamespinner.clear()
+        self.modelnamespinner.addItems(list(self.modeldetails.keys()))
+
+    def set_modelvariable(self):
+        modelname = self.modelnamespinner.currentText()
+        variables = self.modeldetails.get(modelname, [])
+        self.modelvariablespinner.clear()
+        self.modelvariablespinner.addItems(variables)
+
     def get_settings(self):
         #Read the settings and set as as dict
 
         settings = {
-            'target_obstype': get_val(self.obstype_spin),
+            'obstype': get_val(self.obstype_spin),
+            'modelname': get_val(self.modelnamespinner),
+            'modelvariable': get_val(self.modelvariablespinner),
+            'max_gap_duration_to_fill':get_val(self.max_gap_duration),
             'overwrite_fill': get_val(self.overwrite_box),
             'leading_period_duration': f'{get_val(self.lead_duration)}h',
             'trailing_period_duration': f'{get_val(self.trail_duration)}h',
@@ -119,18 +177,36 @@ class DiurnalDebiasModeldataGFSettingsDialog(SettingsDialog):
         return settings
 
 class WeightedDiurnalDebiasModeldataGFSettingsDialog(SettingsDialog):
-    def __init__(self, trgobstype, func):
+    def __init__(self, trgobstype, func, modeldetails: dict = {}):
         super().__init__(uifilepath=Path(GUI_dir).joinpath('gf_page').joinpath('weighted_diurnal_debias_modeldata_settings_dialog.ui'),
                           trgobstype=trgobstype,
                           func=func)
+        self.modeldetails = modeldetails
 
         self.doc.setHtml(format_rawtring_to_htmltext(self.docstr))
+
+        self.modelnamespinner.currentTextChanged.connect(self.set_modelvariable)
+
+        self.setup()
+
+    def setup(self):
+        self.modelnamespinner.clear()
+        self.modelnamespinner.addItems(list(self.modeldetails.keys()))
+
+    def set_modelvariable(self):
+        modelname = self.modelnamespinner.currentText()
+        variables = self.modeldetails.get(modelname, [])
+        self.modelvariablespinner.clear()
+        self.modelvariablespinner.addItems(variables)
 
     def get_settings(self):
         #Read the settings and set as as dict
 
         settings = {
-            'target_obstype': get_val(self.obstype_spin),
+            'obstype': get_val(self.obstype_spin),
+            'modelname': get_val(self.modelnamespinner),
+            'modelvariable': get_val(self.modelvariablespinner),
+            'max_gap_duration_to_fill':get_val(self.max_gap_duration),
             'overwrite_fill': get_val(self.overwrite_box),
             'leading_period_duration': f'{get_val(self.lead_duration)}h',
             'trailing_period_duration': f'{get_val(self.trail_duration)}h',

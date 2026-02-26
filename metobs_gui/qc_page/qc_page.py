@@ -102,7 +102,7 @@ def _react_rep_check(MW):
     #scrape and Update the default kwargs with settings
     trg_obstype = MW.obstype_spinner.currentText()
     func_kwargs.update({
-        'target_obstype': trg_obstype,
+        'obstype': trg_obstype,
         'max_N_repetitions': int(MW.rep_max_rep.value())
     })
 
@@ -134,7 +134,7 @@ def _react_gross_val_check(MW):
     #scrape and Update the default kwargs with settings
     trg_obstype = MW.obstype_spinner.currentText()
     func_kwargs.update({
-        'target_obstype': trg_obstype,
+        'obstype': trg_obstype,
         'lower_threshold': MW.gross_min.value(),
         'upper_threshold': MW.gross_max.value()
     })
@@ -165,7 +165,7 @@ def _react_persist_check(MW):
     #scrape and Update the default kwargs with settings
     trg_obstype = MW.obstype_spinner.currentText()
     func_kwargs.update({
-        'target_obstype': trg_obstype,
+        'obstype': trg_obstype,
         'timewindow': f'{int(MW.pers_window.value())}min',
         'min_records_per_window': int(MW.pers_min_n.value())
     })
@@ -195,7 +195,7 @@ def _react_step_check(MW):
     #scrape and Update the default kwargs with settings
     trg_obstype = MW.obstype_spinner.currentText()
     func_kwargs.update({
-        'target_obstype': trg_obstype,
+        'obstype': trg_obstype,
         'max_increase_per_second': float(MW.step_max_inc.value())/3600.0,
         'max_decrease_per_second': float(MW.step_max_dec.value())/3600.0
     })
@@ -226,7 +226,7 @@ def _react_window_var_check(MW):
     #scrape and Update the default kwargs with settings
     trg_obstype = MW.obstype_spinner.currentText()
     func_kwargs.update({
-        'target_obstype': trg_obstype,
+        'obstype': trg_obstype,
         'timewindow': f'{int(MW.var_window.value())}min',
         'min_records_per_window': int(MW.var_min_n.value()),
         'max_increase_per_second': float(MW.var_max_inc_hour.value())/3600.0, 
@@ -271,14 +271,14 @@ def _react_buddy_check(MW):
     
 
     func_kwargs.update({
-        'target_obstype': trg_obstype,
-        'buddy_radius': float(MW.buddy_rad.value()),
+        'obstype': trg_obstype,
+        'spatial_buddy_radius': float(MW.buddy_rad.value()),
         'min_sample_size': int(MW.buddy_min_n.value()),
         'max_alt_diff': max_alt_diff,
         'min_std': float(MW.buddy_min_std.value()),
-        'std_threshold': float(MW.buddy_threshold.value()),
+        'spatial_z_threshold': float(MW.buddy_threshold.value()),
         'N_iter': int(MW.buddy_iter.value()),
-        'instantanious_tolerance': f'{int(MW.buddy_int_tol.value())}min',
+        'instantaneous_tolerance': f'{int(MW.buddy_int_tol.value())}min',
         'lapserate': lapserate
     })
 

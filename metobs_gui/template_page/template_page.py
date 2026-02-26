@@ -13,13 +13,11 @@ import json
 from PyQt5.QtWidgets import QFileDialog, QComboBox, QDialog
 from PyQt5.uic import loadUi
 
-from metobs_toolkit.template import _get_empty_templ_dict
 from metobs_gui.tlk_scripts import gui_wrap, get_function_defaults
 
 import metobs_gui.common_functions as common_func
 import metobs_gui.template_page.template_mapping as template_mapping
 
-# import metobs_gui.template_func as template_func
 import metobs_gui.path_handler as path_handler
 from metobs_gui.import_data_page.import_data_page import _setup_select_template_spinner
 from metobs_gui.errors import Error, Notification
@@ -40,7 +38,7 @@ def init_page(MW):
 
 def _init_an_empty_template(MW):
     #Add a the template to the MW as dict    
-    MW._templ_dict= _get_empty_templ_dict() 
+    MW._templ_dict= common_func._get_empty_templ_dict() 
     MW._template_json_file=os.path.join(path_handler.TMP_dir, 'template.json')
 
     #create an empty templatejson file

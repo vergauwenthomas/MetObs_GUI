@@ -10,7 +10,11 @@ import os
 import json
 import shutil
 from pathlib import Path
-from metobs_toolkit import demo_template
+
+try:
+    from metobs_toolkit import demo_template
+except ImportError:
+    demo_template = None
 
 
 

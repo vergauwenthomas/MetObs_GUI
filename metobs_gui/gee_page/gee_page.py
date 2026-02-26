@@ -1,6 +1,7 @@
 
 import os
 from pathlib import Path
+import webbrowser
 import metobs_toolkit
 
 
@@ -15,12 +16,122 @@ from metobs_gui.extra_windows import  DatasetTimeSeriesDialog
 promptvar = "prompt_geedata" #name of the plaintext prompt on this page
 geemanagers = metobs_toolkit.default_GEE_datasets
 
+
+def _ensure_gee_ready(MW, force_auth=False):
+    """Ensure Earth Engine is available, authenticated and initialized."""
+    prompt = getattr(MW, promptvar)
+
+    try:
+        import ee
+    except Exception as e:
+        Error('Earth Engine API is not available.', str(e))
+        return False
+
+    if force_auth:
+        return _react_force_gee_auth(MW)
+
+    try:
+        ee.Initialize()
+        return True
+    except Exception:
+        if getattr(MW, '_gee_auth_pending', False):
+            prompt.appendPlainText(
+                '\n---- Earth Engine auth pending ----\n'
+                'Paste the code in gee_code and press gee_submit.\n'
+            )
+        else:
+            prompt.appendPlainText(
+                '\n---- Earth Engine not authenticated ----\n'
+                'Press authenticate_gee_button first.\n'
+            )
+        return False
+
+
+def _start_gee_notebook_auth(MW):
+    prompt = getattr(MW, promptvar)
+
+    try:
+        import ee.oauth as ee_oauth
+    except Exception as e:
+        Error('Could not load Earth Engine OAuth helpers.', str(e))
+        return False
+
+    try:
+        flow = ee_oauth.Flow(auth_mode='notebook')
+        auth_url = flow.auth_url
+    except Exception as e:
+        Error('Could not start Earth Engine notebook authentication.', str(e))
+        return False
+
+    MW._gee_oauth_flow = flow
+    MW._gee_auth_pending = True
+
+    MW.gee_code.clear()
+    MW.gee_code.setEnabled(True)
+    MW.gee_submit.setEnabled(True)
+
+    prompt.appendPlainText(
+        '\n---- Earth Engine notebook auth started ----\n'
+        '1) Open the URL below and authorize.\n'
+        '2) Copy the generated code.\n'
+        '3) Paste into gee_code and click submit code.\n'
+        f'URL: {auth_url}\n'
+    )
+
+    try:
+        webbrowser.open(auth_url)
+    except Exception:
+        pass
+
+    return True
+
+
+def _finish_gee_notebook_auth(MW):
+    prompt = getattr(MW, promptvar)
+    code = MW.gee_code.text().strip()
+
+    if not code:
+        Error('No Earth Engine code provided.', 'Paste the code in gee_code first.')
+        return False
+
+    flow = getattr(MW, '_gee_oauth_flow', None)
+    if flow is None:
+        Error(
+            'No authentication session active.',
+            'Press authenticate_gee_button first to start notebook auth.'
+        )
+        return False
+
+    try:
+        import ee
+        flow.save_code(code=code)
+        ee.Initialize()
+    except Exception as e:
+        Error('Failed to finalize Earth Engine authentication.', str(e))
+        return False
+
+    MW._gee_auth_pending = False
+    MW._gee_oauth_flow = None
+    MW.gee_code.clear()
+    MW.gee_code.setEnabled(False)
+    MW.gee_submit.setEnabled(False)
+
+    prompt.appendPlainText('\n---- Earth Engine authenticated successfully ----\n')
+    Notification('Earth Engine credentials saved and initialized.')
+    return True
+        
+
+
 # =============================================================================
 # init page
 # =============================================================================
 def init_page(MW):
 
     setup_spinners(MW)
+    MW._gee_auth_pending = False
+    MW._gee_oauth_flow = None
+    MW.gee_code.setEnabled(False)
+    MW.gee_submit.setEnabled(False)
 
 
 # =============================================================================
@@ -36,7 +147,10 @@ def setup_spinners(MW):
 
 
     #dynamic datasets
-    dynamic_geedatasets = [key for key, value in geemanagers.items() if isinstance(value, metobs_toolkit.GEEDynamicDatasetManager)]
+    dynamic_geedatasets = [
+        key for key, value in geemanagers.items()
+        if hasattr(value, 'modelobstypes')
+    ]
     MW.dynamic_dataset_spinner.clear()
     MW.dynamic_dataset_spinner.addItems(dynamic_geedatasets)
 
@@ -74,6 +188,10 @@ def setup_triggers(MW):
     #radiobox statchanges
     MW.gee_similar_timespan.stateChanged.connect(lambda: _react_similar_timespan(MW))
 
+    
+    MW.authenticate_gee_button.clicked.connect(lambda: _react_force_gee_auth(MW))
+    MW.gee_submit.clicked.connect(lambda: _react_submit_gee_code(MW))
+
    
 
 # =============================================================================
@@ -84,7 +202,40 @@ def _browse_gee_csv_file(MW):
     fpath=common_func.browse_for_file(MW, 'Select GEE CSV file')
     MW.gee_csv_path.setText(fpath) #update text
 
+
+def _react_force_gee_auth(MW):
+    prompt = getattr(MW, promptvar)
+
+    try:
+        import ee
+    except Exception as e:
+        Error('Earth Engine API is not available.', str(e))
+        return False
+
+    prompt.appendPlainText('\n---- Starting Earth Engine authentication ----\n')
+
+    try:
+        ee.Authenticate(auth_mode='localhost', force=True)
+        ee.Initialize()
+        MW._gee_auth_pending = False
+        MW._gee_oauth_flow = None
+        MW.gee_code.clear()
+        MW.gee_code.setEnabled(False)
+        MW.gee_submit.setEnabled(False)
+        Notification('Earth Engine authenticated (automatic browser flow).')
+        return True
+    except Exception as e:
+        prompt.appendPlainText(
+            f'Automatic localhost auth failed, switching to notebook-code mode.\nReason: {e}\n'
+        )
+        return _start_gee_notebook_auth(MW)
+
+
+def _react_submit_gee_code(MW):
+    _finish_gee_notebook_auth(MW)
+
 def _react_gee_from_csv(MW):
+
     prompt = getattr(MW, promptvar )
     #Check if file exists
     trgfile = Path(MW.gee_csv_path.text())
@@ -99,7 +250,7 @@ def _react_gee_from_csv(MW):
 
     #Update the defaults
     func_kwargs['filepath'] = str(trgfile)
-    func_kwargs['geedynamicdatasetmanager'] = geemanager
+    func_kwargs['gee_dynamic_manager'] = geemanager
     
     # start prompting
     prompt.appendPlainText('\n---- Importing GEE data from CSV  ---- \n')
@@ -132,6 +283,9 @@ def _react_similar_timespan(MW):
 
 
 def _react_get_gee_timeseries(MW):
+    if not _ensure_gee_ready(MW):
+        return
+
     prompt = getattr(MW, promptvar )
     
     #Scrape the info
@@ -153,10 +307,10 @@ def _react_get_gee_timeseries(MW):
     func_kwargs = get_function_defaults(MW.Dataset.get_gee_timeseries_data)
 
     #Update the defaults
-    func_kwargs['geedynamicdatasetmanager'] = geemanager
+    func_kwargs['gee_dynamic_manager'] = geemanager
     func_kwargs['startdt_utc'] = startdt
     func_kwargs['enddt_utc'] = enddt
-    func_kwargs['target_obstypes'] = selected_modelobs
+    func_kwargs['obstypes'] = selected_modelobs
     func_kwargs['get_all_bands'] = get_all_bands
 
     # start prompting
@@ -188,14 +342,16 @@ def _update_modelobstypes(MW):
 
 
 def _react_get_lcz(MW):
+    if not _ensure_gee_ready(MW):
+        return
+
     prompt = getattr(MW, promptvar)
 
     # start prompting
     prompt.appendPlainText('\n---- Get LCZ from GEE ---- \n')
-    import logging
     _lcz, succes, stout = gui_wrap(
                         func=MW.Dataset.get_LCZ,
-                        func_kwargs={'overwrite': True},
+                        func_kwargs={'update_metadata': True},
                         plaintext=prompt,
                         log_level=MW.loglevel.currentText())
     if not succes:
@@ -210,13 +366,16 @@ def _react_get_lcz(MW):
  
 
 def _react_get_altitude(MW):
+    if not _ensure_gee_ready(MW):
+        return
+
     prompt = getattr(MW, promptvar )
     # start prompting
     prompt.appendPlainText('\n---- Get Altitude from GEE ---- \n')
 
     _alt, succes, stout = gui_wrap(
                     func=MW.Dataset.get_altitude,
-                    func_kwargs={'overwrite': True},
+                    func_kwargs={'update_metadata': True},
                     plaintext=prompt,
                     log_level=MW.loglevel.currentText())
     if not succes:
@@ -229,6 +388,9 @@ def _react_get_altitude(MW):
  
 
 def _react_get_landcover(MW):
+    if not _ensure_gee_ready(MW):
+        return
+
     prompt = getattr(MW, promptvar )
     # start prompting
     prompt.appendPlainText('\n---- Get landcover fractions from GEE ---- \n')
@@ -269,6 +431,9 @@ def _react_plot_dataset(MW):
     MW._dlg = DatasetTimeSeriesDialog(dataset=MW.Dataset)#launched when created
 
 def _react_spatial_plot(MW):
+    if not _ensure_gee_ready(MW):
+        return
+
     prompt = MW.prompt_geedata
     #scrape the info
     geemanager=geemanagers[MW.geedataset_plot_spinner.currentText()]
@@ -278,10 +443,9 @@ def _react_spatial_plot(MW):
 
     #construct kwargs
     func_kwargs = get_function_defaults(MW.Dataset.make_gee_plot)
-    func_kwargs['geedatasetmanager'] = geemanager
-    func_kwargs['save'] = True,
-    func_kwargs['outputfolder']=str(trgfilepath.parent)
-    func_kwargs['filename']=str(trgfilepath.name)
+    func_kwargs['gee_manager'] = geemanager
+    func_kwargs['save'] = True
+    func_kwargs['filepath'] = str(trgfilepath)
     func_kwargs['overwrite'] = True
 
     #create the map

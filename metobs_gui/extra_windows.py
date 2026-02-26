@@ -13,6 +13,7 @@ Created on Thu Apr 27 16:17:53 2023
 # # END DEBUG
 
 import sys, os
+import webbrowser
 import pandas as pd
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QDialog, QDialogButtonBox
 
@@ -276,10 +277,17 @@ class HtmlDialog(QDialog):
 
     def __init__(self, htmlfile):
         super().__init__()
-        loadUi(os.path.join(path_handler.GUI_dir,'qt_windows','html_map.ui'), self)
-
-        self.show()
-        self.display_2.load(QtCore.QUrl().fromLocalFile(htmlfile))
+        try:
+            from PyQt5 import QtWebEngineWidgets  # noqa: F401
+            loadUi(os.path.join(path_handler.GUI_dir, 'qt_windows', 'html_map.ui'), self)
+            self.show()
+            self.display_2.load(QtCore.QUrl().fromLocalFile(htmlfile))
+        except Exception as e:
+            file_url = QtCore.QUrl.fromLocalFile(htmlfile).toString()
+            webbrowser.open(file_url)
+            Notification(
+                'PyQtWebEngine is not available. Opened the map in your default browser.'
+            )
 
 
    

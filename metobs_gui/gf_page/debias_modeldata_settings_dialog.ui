@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>750</width>
-    <height>563</height>
+        <width>750</width>
+        <height>679</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>520</y>
+      <y>640</y>
      <width>621</width>
      <height>32</height>
     </rect>
@@ -48,7 +48,7 @@
      <x>30</x>
      <y>50</y>
      <width>561</width>
-     <height>211</height>
+      <height>311</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -66,21 +66,55 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_modelname">
+      <property name="text">
+       <string>modelname</string>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="1">
+     <widget class="QComboBox" name="modelnamespinner"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_modelvariable">
+      <property name="text">
+       <string>modelvariable</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QComboBox" name="modelvariablespinner"/>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_maxgap">
+      <property name="text">
+       <string>max_gap_duration_to_fill</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="max_gap_duration">
+      <property name="text">
+       <string>3h</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
      <widget class="QCheckBox" name="overwrite_box">
       <property name="text">
        <string>Overwrite filled gaps</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="5" column="0">
      <widget class="QLabel" name="label_3">
       <property name="text">
        <string>Leading period duration</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="5" column="1">
      <widget class="QSpinBox" name="lead_duration">
       <property name="suffix">
        <string>hours</string>
@@ -96,14 +130,14 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="6" column="0">
      <widget class="QLabel" name="label_4">
       <property name="text">
        <string>MInimum number of leading records</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
+    <item row="6" column="1">
      <widget class="QSpinBox" name="n_lead">
       <property name="minimum">
        <number>1</number>
@@ -116,7 +150,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="7" column="1">
      <widget class="QSpinBox" name="trail_duration">
       <property name="suffix">
        <string>hours</string>
@@ -132,7 +166,7 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
+    <item row="8" column="1">
      <widget class="QSpinBox" name="n_trail">
       <property name="minimum">
        <number>1</number>
@@ -145,14 +179,14 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item row="7" column="0">
      <widget class="QLabel" name="label_6">
       <property name="text">
        <string>Trailing period duration</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
+    <item row="8" column="0">
      <widget class="QLabel" name="label_5">
       <property name="text">
        <string>MInimum number of trailing records</string>
@@ -165,9 +199,9 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>260</y>
+      <y>360</y>
      <width>561</width>
-     <height>251</height>
+      <height>271</height>
     </rect>
    </property>
   </widget>

@@ -6,10 +6,44 @@ import pandas as pd
 
 from PyQt5.QtWidgets import QFileDialog
 
-from metobs_gui.tlk_scripts import gui_wrap 
+from metobs_gui.tlk_scripts import gui_wrap
 from metobs_gui.errors import Error
 import metobs_gui.path_handler as path_handler
-from metobs_toolkit.io_collection.filereaders import CsvFileReader
+
+
+def _get_empty_templ_dict():
+    """Return an empty template dict structure compatible with metobs_toolkit."""
+    return {
+        "data_related": {
+            "structure": None,
+            "timestamp": {
+                "timezone": None,
+                "datetime_column": None,
+                "datetime_fmt": None,
+                "date_column": None,
+                "date_fmt": None,
+                "time_column": None,
+                "time_fmt": None,
+            },
+            "name_column": None,
+            "obstype_mapping": [
+                {
+                    "tlk_obstype": None,
+                    "columnname": None,
+                    "unit": None,
+                    "description": None,
+                }
+            ],
+        },
+        "metadata_related": {
+            "name_column": None,
+            "lat_column": None,
+            "lon_column": None,
+            "altitude_column": None,
+            "columns_to_include": [],
+        },
+        "single_station_name": None,
+    }
 
 # ------------------------------------------
 #    Formatting
@@ -80,9 +114,13 @@ def display_info_in_plaintext(plaintext, metobs_obj, cleanup=False):
 #    Reading data
 # ------------------------------------------
 
-def read_csv_file(filepath, nrows=None):            
-    datareader = CsvFileReader(file_path=filepath, is_url=False)
-    data = datareader.read(nrows=nrows)
+def read_csv_file(filepath, nrows=None):
+    """Read a CSV file using pandas."""
+    try:
+        data = pd.read_csv(filepath, nrows=nrows)
+    except Exception as e:
+        Error(f'Error reading CSV file {filepath}: {e}')
+        return pd.DataFrame()
     return data
 
 

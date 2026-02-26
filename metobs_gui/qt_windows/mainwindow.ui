@@ -83,7 +83,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>5</number>
+             <number>3</number>
             </property>
             <widget class="QWidget" name="tab">
              <attribute name="title">
@@ -898,27 +898,20 @@
               </property>
               <layout class="QGridLayout" name="gridLayout_9">
                <item row="2" column="0">
-                <widget class="QPushButton" name="get_landcover">
-                 <property name="text">
-                  <string>Get Landcover</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
                 <widget class="QPushButton" name="get_lcz">
                  <property name="text">
                   <string>Get LCZ</string>
                  </property>
                 </widget>
                </item>
-               <item row="0" column="0">
+               <item row="1" column="0">
                 <widget class="QPushButton" name="get_altitude">
                  <property name="text">
                   <string>Get Altitude</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
+               <item row="3" column="1">
                 <layout class="QGridLayout" name="gridLayout_10">
                  <item row="1" column="0">
                   <widget class="QCheckBox" name="lc_agg">
@@ -958,6 +951,41 @@
                  </item>
                 </layout>
                </item>
+               <item row="0" column="0">
+                <widget class="QPushButton" name="authenticate_gee_button">
+                 <property name="text">
+                  <string>Authenticate GEE (with force)</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QPushButton" name="get_landcover">
+                 <property name="text">
+                  <string>Get Landcover</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <widget class="QLabel" name="label_89">
+                   <property name="text">
+                    <string>Pase GEE code: </string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="gee_code"/>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="gee_submit">
+                   <property name="text">
+                    <string>submit code</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
               </layout>
              </widget>
              <widget class="QPlainTextEdit" name="prompt_geedata">
@@ -969,35 +997,6 @@
                 <height>411</height>
                </rect>
               </property>
-             </widget>
-             <widget class="QWidget" name="horizontalLayoutWidget_31">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>270</y>
-                <width>651</width>
-                <height>80</height>
-               </rect>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_35">
-               <item>
-                <widget class="QLabel" name="label_89">
-                 <property name="text">
-                  <string>Pase GEE code: </string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="gee_code"/>
-               </item>
-               <item>
-                <widget class="QPushButton" name="gee_submit">
-                 <property name="text">
-                  <string>submit code</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
              </widget>
              <widget class="QWidget" name="gridLayoutWidget">
               <property name="geometry">
@@ -1228,16 +1227,16 @@
                <item row="1" column="1">
                 <layout class="QVBoxLayout" name="verticalLayout_4">
                  <item>
-                  <widget class="QLabel" name="label_69">
+                  <widget class="QLabel" name="label_68">
                    <property name="text">
-                    <string>Minimum value:</string>
+                    <string>Maximum value:</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_68">
+                  <widget class="QLabel" name="label_69">
                    <property name="text">
-                    <string>Maximum value:</string>
+                    <string>Minimum value:</string>
                    </property>
                   </widget>
                  </item>
@@ -1321,7 +1320,7 @@
                     <double>100000.000000000000000</double>
                    </property>
                    <property name="value">
-                    <double>39.000000000000000</double>
+                    <double>30.000000000000000</double>
                    </property>
                   </widget>
                  </item>

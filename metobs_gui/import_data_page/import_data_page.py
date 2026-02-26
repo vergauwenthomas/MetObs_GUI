@@ -23,10 +23,9 @@ import metobs_gui.common_functions as common_func
 import metobs_gui.tlk_scripts as tlk_scripts
 import metobs_gui.log_displayer as log_displayer
 
-from metobs_gui.extra_windows import  DatasetTimeSeriesDialog
+from metobs_gui.extra_windows import DatasetTimeSeriesDialog
 from metobs_gui.dataframelab import DataDialog
 import metobs_toolkit
-from metobs_toolkit import rootlog as toolkit_logger
 
 # =============================================================================
 # Initialise values
@@ -191,8 +190,7 @@ def _react_save_dataset_as_pkl(MW):
     #save the pickle
     _, succes, stout = tlk_scripts.gui_wrap(
                         func = MW.Dataset.save_dataset_to_pkl,
-                        func_kwargs = {'target_folder': path_handler.dataset_dir,
-                                    'filename': trg_file,
+                        func_kwargs = {'filepath': filepath,
                                     'overwrite': False},
                         log_level=MW.loglevel.currentText(),
                         plaintext=prompt)
@@ -322,27 +320,28 @@ def make_dataset_from_files(MW):
     
     dataset = metobs_toolkit.Dataset()
     if metadataonly_case:
+        # In v1.0.2, import_only_metadata_from_file is removed.
+        # Use import_data_from_file with input_data_file=None instead.
         _return, succes, stout = tlk_scripts.gui_wrap(
-                    func = dataset.import_only_metadata_from_file,
-                    func_kwargs={'input_metadata_file':metadatafile,
-                                'template_file':templatefile,
-                                'kwargs_metadata_read':metadata_kwargs,
-                                'templatefile_is_url':False},
+                    func = dataset.import_data_from_file,
+                    func_kwargs={'input_data_file': None,
+                                'input_metadata_file': metadatafile,
+                                'template_file': templatefile,
+                                'kwargs_metadata_read': metadata_kwargs},
                     log_level=MW.loglevel.currentText(),
                     plaintext=prompt)
     else:
         _return, succes, stout = tlk_scripts.gui_wrap(
                     func=dataset.import_data_from_file,
-                    func_kwargs={'input_data_file':datafile,
-                                'input_metadata_file':metadatafile,
-                                'template_file':templatefile,
-                                'freq_estimation_method':freq_method,
-                                'freq_estimation_simplify_tolerance':freq_simpl_tol,
-                                'origin_simplify_tolerance':origin_simpl_tol,
-                                'timestamp_tolerance':timestamp_tol,
-                                'kwargs_data_read':data_kwargs,
-                                'kwargs_metadata_read':metadata_kwargs,
-                                'templatefile_is_url':False},
+                    func_kwargs={'input_data_file': datafile,
+                                'input_metadata_file': metadatafile,
+                                'template_file': templatefile,
+                                'freq_estimation_method': freq_method,
+                                'freq_estimation_simplify_tolerance': freq_simpl_tol,
+                                'origin_simplify_tolerance': origin_simpl_tol,
+                                'timestamp_tolerance': timestamp_tol,
+                                'kwargs_data_read': data_kwargs,
+                                'kwargs_metadata_read': metadata_kwargs},
                     log_level=MW.loglevel.currentText(),
                     plaintext=prompt
                     )

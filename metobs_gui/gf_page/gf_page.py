@@ -175,9 +175,11 @@ def launch_interp_settings(MW):
     
 def launch_weighted_diurnal_debias_model_gf_settings(MW):
     obstype = MW.fill_obstype.currentText()
+    modeldetails = find_present_modeldetails(MW.Dataset)
     dlg = dialogs.WeightedDiurnalDebiasModeldataGFSettingsDialog(
                 trgobstype=obstype,
-                func=MW.Dataset.fill_gaps_with_weighted_diurnal_debiased_modeldata
+                func=MW.Dataset.fill_gaps_with_weighted_diurnal_debiased_modeldata,
+                modeldetails=modeldetails,
                 )
                                                                  
     
@@ -207,9 +209,11 @@ def launch_weighted_diurnal_debias_model_gf_settings(MW):
 
 def launch_raw_model_gf_settings(MW):
     obstype = MW.fill_obstype.currentText()
+    modeldetails = find_present_modeldetails(MW.Dataset)
     dlg = dialogs.RawModeldataGFSettingsDialog(
         trgobstype=obstype,
-        func=MW.Dataset.fill_gaps_with_raw_modeldata                                     
+        func=MW.Dataset.fill_gaps_with_raw_modeldata,
+        modeldetails=modeldetails
         )
     
     if dlg.exec():
@@ -237,9 +241,11 @@ def launch_raw_model_gf_settings(MW):
 
 def launch_debias_model_gf_settings(MW):
     obstype = MW.fill_obstype.currentText()
+    modeldetails = find_present_modeldetails(MW.Dataset)
     dlg = dialogs.DebiasModeldataGFSettingsDialog(
         trgobstype=obstype,
-        func=MW.Dataset.fill_gaps_with_debiased_modeldata)
+        func=MW.Dataset.fill_gaps_with_debiased_modeldata,
+        modeldetails=modeldetails)
     
     if dlg.exec():
         #when pushed the "ok" button
@@ -266,9 +272,11 @@ def launch_debias_model_gf_settings(MW):
 
 def launch_diurnal_debias_model_gf_settings(MW):
     obstype = MW.fill_obstype.currentText()
+    modeldetails = find_present_modeldetails(MW.Dataset)
     dlg = dialogs.DiurnalDebiasModeldataGFSettingsDialog(
         trgobstype=obstype,
-        func=MW.Dataset.fill_gaps_with_diurnal_debiased_modeldata)
+        func=MW.Dataset.fill_gaps_with_diurnal_debiased_modeldata,
+        modeldetails=modeldetails)
     
     if dlg.exec():
         #when pushed the "ok" button
@@ -311,3 +319,25 @@ def _react_show_data(MW):
 def _react_plot_dataset(MW):
     MW._dlg = DatasetTimeSeriesDialog(dataset=MW.Dataset)#launched when created
         
+        
+# ------------------------------------------
+#    Helping methods
+# ------------------------------------------
+
+def find_present_modeldetails(dataset) -> dict: 
+
+    #create dict of modelnames and variables
+    modeltargets = {}
+
+    for sta in dataset.stations:
+        for modelseries in sta.modeldata:
+            if modelseries.modelname not in modeltargets:
+                modeltargets[modelseries.modelname] = []
+            modeltargets[modelseries.modelname].append(modelseries.modelvariable)
+
+
+    for modelname in modeltargets.keys():
+        modeltargets[modelname] = list(set(modeltargets[modelname]))
+
+
+    return modeltargets
